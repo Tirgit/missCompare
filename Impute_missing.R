@@ -17,12 +17,11 @@ library(mi)
 
 setwd("/Users/med-tv_/Documents/Projects/missingdata/")
 data <- readRDS("simulated_dataframe.rds")
-summary(data)
 
 
 #scale data
 data_scaled <- as.data.frame(scale(data))
-#check that means are 0, SD=1
+#means are 0, SD=1
 summary(data_scaled)
 real_matrix <- as.matrix(data_scaled)
 
