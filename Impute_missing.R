@@ -15,8 +15,10 @@ library(mice)
 library(Amelia)
 library(mi)
 
-setwd("/Users/med-tv_/Documents/Projects/DPP_NMR_lipidomics/")
-dataset <- readRDS("DPP_simulated_dataframe.rds")
+setwd("/Users/med-tv_/Documents/Projects/missingdata/")
+data <- readRDS("simulated_dataframe.rds")
+summary(data)
+
 
 #scale data
 data_scaled <- as.data.frame(scale(data))
@@ -358,11 +360,6 @@ outputvalues_mi[nrow(outputvalues_mi) + 1, ] <- c(0.5,NA,NA)
 #saveRDS(outputvalues_mi, file="/mnt/lustre/Home/tibor_v/missing_mi.rds")
 
 
-#imputation with HMisc aregImpute
-
-
-?aregImpute
-
 
 
 
@@ -401,60 +398,4 @@ points(outputvalues_regularized$percentage, outputvalues_mi$mean, col = "darkorc
 arrows(outputvalues_regularized$percentage, outputvalues_mi$mean-(1.96*outputvalues_mi$se), outputvalues_regularized$percentage, outputvalues_mi$mean+(1.96*outputvalues_mi$se), length=0.05, angle=90, code=3, col = "darkorchid")
 legend(0.35,1, c("missMDA Regularized","missMDA EM","pcaMethods SVDimpute","pcaMethods BPCA","pcaMethods PPCA","pcaMethods Nipals","pcaMethods NLPCA","Median imputation","MICE pmm","AMELIA EMB algorithm", "missForest non-parametric", "mi"), lty=c(1,1), lwd=c(2.5,2.5), col=c("blue","red","yellow","green","orange","deepskyblue2","dimgrey","black","lightcoral","antiquewhite","aquamarine","darkorchid"), cex=0.7 ,pt.cex=1);
 dev.off()
-
-
-
-
-
-
-
-
-
-#RUN PCA ON FULL DATASET
-
-
-res.pca <- PCA(real_matrix, graph = F)
-#scree plot
-barplot(res.pca$eig[,1],main="Eigenvalues",names.arg=1:nrow(res.pca$eig))
-#par(mfrow=c(1,2))
-#?plot.PCA
-#individuals PC1 vs PC2
-plot(res.pca,choix="ind", label = "none")
-#variable loads PC1 vs PC2
-plot(res.pca,choix="var")
-#variable correlations with PC1 and PC2
-dimdesc(res.pca, axes = 1:2)
-
-
-#RUN PCA ON DATASET WITH MISSING
-ncomp <- estim_ncpPCA(real_matrix_miss)
-res.imp <- imputePCA(real_matrix_miss, ncp= ncomp$ncp, method = "Regularized")
-res.pca.miss <- PCA(res.imp$completeObs, graph = F)
-
-par(mfrow=c(1,2))
-plot(res.pca, choice="ind", label = "none", title = "PCA map with no missing data")
-plot(res.pca.miss, choice="ind", label = "none", title = "PCA map with 20% missing data")
-
-
-#RUN MIPCA ON DATASET WITH BOOTSTRAP
-ncomp <- estim_ncpPCA(real_matrix_miss)
-resMIPCA <- MIPCA(real_matrix_miss, ncp = ncomp$ncp, nboot = 100, method = "Regularized")
-
-par(mfrow=c(1,1))
-plot(resMIPCA,choice= "var", label = "none")
-plot(resMIPCA,choice= "dim", label = "none")
-
-
-#FACTOSHINY
-install.packages("Factoshiny")
-library(Factoshiny)
-outPCA <- PCAshiny(real_matrix)
-
-library(Factoshiny)
-outCLUSTER <- HCPCshiny(real_matrix)
-
-
-
-rm(list=ls())
-
 
