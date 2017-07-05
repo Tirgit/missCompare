@@ -25,6 +25,8 @@ data_scaled <- as.data.frame(scale(data))
 summary(data_scaled)
 real_matrix <- as.matrix(data_scaled)
 
+numsim <- 3
+
 ###Simulation, MEDIAN imputation
 outputvalues_median <- data.frame("percentage" = numeric() ,"mean" = numeric(), "se" = numeric())
 percentage_cat <- c(seq(0.05, 0.5, 0.05))
@@ -41,7 +43,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -71,7 +73,7 @@ repeat {
   n <- cor(c(real_matrix), c(imp_matrix))
   ns <- c(ns, n) 
   count <- count+1
-if(count >= 3) {
+if(count >= numsim) {
   break
 }
 }
@@ -99,7 +101,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -127,7 +129,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -154,7 +156,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -181,7 +183,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -208,7 +210,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -234,7 +236,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -260,7 +262,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -286,7 +288,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -316,7 +318,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -343,7 +345,7 @@ for(cats in percentage_cat){
     n <- cor(c(real_matrix), c(imp_matrix))
     ns <- c(ns, n) 
     count <- count+1
-    if(count >= 3) {
+    if(count >= numsim) {
       break
     }
   }
@@ -357,9 +359,6 @@ outputvalues_mi[nrow(outputvalues_mi) + 1, ] <- c(0.4,NA,NA)
 outputvalues_mi[nrow(outputvalues_mi) + 1, ] <- c(0.45,NA,NA)
 outputvalues_mi[nrow(outputvalues_mi) + 1, ] <- c(0.5,NA,NA)
 #saveRDS(outputvalues_mi, file="/mnt/lustre/Home/tibor_v/missing_mi.rds")
-
-
-
 
 
 #PLOT RESULTS FROM SIMULATIONS
