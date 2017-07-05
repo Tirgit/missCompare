@@ -15,16 +15,18 @@ library(mice)
 library(Amelia)
 library(mi)
 
+#set working directory
 setwd("/Users/med-tv_/Documents/Projects/missingdata/")
 data <- readRDS("simulated_dataframe.rds")
-
 
 #scale data
 data_scaled <- as.data.frame(scale(data))
 #means are 0, SD=1
 summary(data_scaled)
+#create matrix from data frame
 real_matrix <- as.matrix(data_scaled)
 
+#set number of simulations
 numsim <- 3
 
 ###Simulation, MEDIAN imputation
@@ -53,7 +55,6 @@ for(cats in percentage_cat){
   outputvalues_median[nrow(outputvalues_median) + 1, ] <- values
 }
 #saveRDS(outputvalues_median, file="/mnt/lustre/Home/tibor_v/missing_median.rds")
-
 
 
 ###PCA USING MISSMDA
@@ -363,7 +364,7 @@ outputvalues_mi[nrow(outputvalues_mi) + 1, ] <- c(0.5,NA,NA)
 
 #PLOT RESULTS FROM SIMULATIONS
 library(Hmisc)
-pdf("/Users/med-tv_/Desktop/DPP_simulations.pdf")
+pdf("simulations.pdf")
 plot(outputvalues_regularized$percentage, outputvalues_regularized$mean,
      minor.tick(nx=2),
      ylim=c(ymin=0.7, ymax=1),
