@@ -363,6 +363,11 @@ outputvalues_mi[nrow(outputvalues_mi) + 1, ] <- c(0.5,NA,NA)
 
 
 #PLOT RESULTS FROM SIMULATIONS
+# Iliinsky and Steele color name vector
+IScolors <- c("red", "green", "yellow", "blue",
+              "black", "white", "pink", "cyan",
+              "gray", "orange", "brown", "purple")
+
 library(Hmisc)
 pdf("simulations.pdf")
 plot(outputvalues_regularized$percentage, outputvalues_regularized$mean,
@@ -397,4 +402,3 @@ points(outputvalues_regularized$percentage, outputvalues_mi$mean, col = "darkorc
 arrows(outputvalues_regularized$percentage, outputvalues_mi$mean-(1.96*outputvalues_mi$se), outputvalues_regularized$percentage, outputvalues_mi$mean+(1.96*outputvalues_mi$se), length=0.05, angle=90, code=3, col = "darkorchid")
 legend(0.35,1, c("missMDA Regularized","missMDA EM","pcaMethods SVDimpute","pcaMethods BPCA","pcaMethods PPCA","pcaMethods Nipals","pcaMethods NLPCA","Median imputation","MICE pmm","AMELIA EMB algorithm", "missForest non-parametric", "mi"), lty=c(1,1), lwd=c(2.5,2.5), col=c("blue","red","yellow","green","orange","deepskyblue2","dimgrey","black","lightcoral","antiquewhite","aquamarine","darkorchid"), cex=0.7 ,pt.cex=1);
 dev.off()
-
