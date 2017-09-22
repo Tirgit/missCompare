@@ -58,7 +58,6 @@ ggplot_missing <- function(x) {
   theme(axis.text.x  = element_text(angle=45, vjust=0.5)) + 
   labs(x = "Variables in Dataset", y = "Rows / observations")
 }
-
 if (!is.na(missplot)) {
   pdf(missplot)
   p <- ggplot_missing(df)
@@ -67,9 +66,9 @@ if (!is.na(missplot)) {
 }
 
 #IMPUTATIONS
+outputvalues <- data.frame("mean" = numeric(), "se" = numeric())
 
 ###Simulation, MEDIAN imputation
-outputvalues <- data.frame("mean" = numeric(), "se" = numeric())
 ns <- NULL
 count <- 1
 repeat {
@@ -90,16 +89,251 @@ sevalue <- sd(ns)/sqrt(length(ns))
 values <- c(meanvalue,sevalue)
 outputvalues[nrow(outputvalues) + 1, ] <- values
 
-
+###Simulation, MEAN imputation
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  for(i in 1:ncol(real_matrix_miss)){
+    real_matrix_miss[is.na(real_matrix_miss[,i]), i] <- mean(real_matrix_miss[,i], na.rm = TRUE)
+  }
+  imp_matrix <- real_matrix_miss
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count > numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
   
+###Simulation, missMDA REGULARIZED method
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  ncomp <- estim_ncpPCA(real_matrix_miss)
+  res.imp <- imputePCA(real_matrix_miss, ncp= ncomp$ncp, method = "Regularized")
+  res.pca.miss <- PCA(res.imp$completeObs, graph = F)
+  imp_matrix <- res.imp$completeObs
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
+
+###Simulation, missMDA EM method
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  ncomp <- estim_ncpPCA(real_matrix_miss)
+  res.imp <- imputePCA(real_matrix_miss, ncp= ncomp$ncp, method = "EM")
+  res.pca.miss <- PCA(res.imp$completeObs, graph = F)
+  imp_matrix <- res.imp$completeObs
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
+
+###Simulation, pcaMethods PPCA
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  ncomp <- estim_ncpPCA(real_matrix_miss)
+  resPPCA <- pca(real_matrix_miss, method="ppca", center=FALSE, nPcs=ncomp$ncp)
+  imp_matrix <- resPPCA@completeObs
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
   
+###Simulation, pcaMethods SVDIMPUTE
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  ncomp <- estim_ncpPCA(real_matrix_miss)
+  resSVDI <- pca(real_matrix_miss, method="svdImpute", center=FALSE, nPcs=ncomp$ncp)
+  imp_matrix <- resSVDI@completeObs
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
+
+###Simulation, pcaMethods BPCA
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  ncomp <- estim_ncpPCA(real_matrix_miss)
+  resBPCA <- pca(real_matrix_miss, method="bpca", center=FALSE, nPcs=ncomp$ncp)
+  imp_matrix <- resBPCA@completeObs
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
+
+###Simulation, pcaMethods NIPALS
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  ncomp <- estim_ncpPCA(real_matrix_miss)
+  resNipals <- pca(real_matrix_miss, method="nipals", center=FALSE, nPcs=ncomp$ncp)
+  imp_matrix <- resNipals@completeObs
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
   
+###Simulation, pcaMethods NLPCA
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  ncomp <- estim_ncpPCA(real_matrix_miss)
+  resNLPCA <- pca(real_matrix_miss, method="nlpca", center=FALSE, nPcs=ncomp$ncp, maxSteps=100)
+  imp_matrix <- resNLPCA@completeObs
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
   
+###Simulation, MICE
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  imputed_Data <- mice(real_matrix_miss, m=1, maxit = 100, method = 'pmm')
+  imp_matrix <- as.matrix(complete(imputed_Data,1))
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
+
+###Simulation, AMELIA
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  amelia_fit <- amelia(real_matrix_miss, m=1)
+  imp_matrix <- amelia_fit$imputations[[1]]
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
+  
+###Simulation, missForest
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  results <- missForest(real_matrix_miss)
+  imp_matrix <- results$ximp
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
+  
+###Simulation, mi
+ns <- NULL
+count <- 1
+repeat {
+  real_matrix_miss <- prodNA(X_hat, noNA = miss)
+  mi_data <- mi(as.data.frame(real_matrix_miss), n.chain = 1)
+  imputed <- complete(mi_data,1)
+  imp_matrix <- as.matrix(imputed[,1:ncol(real_matrix_miss)])
+  n <- cor(c(X_hat), c(imp_matrix))
+  ns <- c(ns, n) 
+  count <- count+1
+  if(count >= numsim) {
+    break
+  }
+}
+meanvalue <- mean(ns)
+sevalue <- sd(ns)/sqrt(length(ns))
+values <- c(meanvalue,sevalue)
+outputvalues[nrow(outputvalues) + 1, ] <- values
   
 
 
-
-
-
+methods <- c("Median imputation", "Mean imputation", "missMDA Regularized", "missMDA EM", "pcaMethods PPCA", 
+  "pcaMethods svdImpute", "pcaMethods BPCA", "pcaMethods NIPALS", "pcaMethods NLPCA", "mice",
+  "Amelia", "missForest", "mi")
+  
 
 
