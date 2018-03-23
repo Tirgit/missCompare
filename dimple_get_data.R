@@ -49,5 +49,7 @@ df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
 library(missForest)
 df_miss <- prodNA(df, 0.3)
 
+
+
 y <- dimple_get_data(df_miss, matrixplot_sort = T)
 

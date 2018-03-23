@@ -13,9 +13,7 @@ library(mice)
 library(Amelia)
 library(mi)
 
-ImputeGetData() <- function(filename, NA_gen = 0, missplot = NA, numsim = 100) {
-  functiontext
-}
+
 
 #define in function
 filename <- "/Users/med-tv_/Documents/Projects/missingdata/pheno.txt"
