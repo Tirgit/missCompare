@@ -10,11 +10,7 @@
 #missing data pattern
 #
 #
-#
 #The function also provides statistics and visualization for missing data observation
-#
-#
-#
 #
 #################################################################################################################################################
 
@@ -25,7 +21,6 @@ library(VIM)
 library(ggplot2)
 library(magrittr)
 library(dplyr)
-
 
 
 ###FUNCTION
