@@ -14,23 +14,22 @@
 #The function also provides statistics and visualization for missing data observation
 #
 #
-#Necessary packages: ggplot2, VIM, mice, ...
 #
 #
 #################################################################################################################################################
 
+
+###PACKAGES
 library(mice)
 library(VIM)
-library(Amelia)
 library(ggplot2)
 library(magrittr)
 library(dplyr)
 
-df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
-library(missForest)
-df_miss <- prodNA(df, 0.3)
 
-dimple_get_data <- function(X, matrixplot_sort = F ,missplot = NA) {
+
+###FUNCTION
+dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
   comp <- sum(complete.cases(X))
   rows <- nrow(X)
   cols <- ncol(X)
@@ -41,7 +40,6 @@ dimple_get_data <- function(X, matrixplot_sort = F ,missplot = NA) {
   na_per_var <- sapply(X, function(x) sum(length(which(is.na(x))))) 
   mdpat <- md.pattern(X)
   
-  
   nm1 <- names(X)[colSums(is.na(X)) >0]
   arr_X <- X %>% 
     arrange_at(vars(nm1), funs(desc(is.na(.))))
@@ -51,6 +49,10 @@ dimple_get_data <- function(X, matrixplot_sort = F ,missplot = NA) {
 }
 
 
+###LAB
+df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
+library(missForest)
+df_miss <- prodNA(df, 0.3)
 
-y <- dimple_get_data(df_miss)
+y <- dimple_get_data(df_miss, matrixplot_sort = T)
 
