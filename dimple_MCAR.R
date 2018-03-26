@@ -1,18 +1,13 @@
 #################################################################################################################################################
 #
-#The purpose of this function is to simulate a dataset that resembles the original dataset based on real information.
-#The function will estimate the nearest possible positive definitive matrix for correlation structure with normally distributed variables with given mean and SD.
-#At this stage, the simulated dataset will not contain missing values.
-#These pieces of information are:
+#This function uses the generated simulated matrix and generates missing datapoints in MCAR (missing completely at random) pattern per variable.
 #
-#data size
-#data dimensions
-#correlation matrix
+#Inputs are:
 #
+#simulated matrix
+#missing fraction per variable
 #
-#The function outputs the simulated matrix, the original correlation structure and the correlation structure of the simulated matrix
-#The two correlation matrices should be very similar.
-#
+#The function outputs a matrix with missing values and a summary of the matrix.
 #
 #################################################################################################################################################
 
