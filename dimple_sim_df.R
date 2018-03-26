@@ -37,23 +37,6 @@ dimple_sim_df <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
 
 
 ###LAB
-cormat = y$Corr_matrix
-rownum = y$Rows
-colnum = y$Columns
-meanval = 0
-sdval = 1
-
-
-pd_corr_matrix <- nearPD(cormat, keepDiag=T, conv.tol = 1e-7, corr=T)
-mu <- rep(meanval,colnum)
-stddev <- rep(sdval,colnum)
-covMat <- stddev %*% t(stddev) * pd_corr_matrix$mat
-X_hat <- mvrnorm(n=rownum, mu=mu, Sigma=covMat, empirical=TRUE) # Simulated values
-original_sample <- cormat[1:5,1:5]
-nearPD_sample <- cor(X_hat)[1:5,1:5]
-
-
-
 yy <- dimple_sim_df(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
 
 

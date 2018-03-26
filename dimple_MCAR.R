@@ -20,10 +20,16 @@
 library(missForest)
 
 
-
 ###FUNCTION
-dimple_prodNA <- function(X_hat, missfrac_per_var, pattern=c("MCAR", "MAR", "MNAR")) {
+dimple_MCAR <- function(X_hat, missfrac_per_var) {
   
+  for (i in 1:length(missfrac_per_var)) {
+    X_hat[,i] <- prodNA(as.matrix(X_hat[,i]), noNA = missfrac_per_var[i])
+  }
+  
+  matrix_summary <- summary(X_hat)
+  
+  list(MCAR_matrix = X_hat, Summary = matrix_summary)
   
 }
 
@@ -31,14 +37,7 @@ dimple_prodNA <- function(X_hat, missfrac_per_var, pattern=c("MCAR", "MAR", "MNA
 
 
 ###LAB
-real_matrix_miss <- prodNA(yy$Simulated_matrix , missfrac_per_var = y$Fraction_missingness_per_variable)
-
-
-
-
-
-
-
+res <- dimple_MCAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 
 
 
