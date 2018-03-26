@@ -10,7 +10,10 @@
 
 #FUNCTION
 
+dimple_median_imp <- function(X_hat, list) {
 
+index <- lapply(list, is.na)  
+  
 median_imp <- function(X) {
   for(i in 1:ncol(X)) {
     X[is.na(X[,i]), i] <- median(X[,i], na.rm = TRUE)
@@ -19,66 +22,32 @@ median_imp <- function(X) {
   list(Imputed = X)
 }
 
-results <- lapply(res, median_imp)
+results <- lapply(list, median_imp)
 
+#using NA index to identify the original values (later set to missing)
+orig_MCAR <- X_hat[index[[1]]]
+orig_MAR <- X_hat[index[[2]]]
+orig_MNAR <- X_hat[index[[3]]]
+
+#using NA index to identify the imputed values
+imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
+imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
+imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+
+#RMSE
+rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
+rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
+rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+
+list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+
+}
 
 
 
 #LAB
 res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 
+dimple_median_imp(X_hat = yy$Simulated_matrix, list = res)
 
 
-
-median(res$MCAR_matrix[,1], na.rm = TRUE)
-
-for(i in 1:ncol(res$MCAR_matrix)) {
-  res$MCAR_matrix[is.na(res$MCAR_matrix[,i]), i] <- median(res$MCAR_matrix[,i], na.rm = TRUE)
-}
-
-results <- lapply(res, median_imp)
-
-
-#using NA index to identify the original values (later set to missing)
-original <- yy$Simulated_matrix[is.na(res$MCAR_matrix)]
-
-#using NA index to identify the imputed values
-imputed <- results$MCAR_matrix$Imputed[is.na(res$MCAR_matrix)]
-error <- original-imputed
-
-rmse <_ sqrt(mean(error^2))
-
-
-
-
-lapply(res, median_imp)
-
-
-
-
-
-
-
-
-
-
-###Simulation, MEDIAN imputation
-ns <- NULL
-count <- 1
-repeat {
-  real_matrix_miss <- prodNA(X_hat, noNA = miss)
-  for(i in 1:ncol(real_matrix_miss)){
-    res$MCAR_matrix[is.na(res$MCAR_matrix[,1]), 1] <- median(real_matrix_miss[,i], na.rm = TRUE)
-  }
-  imp_matrix <- real_matrix_miss
-  n <- cor(c(X_hat), c(imp_matrix))
-  ns <- c(ns, n) 
-  count <- count+1
-  if(count > numsim) {
-    break
-  }
-}
-meanvalue <- mean(ns)
-sevalue <- sd(ns)/sqrt(length(ns))
-values <- c(meanvalue,sevalue)
-outputvalues[nrow(outputvalues) + 1, ] <- values
