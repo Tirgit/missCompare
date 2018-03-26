@@ -20,6 +20,8 @@ library(missForest)
 ###FUNCTION
 dimple_MNAR <- function(X_hat, missfrac_per_var) {
   
+  rownames(X_hat) <- 1:nrow(X_hat)
+  
   logi <- sample(0:1, length(missfrac_per_var), replace = T)
   
   for (i in 1:length(missfrac_per_var)) {
@@ -27,6 +29,8 @@ dimple_MNAR <- function(X_hat, missfrac_per_var) {
     threshold_for_excl <- X_hat[,i][ceiling(missfrac_per_var[i]*nrow(X_hat))]
     if (logi[i]==1) X_hat[,i] <- ifelse(X_hat[,i]>threshold_for_excl, NA, X_hat[,i]) else X_hat[,i] <- ifelse(X_hat[,i]<threshold_for_excl, NA, X_hat[,i]) 
       }
+  
+  X_hat <- X_hat[ order(as.numeric(row.names(X_hat))),]
   
   matrix_summary <- summary(X_hat)
   
@@ -39,5 +43,6 @@ dimple_MNAR <- function(X_hat, missfrac_per_var) {
 ###LAB
 res <- dimple_MNAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 matrixplot(res$MNAR_matrix, interactive = F, col= "red") 
+
 
 

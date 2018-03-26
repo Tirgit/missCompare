@@ -18,6 +18,8 @@ library(missForest)
 ###FUNCTION
 dimple_MCAR <- function(X_hat, missfrac_per_var) {
   
+  rownames(X_hat) <- 1:nrow(X_hat)
+  
   for (i in 1:length(missfrac_per_var)) {
     X_hat[,i] <- prodNA(as.matrix(X_hat[,i]), noNA = missfrac_per_var[i])
   }

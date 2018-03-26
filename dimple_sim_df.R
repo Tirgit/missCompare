@@ -31,6 +31,8 @@ dimple_sim_df <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
   original_sample <- cormat[1:5,1:5]
   nearPD_sample <- cor(X_hat)[1:5,1:5]
   
+  rownames(X_hat) <- 1:nrow(X_hat)
+  
   list(Simulated_matrix = X_hat, Original_correlation_sample = original_sample, NearPD_correlation_sample = nearPD_sample)
 }
 
@@ -38,8 +40,6 @@ dimple_sim_df <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
 
 ###LAB
 yy <- dimple_sim_df(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
-
-
 
 
 

@@ -20,6 +20,8 @@ library(missForest)
 ###FUNCTION
 dimple_MAR <- function(X_hat, missfrac_per_var) {
   
+  rownames(X_hat) <- 1:nrow(X_hat)
+  
   logi <- sample(0:1, length(missfrac_per_var)-1, replace = T)
   
   for (i in 1:(length(missfrac_per_var)-1)) {
@@ -32,6 +34,8 @@ dimple_MAR <- function(X_hat, missfrac_per_var) {
   
   if (logi2==1) X_hat <- X_hat[order(X_hat[,1], decreasing = T),] else X_hat <- X_hat[order(X_hat[,1], decreasing = F),]
   X_hat[1:(nrow(X_hat)*(missfrac_per_var[length(missfrac_per_var)])),length(missfrac_per_var)] <- NA
+  
+  X_hat <- X_hat[ order(as.numeric(row.names(X_hat))),]
   
   matrix_summary <- summary(X_hat)
   
