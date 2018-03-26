@@ -29,8 +29,6 @@ dimple_MCAR <- function(X_hat, missfrac_per_var) {
 }
 
 
-
-
 ###LAB
 res <- dimple_MCAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 
