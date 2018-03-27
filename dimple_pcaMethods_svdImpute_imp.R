@@ -15,8 +15,8 @@ dimple_pcaMethods_svdImpute_imp <- function(X_hat, list) {
   
   pcaMethods_svdImpute_imp <- function(X) {
     ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) nresPPCA <- pca(X, method="svdImpute", center=FALSE, nPcs=ncomp$ncp) else nresPPCA <- pca(X, method="svdImpute", center=FALSE, nPcs=2)
-    imp_matrix <- resPPCA@completeObs
+    if (ncomp$ncp>0) ressvdImpute <- pca(X, method="svdImpute", center=FALSE, nPcs=ncomp$ncp) else ressvdImpute <- pca(X, method="svdImpute", center=FALSE, nPcs=2)
+    imp_matrix <- ressvdImpute@completeObs
     
     list(Imputed = imp_matrix)
   }

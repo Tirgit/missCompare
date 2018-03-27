@@ -10,6 +10,7 @@ library(missForest)
 library(missMDA)
 library(pcaMethods)
 library(mi)
+library(Amelia)
 
 
 ###FUNCTIONS
@@ -238,78 +239,14 @@ dimple_missMDA_EM_imp <- function(X_hat, list) {
   list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
-dimple_pcaMethods_PPCA_imp <- function(X_hat, list) {
-  
-  index <- lapply(list, is.na)  
-  
-  pcaMethods_PPCA_imp <- function(X) {
-    ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) nresPPCA <- pca(X, method="ppca", center=FALSE, nPcs=ncomp$ncp) else nresPPCA <- pca(X, method="ppca", center=FALSE, nPcs=2)
-    imp_matrix <- resPPCA@completeObs
-    
-    list(Imputed = imp_matrix)
-  }
-  
-  results <- lapply(list, pcaMethods_PPCA_imp)
-  
-  #using NA index to identify the original values (later set to missing)
-  orig_MCAR <- X_hat[index[[1]]]
-  orig_MAR <- X_hat[index[[2]]]
-  orig_MNAR <- X_hat[index[[3]]]
-  
-  #using NA index to identify the imputed values
-  imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
-  imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
-  imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
-  
-  #RMSE
-  rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
-  rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
-  rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
-  
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
-  
-}
-dimple_pcaMethods_svdImpute_imp <- function(X_hat, list) {
-  
-  index <- lapply(list, is.na)  
-  
-  pcaMethods_svdImpute_imp <- function(X) {
-    ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) nresPPCA <- pca(X, method="svdImpute", center=FALSE, nPcs=ncomp$ncp) else nresPPCA <- pca(X, method="svdImpute", center=FALSE, nPcs=2)
-    imp_matrix <- resPPCA@completeObs
-    
-    list(Imputed = imp_matrix)
-  }
-  
-  results <- lapply(list, pcaMethods_svdImpute_imp)
-  
-  #using NA index to identify the original values (later set to missing)
-  orig_MCAR <- X_hat[index[[1]]]
-  orig_MAR <- X_hat[index[[2]]]
-  orig_MNAR <- X_hat[index[[3]]]
-  
-  #using NA index to identify the imputed values
-  imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
-  imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
-  imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
-  
-  #RMSE
-  rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
-  rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
-  rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
-  
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
-  
-}
 dimple_pcaMethods_BPCA_imp <- function(X_hat, list) {
   
   index <- lapply(list, is.na)  
   
   pcaMethods_BPCA_imp <- function(X) {
     ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) nresPPCA <- pca(X, method="bpca", center=FALSE, nPcs=ncomp$ncp) else nresPPCA <- pca(X, method="bpca", center=FALSE, nPcs=2)
-    imp_matrix <- resPPCA@completeObs
+    if (ncomp$ncp>0) resBPCA <- pca(X, method="bpca", center=FALSE, nPcs=ncomp$ncp) else resBPCA <- pca(X, method="bpca", center=FALSE, nPcs=2)
+    imp_matrix <- resBPCA@completeObs
     
     list(Imputed = imp_matrix)
   }
@@ -340,13 +277,77 @@ dimple_pcaMethods_Nipals_imp <- function(X_hat, list) {
   
   pcaMethods_Nipals_imp <- function(X) {
     ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) nresPPCA <- pca(X, method="nipals", center=FALSE, nPcs=ncomp$ncp) else nresPPCA <- pca(X, method="nipals", center=FALSE, nPcs=2)
-    imp_matrix <- resPPCA@completeObs
+    if (ncomp$ncp>0) resNipals <- pca(X, method="nipals", center=FALSE, nPcs=ncomp$ncp) else resNipals <- pca(X, method="nipals", center=FALSE, nPcs=2)
+    imp_matrix <- resNipals@completeObs
     
     list(Imputed = imp_matrix)
   }
   
   results <- lapply(list, pcaMethods_Nipals_imp)
+  
+  #using NA index to identify the original values (later set to missing)
+  orig_MCAR <- X_hat[index[[1]]]
+  orig_MAR <- X_hat[index[[2]]]
+  orig_MNAR <- X_hat[index[[3]]]
+  
+  #using NA index to identify the imputed values
+  imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
+  imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
+  imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  
+  #RMSE
+  rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
+  rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
+  rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  
+  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  
+}
+dimple_pcaMethods_svdImpute_imp <- function(X_hat, list) {
+  
+  index <- lapply(list, is.na)  
+  
+  pcaMethods_svdImpute_imp <- function(X) {
+    ncomp <- estim_ncpPCA(X)
+    if (ncomp$ncp>0) ressvdImpute <- pca(X, method="svdImpute", center=FALSE, nPcs=ncomp$ncp) else ressvdImpute <- pca(X, method="svdImpute", center=FALSE, nPcs=2)
+    imp_matrix <- ressvdImpute@completeObs
+    
+    list(Imputed = imp_matrix)
+  }
+  
+  results <- lapply(list, pcaMethods_svdImpute_imp)
+  
+  #using NA index to identify the original values (later set to missing)
+  orig_MCAR <- X_hat[index[[1]]]
+  orig_MAR <- X_hat[index[[2]]]
+  orig_MNAR <- X_hat[index[[3]]]
+  
+  #using NA index to identify the imputed values
+  imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
+  imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
+  imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  
+  #RMSE
+  rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
+  rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
+  rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  
+  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  
+}
+dimple_pcaMethods_PPCA_imp <- function(X_hat, list) {
+  
+  index <- lapply(list, is.na)  
+  
+  pcaMethods_PPCA_imp <- function(X) {
+    ncomp <- estim_ncpPCA(X)
+    if (ncomp$ncp>0) resPPCA <- pca(X, method="ppca", center=FALSE, nPcs=ncomp$ncp) else resPPCA <- pca(X, method="ppca", center=FALSE, nPcs=2)
+    imp_matrix <- resPPCA@completeObs
+    
+    list(Imputed = imp_matrix)
+  }
+  
+  results <- lapply(list, pcaMethods_PPCA_imp)
   
   #using NA index to identify the original values (later set to missing)
   orig_MCAR <- X_hat[index[[1]]]
@@ -372,8 +373,8 @@ dimple_pcaMethods_NLPCA_imp <- function(X_hat, list) {
   
   pcaMethods_NLPCA_imp <- function(X) {
     ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) nresPPCA <- pca(X, method="nlpca", center=FALSE, nPcs=ncomp$ncp, maxSteps=100) else nresPPCA <- pca(X, method="nlpca", center=FALSE, nPcs=2, maxSteps=100)
-    imp_matrix <- resPPCA@completeObs
+    if (ncomp$ncp>0) resNLPCA <- pca(X, method="nlpca", center=FALSE, nPcs=ncomp$ncp, maxSteps=100) else resNLPCA <- pca(X, method="nlpca", center=FALSE, nPcs=2, maxSteps=100)
+    imp_matrix <- resNLPCA@completeObs
     
     list(Imputed = imp_matrix)
   }

@@ -15,8 +15,8 @@ dimple_pcaMethods_BPCA_imp <- function(X_hat, list) {
   
   pcaMethods_BPCA_imp <- function(X) {
     ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) nresPPCA <- pca(X, method="bpca", center=FALSE, nPcs=ncomp$ncp) else nresPPCA <- pca(X, method="bpca", center=FALSE, nPcs=2)
-    imp_matrix <- resPPCA@completeObs
+    if (ncomp$ncp>0) resBPCA <- pca(X, method="bpca", center=FALSE, nPcs=ncomp$ncp) else resBPCA <- pca(X, method="bpca", center=FALSE, nPcs=2)
+    imp_matrix <- resBPCA@completeObs
     
     list(Imputed = imp_matrix)
   }

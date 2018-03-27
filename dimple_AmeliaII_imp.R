@@ -5,7 +5,6 @@ library(Amelia)
 
 
 #FUNCTION
-
 dimple_AmeliaII_imp <- function(X_hat, list) {
   
   index <- lapply(list, is.na)  

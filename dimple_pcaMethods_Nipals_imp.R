@@ -15,8 +15,8 @@ dimple_pcaMethods_Nipals_imp <- function(X_hat, list) {
   
   pcaMethods_Nipals_imp <- function(X) {
     ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) nresPPCA <- pca(X, method="nipals", center=FALSE, nPcs=ncomp$ncp) else nresPPCA <- pca(X, method="nipals", center=FALSE, nPcs=2)
-    imp_matrix <- resPPCA@completeObs
+    if (ncomp$ncp>0) resNipals <- pca(X, method="nipals", center=FALSE, nPcs=ncomp$ncp) else resNipals <- pca(X, method="nipals", center=FALSE, nPcs=2)
+    imp_matrix <- resNipals@completeObs
     
     list(Imputed = imp_matrix)
   }
