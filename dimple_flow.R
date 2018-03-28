@@ -21,7 +21,7 @@ dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
   comp <- sum(complete.cases(X))
   rows <- nrow(X)
   cols <- ncol(X)
-  mat <- cor(X, use="complete.obs", method="pearson") 
+  mat <- cor(X, use="pairwise.complete.obs", method="pearson") 
   missfrac_per_df <- sum(is.na(X))/(nrow(X)*ncol(X))
   missfrac_per_var <- colMeans(is.na(df_miss))
   na_per_df <-  sum(is.na(X))
@@ -32,8 +32,20 @@ dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
   arr_X <- X %>% 
     arrange_at(vars(nm1), funs(desc(is.na(.))))
   
+  vars_above_half <- colnames(X)[missfrac_per_var>=0.5]
+  if (length(vars_above_half) != 0) message(paste("Warning! Missingness exceeds 50% for variables ",
+                                                  (paste(vars_above_half,collapse=", ") ),
+                                                  ". Consider excluding these variables using dimple_clean() and repeating function until no warnings are shown.", sep= ""))
+  
+  #matrix plot
   if (matrixplot_sort == F) matrixplot(X, interactive = F, col= "red") else matrixplot(arr_X, interactive = F, col= "red")
-  list(Complete_cases = comp, Rows = rows, Columns = cols, Corr_matrix = mat, Fraction_missingness = missfrac_per_df, Fraction_missingness_per_variable = missfrac_per_var, Total_NA = na_per_df, NA_per_variable = na_per_var, MD_Pattern = mdpat)
+  
+  #output
+  list(Complete_cases = comp, Rows = rows, Columns = cols, Corr_matrix = mat, 
+       Fraction_missingness = missfrac_per_df, Fraction_missingness_per_variable = missfrac_per_var, 
+       Total_NA = na_per_df, NA_per_variable = na_per_var, MD_Pattern = mdpat,
+       Vars_above_half = vars_above_half)
+  
 }
 dimple_sim_df <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
   pd_corr_matrix <- nearPD(cormat, keepDiag=T, conv.tol = 1e-7, corr=T)

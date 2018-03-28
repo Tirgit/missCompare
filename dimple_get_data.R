@@ -62,12 +62,7 @@ library(missForest)
 df_miss <- prodNA(df, 0.2)
 
 
-
 y <- dimple_get_data(df_miss, matrixplot_sort = T)
-
-
-
-y$Vars_above_half
 
  
 
