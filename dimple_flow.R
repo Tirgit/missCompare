@@ -11,6 +11,8 @@ library(missMDA)
 library(pcaMethods)
 library(mi)
 library(Amelia)
+library(tidyr)
+
 
 
 ###FUNCTIONS
@@ -526,6 +528,7 @@ dimple_missForest_imp <- function(X_hat, list) {
   
 }
 
+
 dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10) {
   
   collect_res <- data.frame(matrix(NA, nrow = 13*n.iter, ncol = 4))
@@ -616,10 +619,12 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
 }
 
 
+
+
 ###LAB
 df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
 library(missForest)
-df_miss <- prodNA(df, 0.3)
+df_miss <- prodNA(df, 0.2)
 
 y <- dimple_get_data(df_miss, matrixplot_sort = T)
 
@@ -652,7 +657,7 @@ wrap <- dimple_imp_wrapper(rownum = y$Rows,
                            colnum = y$Columns, 
                            cormat = y$Corr_matrix, 
                            missfrac_per_var =  y$Fraction_missingness_per_variable, 
-                           n.iter = 3)
+                           n.iter = 4)
 
 
 
