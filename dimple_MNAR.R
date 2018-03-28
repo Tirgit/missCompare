@@ -1,6 +1,6 @@
 #################################################################################################################################################
 #
-#This function uses the generated simulated matrix and generates missing datapoints in MAR (missing at random) pattern per variable.
+#This function uses the generated simulated matrix and generates missing datapoints in MNAR (missing non at random) pattern per variable.
 #This is achieved by sorting each column and removing the top/bottom of the column (according to the original missingness).
 #Selection from top or bottom is random.
 #
