@@ -77,12 +77,21 @@ dimple_MNAR <- function(X_hat, missfrac_per_var) {
   
   rownames(X_hat) <- 1:nrow(X_hat)
   
-  logi <- sample(0:1, length(missfrac_per_var), replace = T)
+  logi <- sample(0:2, length(missfrac_per_var), replace = T)
   
   for (i in 1:length(missfrac_per_var)) {
-    if (logi[i]==1) X_hat <- X_hat[order(X_hat[,i], decreasing = T),] else X_hat <- X_hat[order(X_hat[,i], decreasing = F),]
-    threshold_for_excl <- X_hat[,i][ceiling(missfrac_per_var[i]*nrow(X_hat))]
-    if (logi[i]==1) X_hat[,i] <- ifelse(X_hat[,i]>threshold_for_excl, NA, X_hat[,i]) else X_hat[,i] <- ifelse(X_hat[,i]<threshold_for_excl, NA, X_hat[,i]) 
+    
+    Q1 <- quantile(X_hat[,i])[2]
+    Q2 <- quantile(X_hat[,i])[3]
+    Q3 <- quantile(X_hat[,i])[4]
+    
+    low_ind <- X_hat[,i] <= Q2
+    mid_ind <- X_hat[,i] <= Q3 & X_hat[,i] >= Q1
+    high_ind <- X_hat[,i] >= Q2
+    
+    if (logi[i]==0) to_NA <- sample(rownames(X_hat)[low_ind], missfrac_per_var[i]*nrow(X_hat)) else if (logi[i]==1) to_NA <- sample(rownames(X_hat)[mid_ind], missfrac_per_var[i]*nrow(X_hat)) else to_NA <- sample(rownames(X_hat)[high_ind], missfrac_per_var[i]*nrow(X_hat))
+    
+    X_hat[,i][to_NA] <- NA    
   }
   
   X_hat <- X_hat[ order(as.numeric(row.names(X_hat))),]
