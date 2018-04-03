@@ -170,6 +170,38 @@ dimple_all_patterns <- function(X_hat, missfrac_per_var) {
   
 }
 
+dimple_random_imp <- function(X_hat, list) {
+  
+  index <- lapply(list, is.na)  
+  
+  random_imp <- function(X) {
+    for(i in 1:ncol(X)) {
+      X[,i][is.na(X[,i])] <- sample(X[,i][!is.na(X[,i])], size=sum(is.na(X[,i])), replace=T)
+    }
+    
+    list(Imputed = X)
+  }
+  
+  results <- lapply(list, random_imp)
+  
+  #using NA index to identify the original values (later set to missing)
+  orig_MCAR <- X_hat[index[[1]]]
+  orig_MAR <- X_hat[index[[2]]]
+  orig_MNAR <- X_hat[index[[3]]]
+  
+  #using NA index to identify the imputed values
+  imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
+  imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
+  imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  
+  #RMSE
+  rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
+  rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
+  rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  
+  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  
+}
 dimple_median_imp <- function(X_hat, list) {
   
   index <- lapply(list, is.na)  
@@ -584,14 +616,15 @@ dimple_missForest_imp <- function(X_hat, list) {
   list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
+
 dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10) {
   
-  collect_res <- data.frame(matrix(NA, nrow = 13*n.iter, ncol = 4))
+  collect_res <- data.frame(matrix(NA, nrow = 14*n.iter, ncol = 4))
   colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE")
   
   for (i in 1:n.iter) {
     
-    collect_res[((13*(i-1))+1):((13*(i-1))+13),1] <- c("Median imputation", "Mean imputation", "missMDA Regularized", 
+    collect_res[((14*(i-1))+1):((14*(i-1))+14),1] <- c("Random replacement", "Median imputation", "Mean imputation", "missMDA Regularized", 
                                                        "missMDA EM", "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA", 
                                                        "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
                                                        "mi Bayesian", "Amelia II", "missForest")
@@ -599,19 +632,20 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
     sim <- dimple_sim(rownum, colnum, cormat)
     res <- dimple_all_patterns(sim$Simulated_matrix, missfrac_per_var)
     
-    collect_res[((13*(i-1))+1),2:4] <- as.data.frame(dimple_median_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+2),2:4] <- as.data.frame(dimple_mean_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+3),2:4] <- as.data.frame(dimple_missMDA_regularized_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+4),2:4] <- as.data.frame(dimple_missMDA_EM_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+5),2:4] <- as.data.frame(dimple_pcaMethods_PPCA_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+6),2:4] <- as.data.frame(dimple_pcaMethods_svdImpute_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+7),2:4] <- as.data.frame(dimple_pcaMethods_BPCA_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+8),2:4] <- as.data.frame(dimple_pcaMethods_Nipals_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+9),2:4] <- as.data.frame(dimple_pcaMethods_NLPCA_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+10),2:4] <- as.data.frame(dimple_mice_mixed_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+11),2:4] <- as.data.frame(dimple_mi_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+12),2:4] <- as.data.frame(dimple_AmeliaII_imp(sim$Simulated_matrix, list = res))
-    collect_res[((13*(i-1))+13),2:4] <- as.data.frame(dimple_missForest_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+1),2:4] <- as.data.frame(dimple_random_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+2),2:4] <- as.data.frame(dimple_median_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+3),2:4] <- as.data.frame(dimple_mean_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+4),2:4] <- as.data.frame(dimple_missMDA_regularized_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+5),2:4] <- as.data.frame(dimple_missMDA_EM_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+6),2:4] <- as.data.frame(dimple_pcaMethods_PPCA_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+7),2:4] <- as.data.frame(dimple_pcaMethods_svdImpute_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+8),2:4] <- as.data.frame(dimple_pcaMethods_BPCA_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+9),2:4] <- as.data.frame(dimple_pcaMethods_Nipals_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+10),2:4] <- as.data.frame(dimple_pcaMethods_NLPCA_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+11),2:4] <- as.data.frame(dimple_mice_mixed_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+12),2:4] <- as.data.frame(dimple_mi_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+13),2:4] <- as.data.frame(dimple_AmeliaII_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+14),2:4] <- as.data.frame(dimple_missForest_imp(sim$Simulated_matrix, list = res))
     
   }
   
@@ -656,7 +690,7 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
     as.character()
   
   forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MNAR_RMSE, factor_key=TRUE)
-  forgraph$Method <- factor(forgraph$Method, levels = c("Median imputation", "Mean imputation", "missMDA Regularized", 
+  forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation", "Mean imputation", "missMDA Regularized", 
                                                         "missMDA EM", "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA", 
                                                         "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
                                                         "mi Bayesian", "Amelia II", "missForest"))
@@ -672,14 +706,27 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
   
   
 }
-
-
+dimple_summary <- function(wrapper_output) {
+  
+  print(paste("In case you assume a missing completely at random (MCAR) missingness pattern, dimple suggests you to use the ",
+              wrapper_output$Best_method_MCAR,
+              " algorithm for imputation", sep= ""))
+  print(paste("In case you assume a missing at random (MAR) missingness pattern, dimple suggests you to use the ",
+              wrapper_output$Best_method_MAR,
+              " algorithm for imputation", sep= ""))
+  print(paste("In case you assume a missing not at random (MNAR) missingness pattern, dimple suggests you to use the ",
+              wrapper_output$Best_method_MNAR,
+              " algorithm for imputation", sep= ""))
+  
+  wrapper_output$Plot
+  
+}
 
 
 
 ###LAB
 df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
-df_miss <- prodNA(df, 0.25)
+df_miss <- prodNA(df, 0.3)
 
 y <- dimple_get_data(df_miss, matrixplot_sort = T)
 
@@ -708,11 +755,15 @@ dimple_mi_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_AmeliaII_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_missForest_imp(X_hat = yy$Simulated_matrix, list = res)
 
-wrap <- dimple_imp_wrapper(rownum = y$Rows, 
+wrap2 <- dimple_imp_wrapper(rownum = y$Rows, 
                            colnum = y$Columns, 
                            cormat = y$Corr_matrix, 
                            missfrac_per_var =  y$Fraction_missingness_per_variable, 
-                           n.iter = 4)
+                           n.iter = 6)
+
+dimple_summary(wrap)
+
+
 
 
 
@@ -720,13 +771,6 @@ wrap <- dimple_imp_wrapper(rownum = y$Rows,
 pdf("/Users/med-tv_/Documents/Projects/missingdata/RMSE_plot.pdf")
 wrap$Plot
 dev.off()
-
-wrap$Best_method_MCAR
-wrap$Best_method_MAR
-wrap$Best_method_MNAR
-
-
-
 
 
 
