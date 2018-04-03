@@ -83,7 +83,7 @@ AUC_values <- dimple_predict_missing(rownum = y$Rows,
                          missfrac_per_var =  y$Fraction_missingness_per_variable, 
                          bootstrap = 30)
 
-AUC_values$MAR_AUC
+AUC_values$MCAR_AUC
 
 
 
