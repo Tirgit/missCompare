@@ -1,5 +1,18 @@
-
+#################################################################################################################################################
+#
+#The purpose of this function is impute missing datapoints using mi imputation
 #The process approximates a Bayesian framework; multiple chains are run and convergence is assessed after a pre-specified number of iterations within each chain. 
+
+#The function takes two arguments:
+#
+#The simulated matrix with no missingness
+#List of matrices with MCAR, MAR, and MNAR patterns.
+#
+#The function outputs a list of RMSE values between the full matrix and the matrices with missingess.
+#RMSE is calculated based on those datapoints that are set to missing.
+#
+#
+#################################################################################################################################################
 
 
 ###PACKAGES

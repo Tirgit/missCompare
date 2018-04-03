@@ -1,3 +1,19 @@
+#################################################################################################################################################
+#
+#The purpose of this function is impute missing datapoints using all missing data imputation algoritms implemented in dimple
+
+#The function takes arguments from the beginning of the pipeline:
+#
+#Dimensions of the dataset
+#Correlation matrix
+#Fraction of missingess per variable
+#
+#The function outputs a list of RMSE values between the full matrix and the matrices with missingess.
+#Also, there is an output summarizing the RMSE values (mean, 95 CIs).
+#A plot is drawn to compare the missingness patterns.
+#The best methods for each missingess patterns are also output.
+#
+#################################################################################################################################################
 
 
 ###PACKAGES

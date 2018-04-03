@@ -19,7 +19,7 @@ dimple_predict_missing <- function(rownum, colnum, cormat, missfrac_per_var, boo
   
   for (number in 1:bootstrap) {
   
-  sim <- dimple_sim_df(rownum, colnum, cormat)
+  sim <- dimple_sim(rownum, colnum, cormat)
   res <- dimple_all_patterns(sim$Simulated_matrix, missfrac_per_var)
   
   for (i in 1:ncol(res$MCAR_matrix)) {

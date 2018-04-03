@@ -1,6 +1,16 @@
-
-
-
+#################################################################################################################################################
+#
+#The purpose of this function is impute missing datapoints using pcaMethods PPCA imputation
+#The function takes two arguments:
+#
+#The simulated matrix with no missingness
+#List of matrices with MCAR, MAR, and MNAR patterns.
+#
+#The function outputs a list of RMSE values between the full matrix and the matrices with missingess.
+#RMSE is calculated based on those datapoints that are set to missing.
+#
+#
+#################################################################################################################################################
 
 
 ###PACKAGES

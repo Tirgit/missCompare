@@ -1,11 +1,17 @@
-
-
-
-
-
-
-###PACKAGES
-
+#################################################################################################################################################
+#
+#The purpose of this function is impute missing datapoints using median imputation
+#The algorithm calculates the median of a given column and assigns these values to the missing datapoints.
+#The function takes two arguments:
+#
+#The simulated matrix with no missingness
+#List of matrices with MCAR, MAR, and MNAR patterns.
+#
+#The function outputs a list of RMSE values between the full matrix and the matrices with missingess.
+#RMSE is calculated based on those datapoints that are set to missing.
+#
+#
+#################################################################################################################################################
 
 
 #FUNCTION

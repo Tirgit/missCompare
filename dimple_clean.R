@@ -1,3 +1,17 @@
+#################################################################################################################################################
+#
+#The purpose of this function is to pre-clean the dataset before starting the imputation pipeline
+#Specifically, the function removes columns (variables) above pre-defined missingness thresholds (by default, above 50%).
+#The function can also convert badly coded missing values (e.g. -9).
+#The function's arguments are:
+#
+#the original data frame
+#removal threshold (by default, 0.5 (50%))
+#missingness coding 
+#
+#The function outputs the a clean dataframe with variables above the removal threshold excluded.
+#
+#################################################################################################################################################
 
 #converts any missing data conding system to NAs in R
 #removes variables with missingness above 50%

@@ -756,29 +756,6 @@ y <- dimple_get_data(clean$Dataframe_clean, matrixplot_sort = T)
 
 yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
 
-res <- dimple_MCAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-res <- dimple_MNAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-res <- dimple_MAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-
-res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-matrixplot(res$MCAR_matrix, interactive = F, col= "red") 
-matrixplot(res$MAR_matrix, interactive = F, col= "red") 
-matrixplot(res$MNAR_matrix, interactive = F, col= "red") 
-
-dimple_median_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_mean_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_missMDA_regularized_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_missMDA_EM_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_pcaMethods_PPCA_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_pcaMethods_svdImpute_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_pcaMethods_BPCA_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_pcaMethods_Nipals_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_pcaMethods_NLPCA_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_mice_mixed_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_mi_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_AmeliaII_imp(X_hat = yy$Simulated_matrix, list = res)
-dimple_missForest_imp(X_hat = yy$Simulated_matrix, list = res)
-
 wrap <- dimple_imp_wrapper(rownum = y$Rows, 
                            colnum = y$Columns, 
                            cormat = y$Corr_matrix, 

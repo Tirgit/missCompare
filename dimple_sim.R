@@ -2,15 +2,14 @@
 #
 #The purpose of this function is to simulate a dataset that resembles the original dataset based on real information.
 #The function will estimate the nearest possible positive definitive matrix for correlation structure with normally distributed variables with given mean and SD.
-#At this stage, the simulated dataset will not contain missing values.
-#These pieces of information are:
+#At this stage, the simulated dataset will not contain any missing values.
+#The pieces of information used for the simulation are:
 #
-#data size
-#data dimensions
+#data dimensions (number of rows and number of columns)
 #correlation matrix
 #
 #
-#The function outputs the simulated matrix, the original correlation structure and the correlation structure of the simulated matrix
+#The function outputs the simulated matrix, and samples from the original correlation structure and the correlation structure of the simulated matrix.
 #The two correlation matrices should be very similar.
 #
 #
@@ -28,8 +27,8 @@ dimple_sim <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
   stddev <- rep(sdval,colnum)
   covMat <- stddev %*% t(stddev) * pd_corr_matrix$mat
   X_hat <- mvrnorm(n=rownum, mu=mu, Sigma=covMat, empirical=TRUE) # Simulated values
-  original_sample <- cormat[1:5,1:5]
-  nearPD_sample <- cor(X_hat)[1:5,1:5]
+  if (colnum >5) original_sample <- cormat[1:5,1:5] else original_sample <- cormat[1:colnum,1:colnum]
+  if (colnum >5) nearPD_sample <- cor(X_hat)[1:5,1:5] else nearPD_sample <- cor(X_hat)[1:colnum,1:colnum]
   
   rownames(X_hat) <- 1:nrow(X_hat)
   
