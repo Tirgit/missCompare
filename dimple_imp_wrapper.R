@@ -18,7 +18,7 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
                                                                  "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
                                                                  "mi Bayesian", "Amelia II", "missForest")
     
-    sim <- dimple_sim_df(rownum, colnum, cormat)
+    sim <- dimple_sim(rownum, colnum, cormat)
     res <- dimple_all_patterns(sim$Simulated_matrix, missfrac_per_var)
     
     collect_res[((13*(i-1))+1),2:4] <- as.data.frame(dimple_median_imp(sim$Simulated_matrix, list = res))
@@ -126,7 +126,7 @@ for (i in 1:2) {
                                                      "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
                                                      "mi Bayesian", "Amelia II", "missForest")
   
-  sim <- dimple_sim_df(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
+  sim <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
   res <- dimple_all_patterns(sim$Simulated_matrix, missfrac_per_var = y$Fraction_missingness_per_variable)
   
   collect_res[((13*(i-1))+1),2:4] <- as.data.frame(dimple_median_imp(sim$Simulated_matrix, list = res))

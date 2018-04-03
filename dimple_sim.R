@@ -22,7 +22,7 @@ library(Matrix)
 
 
 ###FUNCTION
-dimple_sim_df <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
+dimple_sim <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
   pd_corr_matrix <- nearPD(cormat, keepDiag=T, conv.tol = 1e-7, corr=T)
   mu <- rep(meanval,colnum)
   stddev <- rep(sdval,colnum)
@@ -39,7 +39,7 @@ dimple_sim_df <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
 
 
 ###LAB
-yy <- dimple_sim_df(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
+yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
 
 
 

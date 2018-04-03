@@ -30,7 +30,7 @@ dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
   cols <- ncol(X)
   mat <- cor(X, use="pairwise.complete.obs", method="pearson") 
   missfrac_per_df <- sum(is.na(X))/(nrow(X)*ncol(X))
-  missfrac_per_var <- colMeans(is.na(df_miss))
+  missfrac_per_var <- colMeans(is.na(X))
   na_per_df <-  sum(is.na(X))
   na_per_var <- sapply(X, function(x) sum(length(which(is.na(x))))) 
   mdpat <- md.pattern(X)
@@ -40,7 +40,7 @@ dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
     arrange_at(vars(nm1), funs(desc(is.na(.))))
   
   vars_above_half <- colnames(X)[missfrac_per_var>=0.5]
-  if (length(vars_above_half) != 0) message(paste("Warning! Missingness exceeds 50% for variables ",
+  if (length(vars_above_half) != 0) message(paste("Warning! Missingness exceeds 50% for variable(s) ",
                 (paste(vars_above_half,collapse=", ") ),
                 ". Consider excluding these variables using dimple_clean() and repeating function until no warnings are shown.", sep= ""))
   

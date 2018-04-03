@@ -17,13 +17,30 @@ library(ROCR)
 
 
 ###FUNCTIONS
+dimple_clean <- function(x, removal_threshold = 0.5, missingness_coding = NA) {
+  
+  x[x == missingness_coding] <- NA
+  
+  missfrac_per_var <- colMeans(is.na(x))
+  vars_above_half <- colnames(x)[missfrac_per_var>= removal_threshold]
+  
+  if (length(vars_above_half) != 0) message(paste("Variable(s) ",
+                                                  (paste(vars_above_half,collapse=", ") ),
+                                                  " removed due to exceeding the pre-defined removal threshold (>",
+                                                  removal_threshold*100,
+                                                  "%) for missingness.", sep= ""))
+  
+  new_df <- x[, -which(missfrac_per_var >= removal_threshold)]
+  list(Dataframe_clean = new_df)
+  
+}
 dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
   comp <- sum(complete.cases(X))
   rows <- nrow(X)
   cols <- ncol(X)
   mat <- cor(X, use="pairwise.complete.obs", method="pearson") 
   missfrac_per_df <- sum(is.na(X))/(nrow(X)*ncol(X))
-  missfrac_per_var <- colMeans(is.na(df_miss))
+  missfrac_per_var <- colMeans(is.na(X))
   na_per_df <-  sum(is.na(X))
   na_per_var <- sapply(X, function(x) sum(length(which(is.na(x))))) 
   mdpat <- md.pattern(X)
@@ -33,7 +50,7 @@ dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
     arrange_at(vars(nm1), funs(desc(is.na(.))))
   
   vars_above_half <- colnames(X)[missfrac_per_var>=0.5]
-  if (length(vars_above_half) != 0) message(paste("Warning! Missingness exceeds 50% for variables ",
+  if (length(vars_above_half) != 0) message(paste("Warning! Missingness exceeds 50% for variable(s) ",
                                                   (paste(vars_above_half,collapse=", ") ),
                                                   ". Consider excluding these variables using dimple_clean() and repeating function until no warnings are shown.", sep= ""))
   
@@ -47,7 +64,7 @@ dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
        Vars_above_half = vars_above_half)
   
 }
-dimple_sim_df <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
+dimple_sim <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
   pd_corr_matrix <- nearPD(cormat, keepDiag=T, conv.tol = 1e-7, corr=T)
   mu <- rep(meanval,colnum)
   stddev <- rep(sdval,colnum)
@@ -567,7 +584,6 @@ dimple_missForest_imp <- function(X_hat, list) {
   list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
-
 dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10) {
   
   collect_res <- data.frame(matrix(NA, nrow = 13*n.iter, ncol = 4))
@@ -580,7 +596,7 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
                                                        "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
                                                        "mi Bayesian", "Amelia II", "missForest")
     
-    sim <- dimple_sim_df(rownum, colnum, cormat)
+    sim <- dimple_sim(rownum, colnum, cormat)
     res <- dimple_all_patterns(sim$Simulated_matrix, missfrac_per_var)
     
     collect_res[((13*(i-1))+1),2:4] <- as.data.frame(dimple_median_imp(sim$Simulated_matrix, list = res))
@@ -663,11 +679,82 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
 
 ###LAB
 df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
-df_miss <- prodNA(df, 0.4)
+df_miss <- prodNA(df, 0.25)
 
 y <- dimple_get_data(df_miss, matrixplot_sort = T)
 
-yy <- dimple_sim_df(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
+yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
+
+res <- dimple_MCAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+res <- dimple_MNAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+res <- dimple_MAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+
+res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+matrixplot(res$MCAR_matrix, interactive = F, col= "red") 
+matrixplot(res$MAR_matrix, interactive = F, col= "red") 
+matrixplot(res$MNAR_matrix, interactive = F, col= "red") 
+
+dimple_median_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_mean_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_missMDA_regularized_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_missMDA_EM_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_pcaMethods_PPCA_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_pcaMethods_svdImpute_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_pcaMethods_BPCA_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_pcaMethods_Nipals_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_pcaMethods_NLPCA_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_mice_mixed_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_mi_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_AmeliaII_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_missForest_imp(X_hat = yy$Simulated_matrix, list = res)
+
+wrap <- dimple_imp_wrapper(rownum = y$Rows, 
+                           colnum = y$Columns, 
+                           cormat = y$Corr_matrix, 
+                           missfrac_per_var =  y$Fraction_missingness_per_variable, 
+                           n.iter = 4)
+
+
+
+
+pdf("/Users/med-tv_/Documents/Projects/missingdata/RMSE_plot.pdf")
+wrap$Plot
+dev.off()
+
+wrap$Best_method_MCAR
+wrap$Best_method_MAR
+wrap$Best_method_MNAR
+
+
+
+
+
+
+
+
+
+#REAL DATA
+library(foreign)
+mydata <- read.dta("/Volumes/External/LOCUS/pheno/glacier_corr_160127.dta")
+vars <- colnames(mydata)
+to_exclude <- c(grep("da", names(mydata), value=TRUE) ,
+                grep("gram", names(mydata), value=TRUE),
+                grep("sum", names(mydata), value=TRUE),
+                grep("upps", names(mydata), value=TRUE),
+                grep("delp", names(mydata), value=TRUE)
+                )
+mydata <- mydata[, !(names(mydata) %in% to_exclude )] 
+mydata <- mydata[mydata$besok == 1,]
+mydata <- mydata[!is.na(mydata$id),]
+mydata <- mydata[1:2000, 2:16]
+
+
+
+y <- dimple_get_data(mydata, matrixplot_sort = T)
+clean <- dimple_clean(mydata)
+y <- dimple_get_data(clean$Dataframe_clean, matrixplot_sort = T)
+
+yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
 
 res <- dimple_MCAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 res <- dimple_MNAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
@@ -701,13 +788,10 @@ wrap <- dimple_imp_wrapper(rownum = y$Rows,
 
 
 
-pdf("/Users/med-tv_/Documents/Projects/missingdata/RMSE_plot.pdf")
-wrap$Plot
-dev.off()
 
-wrap$Best_method_MCAR
-wrap$Best_method_MAR
-wrap$Best_method_MNAR
+
+
+
 
 
 
