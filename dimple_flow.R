@@ -820,7 +820,7 @@ dimple_summary <- function(wrapper_output) {
 
 ###LAB
 df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
-df_miss <- prodNA(df, 0.1)
+df_miss <- prodNA(df, 0.3)
 
 cleaned <- dimple_clean(df_miss)
 y <- dimple_get_data(cleaned$Dataframe_clean, matrixplot_sort = T)
