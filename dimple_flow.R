@@ -190,6 +190,76 @@ dimple_all_patterns <- function(X_hat, missfrac_per_var) {
   list(MCAR_matrix = MCAR$MCAR_matrix , MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix)
   
 }
+dimple_predict_missing <- function(rownum, colnum, cormat, missfrac_per_var, bootstrap) {
+  
+  MCAR_AUC <- vector('numeric')
+  MAR_AUC <- vector('numeric')
+  MNAR_AUC <- vector('numeric')
+  
+  for (number in 1:bootstrap) {
+    
+    sim <- dimple_sim(rownum, colnum, cormat)
+    res <- dimple_all_patterns(sim$Simulated_matrix, missfrac_per_var)
+    
+    for (i in 1:ncol(res$MCAR_matrix)) {
+      complete <- res$MCAR_matrix[complete.cases(res$MCAR_matrix[,-i]),]
+      
+      # 0 if available data
+      outcome <- rep(0, nrow(complete))
+      # 1 if missing
+      outcome[is.na(complete[,i])] <- 1
+      #predict using logistic regression using the rest of the variables, obtain AUC ROC
+      mylogit <- glm(outcome ~ complete[,-i], family = "binomial")
+      prob <- predict(mylogit,type=c("response")) 
+      AUC <- auc(roc(outcome ~ prob))  
+      MCAR_AUC <- c(MCAR_AUC,AUC)
+    }
+    
+    for (i in 1:ncol(res$MAR_matrix)) {
+      complete <- res$MAR_matrix[complete.cases(res$MAR_matrix[,-i]),]
+      
+      # 0 if available data
+      outcome <- rep(0, nrow(complete))
+      # 1 if missing
+      outcome[is.na(complete[,i])] <- 1
+      #predict using logistic regression using the rest of the variables, obtain AUC ROC
+      mylogit <- glm(outcome ~ complete[,-i], family = "binomial")
+      prob <- predict(mylogit,type=c("response")) 
+      AUC <- auc(roc(outcome ~ prob))  
+      MAR_AUC <- c(MAR_AUC,AUC)
+    }
+    
+    for (i in 1:ncol(res$MNAR_matrix)) {
+      complete <- res$MNAR_matrix[complete.cases(res$MNAR_matrix[,-i]),]
+      
+      # 0 if available data
+      outcome <- rep(0, nrow(complete))
+      # 1 if missing
+      outcome[is.na(complete[,i])] <- 1
+      #predict using logistic regression using the rest of the variables, obtain AUC ROC
+      mylogit <- glm(outcome ~ complete[,-i], family = "binomial")
+      prob <- predict(mylogit,type=c("response")) 
+      AUC <- auc(roc(outcome ~ prob))  
+      MNAR_AUC <- c(MNAR_AUC,AUC)
+    }
+    
+  }
+  
+  rocs <- as.data.frame(cbind(MCAR_AUC, MAR_AUC, MNAR_AUC))
+  names(rocs) <- c("MCAR", "MAR", "MNAR")
+  rocs_forgraph <- gather(rocs, Pattern, AUC, factor_key=TRUE)
+  levels(rocs_forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
+  
+  AUCplot <- ggplot(rocs_forgraph, aes(x=Pattern, y=AUC, fill=Pattern)) + 
+    geom_violin() + 
+    ggtitle("ROC AUC statistics for predicting whether data is available or missing") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    labs(x="") 
+  
+  #output list
+  list(MCAR_AUC = MCAR_AUC, MAR_AUC = MAR_AUC, MNAR_AUC = MNAR_AUC, Plot = AUCplot)
+  
+}
 
 dimple_random_imp <- function(X_hat, list) {
   
@@ -750,7 +820,7 @@ dimple_summary <- function(wrapper_output) {
 
 ###LAB
 df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
-df_miss <- prodNA(df, 0.3)
+df_miss <- prodNA(df, 0.1)
 
 cleaned <- dimple_clean(df_miss)
 y <- dimple_get_data(cleaned$Dataframe_clean, matrixplot_sort = T)
