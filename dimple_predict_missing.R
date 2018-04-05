@@ -83,7 +83,16 @@ AUC_values <- dimple_predict_missing(rownum = y$Rows,
                          missfrac_per_var =  y$Fraction_missingness_per_variable, 
                          bootstrap = 30)
 
-AUC_values$MCAR_AUC
+rocs <- as.data.frame(cbind(AUC_values$MCAR_AUC, AUC_values$MAR_AUC, AUC_values$MNAR_AUC))
+names(rocs) <- c("MCAR", "MAR", "MNAR")
+rocs_forgraph <- gather(rocs, Pattern, AUC, factor_key=TRUE)
+levels(rocs_forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
 
 
+
+ggplot(rocs_forgraph, aes(x=Pattern, y=AUC, fill=Pattern)) + 
+  geom_violin() + 
+  ggtitle("ROC AUC statistics for predicting whether data is available or missing") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x="") 
 

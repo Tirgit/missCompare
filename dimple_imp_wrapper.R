@@ -103,7 +103,10 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
   p <- ggplot(forgraph, aes(x=Method, y=RMSE, fill=Method)) + 
     geom_boxplot() +
     facet_grid(~Pattern, scale="free") + 
-    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+    ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    labs(x="") 
   
   #output list
   list(Imputation_RMSE = collect_res, Imputation_RMSE_means = RMSE_stats, Best_method_MCAR = Best_method_MCAR,

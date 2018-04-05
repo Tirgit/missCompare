@@ -94,37 +94,13 @@ dimple_MCAR <- function(X_hat, missfrac_per_var) {
     X_hat[,i] <- prodNA(as.matrix(X_hat[,i]), noNA = missfrac_per_var[i])
   }
   
+  missfrac_per_ind <- rowMeans(is.na(X_hat))
+  inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
+  if (length(inds_above_thres) != 0) X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
+  
   matrix_summary <- summary(X_hat)
   
   list(MCAR_matrix = X_hat, Summary = matrix_summary)
-  
-}
-dimple_MNAR <- function(X_hat, missfrac_per_var) {
-  
-  rownames(X_hat) <- 1:nrow(X_hat)
-  
-  logi <- sample(0:2, length(missfrac_per_var), replace = T)
-  
-  for (i in 1:length(missfrac_per_var)) {
-    
-    Q1 <- quantile(X_hat[,i])[2]
-    Q2 <- quantile(X_hat[,i])[3]
-    Q3 <- quantile(X_hat[,i])[4]
-    
-    low_ind <- X_hat[,i] <= Q2
-    mid_ind <- X_hat[,i] <= Q3 & X_hat[,i] >= Q1
-    high_ind <- X_hat[,i] >= Q2
-    
-    if (logi[i]==0) to_NA <- sample(rownames(X_hat)[low_ind], missfrac_per_var[i]*nrow(X_hat)) else if (logi[i]==1) to_NA <- sample(rownames(X_hat)[mid_ind], missfrac_per_var[i]*nrow(X_hat)) else to_NA <- sample(rownames(X_hat)[high_ind], missfrac_per_var[i]*nrow(X_hat))
-    
-    X_hat[,i][to_NA] <- NA    
-  }
-  
-  X_hat <- X_hat[ order(as.numeric(row.names(X_hat))),]
-  
-  matrix_summary <- summary(X_hat)
-  
-  list(MNAR_matrix = X_hat, Summary = matrix_summary)
   
 }
 dimple_MAR <- function(X_hat, missfrac_per_var) {
@@ -164,9 +140,45 @@ dimple_MAR <- function(X_hat, missfrac_per_var) {
   X_hat[,10][to_NA] <- NA      
   X_hat <- X_hat[ order(as.numeric(row.names(X_hat))),]
   
+  missfrac_per_ind <- rowMeans(is.na(X_hat))
+  inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
+  if (length(inds_above_thres) != 0) X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
+  
   matrix_summary <- summary(X_hat)
   
   list(MAR_matrix = X_hat, Summary = matrix_summary)
+  
+}
+dimple_MNAR <- function(X_hat, missfrac_per_var) {
+  
+  rownames(X_hat) <- 1:nrow(X_hat)
+  
+  logi <- sample(0:2, length(missfrac_per_var), replace = T)
+  
+  for (i in 1:length(missfrac_per_var)) {
+    
+    Q1 <- quantile(X_hat[,i])[2]
+    Q2 <- quantile(X_hat[,i])[3]
+    Q3 <- quantile(X_hat[,i])[4]
+    
+    low_ind <- X_hat[,i] <= Q2
+    mid_ind <- X_hat[,i] <= Q3 & X_hat[,i] >= Q1
+    high_ind <- X_hat[,i] >= Q2
+    
+    if (logi[i]==0) to_NA <- sample(rownames(X_hat)[low_ind], missfrac_per_var[i]*nrow(X_hat)) else if (logi[i]==1) to_NA <- sample(rownames(X_hat)[mid_ind], missfrac_per_var[i]*nrow(X_hat)) else to_NA <- sample(rownames(X_hat)[high_ind], missfrac_per_var[i]*nrow(X_hat))
+    
+    X_hat[,i][to_NA] <- NA    
+  }
+  
+  X_hat <- X_hat[ order(as.numeric(row.names(X_hat))),]
+  
+  missfrac_per_ind <- rowMeans(is.na(X_hat))
+  inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
+  if (length(inds_above_thres) != 0) X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
+  
+  matrix_summary <- summary(X_hat)
+  
+  list(MNAR_matrix = X_hat, Summary = matrix_summary)
   
 }
 dimple_all_patterns <- function(X_hat, missfrac_per_var) {
@@ -707,7 +719,10 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
   p <- ggplot(forgraph, aes(x=Method, y=RMSE, fill=Method)) + 
     geom_boxplot() +
     facet_grid(~Pattern, scale="free") + 
-    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+    ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    labs(x="") 
   
   #output list
   list(Imputation_RMSE = collect_res, Imputation_RMSE_means = RMSE_stats, Best_method_MCAR = Best_method_MCAR,
@@ -765,27 +780,40 @@ dimple_mi_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_AmeliaII_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_missForest_imp(X_hat = yy$Simulated_matrix, list = res)
 
-wrap2 <- dimple_imp_wrapper(rownum = y$Rows, 
+wrap <- dimple_imp_wrapper(rownum = y$Rows, 
                            colnum = y$Columns, 
                            cormat = y$Corr_matrix, 
                            missfrac_per_var =  y$Fraction_missingness_per_variable, 
                            n.iter = 6)
 
-dimple_summary(wrap)
-dimple_summary(wrap2)
 
-saveRDS(wrap, file = "/Users/med-tv_/Documents/Projects/missingdata/wrap.rds")
-saveRDS(wrap2, file = "/Users/med-tv_/Documents/Projects/missingdata/wrap2.rds")
 
-wrap0 <- readRDS("/Users/med-tv_/Documents/Projects/missingdata/wrap.rds")
-wrap1 <- readRDS("/Users/med-tv_/Documents/Projects/missingdata/wrap2.rds")
+wraps <- readRDS(file = "/Users/med-tv_/Documents/Projects/missingdata/wraps.rds")
 
+Imputation_RMSE <- rbind(wraps, wrap$Imputation_RMSE)
+
+saveRDS(Imputation_RMSE, file = "/Users/med-tv_/Documents/Projects/missingdata/wraps.rds")
+
+
+forgraph <- gather(Imputation_RMSE, Pattern, RMSE, MCAR_RMSE:MNAR_RMSE, factor_key=TRUE)
+forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation", "Mean imputation", "missMDA Regularized", 
+                                                      "missMDA EM", "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA", 
+                                                      "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
+                                                      "mi Bayesian", "Amelia II", "missForest"))
+levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
+p <- ggplot(forgraph, aes(x=Method, y=RMSE, fill=Method)) + 
+  geom_boxplot() +
+  facet_grid(~Pattern, scale="free") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x="") 
 
 
 
 
 pdf("/Users/med-tv_/Documents/Projects/missingdata/RMSE_plot.pdf")
-wrap$Plot
+p
 dev.off()
 
 
