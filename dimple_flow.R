@@ -17,21 +17,25 @@ library(ROCR)
 
 
 ###FUNCTIONS
-dimple_clean <- function(x, removal_threshold = 0.5, missingness_coding = NA) {
+dimple_clean <- function(x, var_removal_threshold = 0.5, ind_removal_threshold = 0.9, missingness_coding = NA) {
   
   x[x == missingness_coding] <- NA
   
   missfrac_per_var <- colMeans(is.na(x))
-  vars_above_half <- colnames(x)[missfrac_per_var>= removal_threshold]
+  vars_above_half <- colnames(x)[missfrac_per_var>= var_removal_threshold]
   
   if (length(vars_above_half) != 0) message(paste("Variable(s) ",
                                                   (paste(vars_above_half,collapse=", ") ),
                                                   " removed due to exceeding the pre-defined removal threshold (>",
-                                                  removal_threshold*100,
+                                                  var_removal_threshold*100,
                                                   "%) for missingness.", sep= ""))
   
-  new_df <- x[, -which(missfrac_per_var >= removal_threshold)]
-  list(Dataframe_clean = new_df)
+  new_df <- x[, -which(missfrac_per_var >= var_removal_threshold)]
+  
+  missfrac_per_ind <- rowMeans(is.na(new_df))
+  clean_df <- new_df[-which(missfrac_per_ind >= ind_removal_threshold), ]
+  
+  list(Dataframe_clean = clean_df)
   
 }
 dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
@@ -728,7 +732,8 @@ dimple_summary <- function(wrapper_output) {
 df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
 df_miss <- prodNA(df, 0.3)
 
-y <- dimple_get_data(df_miss, matrixplot_sort = T)
+cleaned <- dimple_clean(df_miss)
+y <- dimple_get_data(cleaned$Dataframe_clean, matrixplot_sort = T)
 
 yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
 
@@ -762,7 +767,13 @@ wrap2 <- dimple_imp_wrapper(rownum = y$Rows,
                            n.iter = 6)
 
 dimple_summary(wrap)
+dimple_summary(wrap2)
 
+saveRDS(wrap, file = "/Users/med-tv_/Documents/Projects/missingdata/wrap.rds")
+saveRDS(wrap2, file = "/Users/med-tv_/Documents/Projects/missingdata/wrap2.rds")
+
+wrap0 <- readRDS("/Users/med-tv_/Documents/Projects/missingdata/wrap.rds")
+wrap1 <- readRDS("/Users/med-tv_/Documents/Projects/missingdata/wrap2.rds")
 
 
 
