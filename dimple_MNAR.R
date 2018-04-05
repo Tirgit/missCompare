@@ -41,6 +41,10 @@ dimple_MNAR <- function(X_hat, missfrac_per_var) {
   
   X_hat <- X_hat[ order(as.numeric(row.names(X_hat))),]
   
+  missfrac_per_ind <- rowMeans(is.na(X_hat))
+  inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
+  if (length(inds_above_thres) != 0) X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
+  
   matrix_summary <- summary(X_hat)
   
   list(MNAR_matrix = X_hat, Summary = matrix_summary)
