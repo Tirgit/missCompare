@@ -14,6 +14,7 @@ library(Amelia)
 library(tidyr)
 library(pROC)
 library(ROCR)  
+library(Hmisc)
 
 
 ###FUNCTIONS
@@ -850,6 +851,8 @@ dimple_mi_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_AmeliaII_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_missForest_imp(X_hat = yy$Simulated_matrix, list = res)
 
+
+
 wrap <- dimple_imp_wrapper(rownum = y$Rows, 
                            colnum = y$Columns, 
                            cormat = y$Corr_matrix, 
@@ -882,12 +885,12 @@ p <- ggplot(forgraph, aes(x=Method, y=RMSE, fill=Method)) +
 
 
 
-pdf("/Users/med-tv_/Documents/Projects/missingdata/RMSE_plot.pdf")
+pdf("/Users/med-tv_/Documents/Projects/missingdata/RMSE_plot.pdf", width=10, height=6)
 p
 dev.off()
 
 
-
+dimple_summary(wrap)
 
 
 
@@ -933,6 +936,16 @@ wrap <- dimple_imp_wrapper(rownum = y$Rows,
 
 
 
+
+
+#visualizing MAR/MNAR on matrixplot
+MNAR_spike <- res$MNAR_matrix
+colnames(MNAR_spike) <- c("X1", "X2","X3","X4","X5","X6","X7","X8","X9","X10")
+nm1 <- colnames(MNAR_spike)[colSums(is.na(MNAR_spike)) >0]
+arr_MNAR_spike <- MNAR_spike %>% 
+  as.data.frame() %>% 
+  arrange_at(vars(nm1), funs(desc(is.na(.))))
+matrixplot(arr_MNAR_spike, interactive = F, col= "red")
 
 
 

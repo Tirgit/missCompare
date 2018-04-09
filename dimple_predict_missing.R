@@ -169,17 +169,6 @@ AUC_values_30 <- dimple_predict_missing(rownum = y$Rows,
                                         missfrac_per_var =  y$Fraction_missingness_per_variable, 
                                         bootstrap = 100)
 
-df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
-df_miss <- prodNA(df, 0.4)
-cleaned <- dimple_clean(df_miss)
-y <- dimple_get_data(cleaned$Dataframe_clean, matrixplot_sort = F)
-
-AUC_values_40 <- dimple_predict_missing(rownum = y$Rows, 
-                                        colnum = y$Columns, 
-                                        cormat = y$Corr_matrix, 
-                                        missfrac_per_var =  y$Fraction_missingness_per_variable, 
-                                        bootstrap = 100)
-
 
 rocs1 <- as.data.frame(cbind(rep("1%", 1000), AUC_values_1$MCAR_AUC, AUC_values_1$MAR_AUC, AUC_values_1$MNAR_AUC))
 names(rocs1) <- c("Percentage", "MCAR", "MAR", "MNAR")
@@ -191,10 +180,8 @@ rocs20 <- as.data.frame(cbind(rep("20%", 1000), AUC_values_20$MCAR_AUC, AUC_valu
 names(rocs20) <- c("Percentage", "MCAR", "MAR", "MNAR")
 rocs30 <- as.data.frame(cbind(rep("30%", 1000), AUC_values_30$MCAR_AUC, AUC_values_30$MAR_AUC, AUC_values_30$MNAR_AUC))
 names(rocs30) <- c("Percentage", "MCAR", "MAR", "MNAR")
-rocs40 <- as.data.frame(cbind(rep("40%", 1000), AUC_values_40$MCAR_AUC, AUC_values_40$MAR_AUC, AUC_values_40$MNAR_AUC))
-names(rocs40) <- c("Percentage", "MCAR", "MAR", "MNAR")
 
-allrocs <- rbind(rocs1, rocs5, rocs10, rocs20, rocs30, rocs40)
+allrocs <- rbind(rocs1, rocs5, rocs10, rocs20, rocs30)
 rocs_forgraph <- gather(allrocs, Pattern, AUC, MCAR:MNAR, factor_key=TRUE)
 levels(rocs_forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
 rocs_forgraph$AUC <- as.numeric(rocs_forgraph$AUC)
@@ -206,7 +193,7 @@ AUCplot <- ggplot(rocs_forgraph, aes(x=Percentage, y=AUC, fill=Percentage)) +
   theme(plot.title = element_text(hjust = 0.5)) +
   labs(x="") 
 
-pdf("/Users/med-tv_/Documents/Projects/missingdata/ROC_AUC_plot_perc.pdf")
+pdf("/Users/med-tv_/Documents/Projects/missingdata/ROC_AUC_plot_perc.pdf", width=10, height=6)
 AUCplot
 dev.off()
 
