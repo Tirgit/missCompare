@@ -854,7 +854,7 @@ wrap <- dimple_imp_wrapper(rownum = y$Rows,
                            colnum = y$Columns, 
                            cormat = y$Corr_matrix, 
                            missfrac_per_var =  y$Fraction_missingness_per_variable, 
-                           n.iter = 6)
+                           n.iter = 10)
 
 
 
@@ -885,6 +885,12 @@ p <- ggplot(forgraph, aes(x=Method, y=RMSE, fill=Method)) +
 pdf("/Users/med-tv_/Documents/Projects/missingdata/RMSE_plot.pdf")
 p
 dev.off()
+
+
+
+
+
+
 
 
 
