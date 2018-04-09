@@ -202,7 +202,9 @@ dimple_predict_missing <- function(rownum, colnum, cormat, missfrac_per_var, boo
     sim <- dimple_sim(rownum, colnum, cormat)
     res <- dimple_all_patterns(sim$Simulated_matrix, missfrac_per_var)
     
-    for (i in 1:ncol(res$MCAR_matrix)) {
+    MCAR_cols_with_miss <- which(colSums(is.na(res$MCAR_matrix))>0)
+    
+    for (i in MCAR_cols_with_miss) {
       complete <- res$MCAR_matrix[complete.cases(res$MCAR_matrix[,-i]),]
       
       # 0 if available data
@@ -216,7 +218,9 @@ dimple_predict_missing <- function(rownum, colnum, cormat, missfrac_per_var, boo
       MCAR_AUC <- c(MCAR_AUC,AUC)
     }
     
-    for (i in 1:ncol(res$MAR_matrix)) {
+    MAR_cols_with_miss <- which(colSums(is.na(res$MAR_matrix))>0)
+    
+    for (i in MAR_cols_with_miss) {
       complete <- res$MAR_matrix[complete.cases(res$MAR_matrix[,-i]),]
       
       # 0 if available data
@@ -230,7 +234,9 @@ dimple_predict_missing <- function(rownum, colnum, cormat, missfrac_per_var, boo
       MAR_AUC <- c(MAR_AUC,AUC)
     }
     
-    for (i in 1:ncol(res$MNAR_matrix)) {
+    MNAR_cols_with_miss <- which(colSums(is.na(res$MNAR_matrix))>0)
+    
+    for (i in MNAR_cols_with_miss) {
       complete <- res$MNAR_matrix[complete.cases(res$MNAR_matrix[,-i]),]
       
       # 0 if available data
@@ -252,7 +258,7 @@ dimple_predict_missing <- function(rownum, colnum, cormat, missfrac_per_var, boo
   levels(rocs_forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
   
   AUCplot <- ggplot(rocs_forgraph, aes(x=Pattern, y=AUC, fill=Pattern)) + 
-    geom_violin() + 
+    geom_boxplot() + 
     ggtitle("ROC AUC statistics for predicting whether data is available or missing") +
     theme(plot.title = element_text(hjust = 0.5)) +
     labs(x="") 
@@ -261,6 +267,7 @@ dimple_predict_missing <- function(rownum, colnum, cormat, missfrac_per_var, boo
   list(MCAR_AUC = MCAR_AUC, MAR_AUC = MAR_AUC, MNAR_AUC = MNAR_AUC, Plot = AUCplot)
   
 }
+
 
 dimple_random_imp <- function(X_hat, list) {
   
@@ -918,18 +925,21 @@ mydata <- mydata[1:2000, 2:16]
 
 
 y <- dimple_get_data(mydata, matrixplot_sort = T)
-clean <- dimple_clean(mydata)
+clean <- dimple_clean(mydata, var_removal_threshold = 0.4)
 y <- dimple_get_data(clean$Dataframe_clean, matrixplot_sort = T)
 
 yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
+
+
+n <- naclus(clean$Dataframe_clean)
+plot(n)
 
 wrap <- dimple_imp_wrapper(rownum = y$Rows, 
                            colnum = y$Columns, 
                            cormat = y$Corr_matrix, 
                            missfrac_per_var =  y$Fraction_missingness_per_variable, 
                            n.iter = 5)
-
-
+dimple_summary(wrap)
 
 
 
