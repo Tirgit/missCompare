@@ -19,7 +19,7 @@
 
 
 #FUNCTION
-dimple_clean <- function(x, var_removal_threshold = 0.5, ind_removal_threshold = 0.9, missingness_coding = NA) {
+dimple_clean <- function(x, var_removal_threshold = 0.5, ind_removal_threshold = 1, missingness_coding = NA) {
   
   x[x == missingness_coding] <- NA
   

@@ -15,6 +15,7 @@ library(tidyr)
 library(pROC)
 library(ROCR)  
 library(Hmisc)
+library(ggdendro)
 
 
 ###FUNCTIONS
@@ -44,7 +45,7 @@ dimple_clean <- function(x, var_removal_threshold = 0.5, ind_removal_threshold =
   list(Dataframe_clean = clean_df)
   
 }
-dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
+dimple_get_data <- function(X, matrixplot_sort = F, plot_transform = T) {
   comp <- sum(complete.cases(X))
   rows <- nrow(X)
   cols <- ncol(X)
@@ -55,23 +56,59 @@ dimple_get_data <- function(X, matrixplot_sort = F ,missplot = F) {
   na_per_var <- sapply(X, function(x) sum(length(which(is.na(x))))) 
   mdpat <- md.pattern(X)
   
-  nm1 <- names(X)[colSums(is.na(X)) >0]
-  arr_X <- X %>% 
+  if (plot_transform == T) X_update <- as.data.frame(scale(X)) else X_update <- X
+  
+  nm1 <- names(X_update)[colSums(is.na(X_update)) >0]
+  arr_X <- X_update %>% 
     arrange_at(vars(nm1), funs(desc(is.na(.))))
   
-  vars_above_half <- colnames(X)[missfrac_per_var>=0.5]
+  vars_above_half <- colnames(X_update)[missfrac_per_var>=0.5]
   if (length(vars_above_half) != 0) message(paste("Warning! Missingness exceeds 50% for variable(s) ",
                                                   (paste(vars_above_half,collapse=", ") ),
                                                   ". Consider excluding these variables using dimple_clean() and repeating function until no warnings are shown.", sep= ""))
   
   #matrix plot
-  if (matrixplot_sort == F) matrixplot(X, interactive = F, col= "red") else matrixplot(arr_X, interactive = F, col= "red")
+  df_miss_id <- cbind(c(1:rows), arr_X)
+  colnames(df_miss_id) <- c("Observations", colnames(arr_X))
+  df_melt <- melt(df_miss_id, id=c("Observations"))
+  matrixplot_sorted <- ggplot(df_melt, aes(x=variable, y=Observations)) +
+    geom_tile(aes(fill=value)) +
+    scale_fill_gradient(low = "white", high = "lightblue") + 
+    theme(panel.background = element_blank()) + 
+    ggtitle("Matrix plot of missing data") +
+    theme(plot.title = element_text(hjust = 0.5))
+  
+  df_miss_id <- cbind(c(1:rows), X_update)
+  colnames(df_miss_id) <- c("Observations", colnames(X_update))
+  df_melt <- melt(df_miss_id, id=c("Observations"))
+  matrixplot_unsorted <- ggplot(df_melt, aes(x=variable, y=Observations)) +
+    geom_tile(aes(fill=value)) +
+    scale_fill_gradient(low = "white", high = "lightblue") + 
+    theme(panel.background = element_blank()) + 
+    ggtitle("Matrix plot of missing data") +
+    theme(plot.title = element_text(hjust = 0.5))
+  
+  if (matrixplot_sort == F) matrix_plot <- matrixplot_unsorted else matrix_plot <- matrixplot_sorted
+  
+  #cluster plot
+  
+  any_miss <- X_update[,which(!colSums(is.na(X_update))==0)]
+  
+  yesno <- any_miss %>% 
+    is.na 
+  d <- dist(t(yesno), method = "binary")
+  hc <- hclust(d, method= "ward.D")
+  hcdata <- dendro_data(hc)
+  cluster_plot <- ggdendrogram(hcdata, theme_dendro = FALSE) + 
+    ggtitle("Cluster plot of missing data") +
+    theme(plot.title = element_text(hjust = 0.5)) + 
+    labs(x = "variable", y= "Height")
   
   #output
   list(Complete_cases = comp, Rows = rows, Columns = cols, Corr_matrix = mat, 
        Fraction_missingness = missfrac_per_df, Fraction_missingness_per_variable = missfrac_per_var, 
        Total_NA = na_per_df, NA_per_variable = na_per_var, MD_Pattern = mdpat,
-       Vars_above_half = vars_above_half)
+       Vars_above_half = vars_above_half, Matrix_plot = matrix_plot, Cluster_plot = cluster_plot)
   
 }
 dimple_sim <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
@@ -864,7 +901,7 @@ wrap <- dimple_imp_wrapper(rownum = y$Rows,
                            colnum = y$Columns, 
                            cormat = y$Corr_matrix, 
                            missfrac_per_var =  y$Fraction_missingness_per_variable, 
-                           n.iter = 10)
+                           n.iter = 3)
 
 
 
@@ -924,9 +961,12 @@ mydata <- mydata[1:2000, 2:16]
 
 
 
-y <- dimple_get_data(mydata, matrixplot_sort = T)
+y <- dimple_get_data(mydata, matrixplot_sort = T, plot_transform = T)
+y$Matrix_plot
 clean <- dimple_clean(mydata, var_removal_threshold = 0.4)
 y <- dimple_get_data(clean$Dataframe_clean, matrixplot_sort = T)
+y$Matrix_plot
+y$Cluster_plot
 
 yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
 
@@ -945,7 +985,7 @@ dimple_summary(wrap)
 
 
 
-
+as.data.frame(scale(mydata))
 
 
 #visualizing MAR/MNAR on matrixplot
