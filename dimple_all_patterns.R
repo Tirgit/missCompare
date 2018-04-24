@@ -35,3 +35,4 @@ res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_varia
                            assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MAR", "MAR", "MNAR", "MNAR"))
 
 
+assumed_pattern <- c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MAR", "MAR", "MNAR", "MNAR")

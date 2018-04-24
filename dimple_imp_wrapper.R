@@ -55,9 +55,6 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
   }
   
   notmiss <- function(x) { sum(!is.na(x)) }
-  
-  notmiss <- function(x) { sum(!is.na(x)) }
-  
   RMSE_statmaker <- function (x) {
     if (ncol(x) == 5) {
       RMSE_stats <- x %>%
@@ -97,29 +94,33 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
   
   summary <- RMSE_statmaker(collect_res)
   
-  
   #Best methods for the three missingness types
-  Best_method_MCAR <- RMSE_stats %>%
-    filter(mean_RMSE_MCAR == min(mean_RMSE_MCAR)) %>%
+  Best_method_MCAR <- summary$RMSE_stats %>%
+    filter(MCAR_RMSE_mean == min(MCAR_RMSE_mean)) %>%
     dplyr::select(Method) %>%
     as.character()
   
-  Best_method_MAR <- RMSE_stats %>%
-    filter(mean_RMSE_MAR == min(mean_RMSE_MAR)) %>%
+  Best_method_MAR <- summary$RMSE_stats %>%
+    filter(MAR_RMSE_mean == min(MAR_RMSE_mean)) %>%
     dplyr::select(Method) %>%
     as.character()
   
-  Best_method_MNAR <- RMSE_stats %>%
-    filter(mean_RMSE_MNAR == min(mean_RMSE_MNAR)) %>%
+  Best_method_MNAR <- summary$RMSE_stats %>%
+    filter(MNAR_RMSE_mean == min(MNAR_RMSE_mean)) %>%
     dplyr::select(Method) %>%
     as.character()
   
-  forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MNAR_RMSE, factor_key=TRUE)
+  if (!is.na(assumed_pattern)) Best_method_MAP <- summary$RMSE_stats %>%
+    filter(MAP_RMSE_mean == min(MAP_RMSE_mean)) %>%
+    dplyr::select(Method) %>%
+    as.character()
+  
+  if (!is.na(assumed_pattern)) forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MAP_RMSE, factor_key=TRUE) else forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MNAR_RMSE, factor_key=TRUE)
   forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation", "Mean imputation", "missMDA Regularized", 
                                                         "missMDA EM", "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA", 
                                                         "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
                                                         "mi Bayesian", "Amelia II", "missForest"))
-  levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
+  if (!is.na(assumed_pattern)) levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR", "MAP") else levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
   p <- ggplot(forgraph, aes(x=Method, y=RMSE, fill=Method)) + 
     geom_boxplot() +
     facet_grid(~Pattern, scale="free") + 
