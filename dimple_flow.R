@@ -389,7 +389,6 @@ dimple_predict_missing <- function(rownum, colnum, cormat, missfrac_per_var, boo
   
 }
 
-
 dimple_random_imp <- function(X_hat, list) {
   
   index <- lapply(list, is.na)  
@@ -408,18 +407,21 @@ dimple_random_imp <- function(X_hat, list) {
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
 dimple_median_imp <- function(X_hat, list) {
@@ -440,18 +442,21 @@ dimple_median_imp <- function(X_hat, list) {
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
 dimple_mean_imp <- function(X_hat, list) {
@@ -472,50 +477,21 @@ dimple_mean_imp <- function(X_hat, list) {
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
-  
-}
-dimple_missMDA_regularized_imp <- function(X_hat, list) {
-  
-  index <- lapply(list, is.na)  
-  
-  missMDA_regularized_imp <- function(X) {
-    ncomp <- estim_ncpPCA(X)
-    res.imp <- imputePCA(X, ncp= ncomp$ncp, method = "Regularized")
-    imp_matrix <- res.imp$completeObs
-    
-    list(Imputed = imp_matrix)
-  }
-  
-  results <- lapply(list, missMDA_regularized_imp)
-  
-  #using NA index to identify the original values (later set to missing)
-  orig_MCAR <- X_hat[index[[1]]]
-  orig_MAR <- X_hat[index[[2]]]
-  orig_MNAR <- X_hat[index[[3]]]
-  
-  #using NA index to identify the imputed values
-  imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
-  imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
-  imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
-  
-  #RMSE
-  rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
-  rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
-  rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
-  
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
 dimple_missMDA_EM_imp <- function(X_hat, list) {
@@ -536,82 +512,57 @@ dimple_missMDA_EM_imp <- function(X_hat, list) {
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  
   
 }
-dimple_pcaMethods_BPCA_imp <- function(X_hat, list) {
+dimple_missMDA_regularized_imp <- function(X_hat, list) {
   
   index <- lapply(list, is.na)  
   
-  pcaMethods_BPCA_imp <- function(X) {
+  missMDA_regularized_imp <- function(X) {
     ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) resBPCA <- pca(X, method="bpca", center=FALSE, nPcs=ncomp$ncp) else resBPCA <- pca(X, method="bpca", center=FALSE, nPcs=2)
-    imp_matrix <- resBPCA@completeObs
+    res.imp <- imputePCA(X, ncp= ncomp$ncp, method = "Regularized")
+    imp_matrix <- res.imp$completeObs
     
     list(Imputed = imp_matrix)
   }
   
-  results <- lapply(list, pcaMethods_BPCA_imp)
+  results <- lapply(list, missMDA_regularized_imp)
   
   #using NA index to identify the original values (later set to missing)
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
-  
-}
-dimple_pcaMethods_Nipals_imp <- function(X_hat, list) {
-  
-  index <- lapply(list, is.na)  
-  
-  pcaMethods_Nipals_imp <- function(X) {
-    ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) resNipals <- pca(X, method="nipals", center=FALSE, nPcs=ncomp$ncp) else resNipals <- pca(X, method="nipals", center=FALSE, nPcs=2)
-    imp_matrix <- resNipals@completeObs
-    
-    list(Imputed = imp_matrix)
-  }
-  
-  results <- lapply(list, pcaMethods_Nipals_imp)
-  
-  #using NA index to identify the original values (later set to missing)
-  orig_MCAR <- X_hat[index[[1]]]
-  orig_MAR <- X_hat[index[[2]]]
-  orig_MNAR <- X_hat[index[[3]]]
-  
-  #using NA index to identify the imputed values
-  imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
-  imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
-  imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
-  
-  #RMSE
-  rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
-  rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
-  rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
-  
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
 dimple_pcaMethods_svdImpute_imp <- function(X_hat, list) {
@@ -632,18 +583,22 @@ dimple_pcaMethods_svdImpute_imp <- function(X_hat, list) {
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  
   
 }
 dimple_pcaMethods_PPCA_imp <- function(X_hat, list) {
@@ -664,18 +619,21 @@ dimple_pcaMethods_PPCA_imp <- function(X_hat, list) {
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
 dimple_pcaMethods_NLPCA_imp <- function(X_hat, list) {
@@ -696,49 +654,91 @@ dimple_pcaMethods_NLPCA_imp <- function(X_hat, list) {
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
-dimple_mice_mixed_imp <- function(X_hat, list) {
+dimple_pcaMethods_Nipals_imp <- function(X_hat, list) {
   
   index <- lapply(list, is.na)  
   
-  mice_mixed_imp <- function(X) {
-    imputed_Data <- mice(X, m=1, maxit = 100)
-    imp_matrix <- as.matrix(mice::complete(imputed_Data,1))
+  pcaMethods_Nipals_imp <- function(X) {
+    ncomp <- estim_ncpPCA(X)
+    if (ncomp$ncp>0) resNipals <- pca(X, method="nipals", center=FALSE, nPcs=ncomp$ncp) else resNipals <- pca(X, method="nipals", center=FALSE, nPcs=2)
+    imp_matrix <- resNipals@completeObs
     
     list(Imputed = imp_matrix)
   }
   
-  results <- lapply(list, mice_mixed_imp)
+  results <- lapply(list, pcaMethods_Nipals_imp)
   
   #using NA index to identify the original values (later set to missing)
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  
+}
+dimple_pcaMethods_BPCA_imp <- function(X_hat, list) {
+  
+  index <- lapply(list, is.na)  
+  
+  pcaMethods_BPCA_imp <- function(X) {
+    ncomp <- estim_ncpPCA(X)
+    if (ncomp$ncp>0) resBPCA <- pca(X, method="bpca", center=FALSE, nPcs=ncomp$ncp) else resBPCA <- pca(X, method="bpca", center=FALSE, nPcs=2)
+    imp_matrix <- resBPCA@completeObs
+    
+    list(Imputed = imp_matrix)
+  }
+  
+  results <- lapply(list, pcaMethods_BPCA_imp)
+  
+  #using NA index to identify the original values (later set to missing)
+  orig_MCAR <- X_hat[index[[1]]]
+  orig_MAR <- X_hat[index[[2]]]
+  orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
+  
+  #using NA index to identify the imputed values
+  imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
+  imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
+  imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
+  
+  #RMSE
+  rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
+  rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
+  rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
+  
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
 dimple_mi_imp <- function(X_hat, list) {
@@ -759,49 +759,55 @@ dimple_mi_imp <- function(X_hat, list) {
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
-dimple_AmeliaII_imp <- function(X_hat, list) {
+dimple_mice_mixed_imp <- function(X_hat, list) {
   
   index <- lapply(list, is.na)  
   
-  AmeliaII_imp <- function(X) {
-    amelia_fit <- amelia(X, m=1)
-    imp_matrix <- amelia_fit$imputations[[1]]
+  mice_mixed_imp <- function(X) {
+    imputed_Data <- mice(X, m=1, maxit = 100)
+    imp_matrix <- as.matrix(mice::complete(imputed_Data,1))
     
     list(Imputed = imp_matrix)
   }
   
-  results <- lapply(list, AmeliaII_imp)
+  results <- lapply(list, mice_mixed_imp)
   
   #using NA index to identify the original values (later set to missing)
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
 dimple_missForest_imp <- function(X_hat, list) {
@@ -822,20 +828,58 @@ dimple_missForest_imp <- function(X_hat, list) {
   orig_MCAR <- X_hat[index[[1]]]
   orig_MAR <- X_hat[index[[2]]]
   orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
   
   #using NA index to identify the imputed values
   imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
   imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
   imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
   
   #RMSE
   rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
   rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
   rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
   
-  list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
   
 }
+dimple_AmeliaII_imp <- function(X_hat, list) {
+  
+  index <- lapply(list, is.na)  
+  
+  AmeliaII_imp <- function(X) {
+    amelia_fit <- amelia(X, m=1)
+    imp_matrix <- amelia_fit$imputations[[1]]
+    
+    list(Imputed = imp_matrix)
+  }
+  
+  results <- lapply(list, AmeliaII_imp)
+  
+  #using NA index to identify the original values (later set to missing)
+  orig_MCAR <- X_hat[index[[1]]]
+  orig_MAR <- X_hat[index[[2]]]
+  orig_MNAR <- X_hat[index[[3]]]
+  if (length(index)==4) orig_MAP <- X_hat[index[[4]]]
+  
+  #using NA index to identify the imputed values
+  imp_MCAR <- results$MCAR_matrix$Imputed[index[[1]]]
+  imp_MAR <- results$MAR_matrix$Imputed[index[[2]]]
+  imp_MNAR <- results$MNAR_matrix$Imputed[index[[3]]]
+  if (length(index)==4) imp_MAP <- results$MAP_matrix$Imputed[index[[4]]]
+  
+  #RMSE
+  rmse_MCAR <- sqrt(mean((orig_MCAR-imp_MCAR)^2))
+  rmse_MAR <- sqrt(mean((orig_MAR-imp_MAR)^2))
+  rmse_MNAR <- sqrt(mean((orig_MNAR-imp_MNAR)^2))
+  if (length(index)==4) rmse_MAP <- sqrt(mean((orig_MAP-imp_MAP)^2))
+  
+  if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+  
+}
+
 
 dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10) {
   

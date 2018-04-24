@@ -22,10 +22,10 @@ library(dplyr)
 library(ggplot2)
 
 #FUNCTION
-dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10) {
+dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10, assumed_pattern = NA) {
   
-  collect_res <- data.frame(matrix(NA, nrow = 14*n.iter, ncol = 4))
-  colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE")
+  if (!is.na(assumed_pattern)) collect_res <- data.frame(matrix(NA, nrow = 14*n.iter, ncol = 5)) else collect_res <- data.frame(matrix(NA, nrow = 14*n.iter, ncol = 4))
+  if (!is.na(assumed_pattern)) colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE", "MAP_RMSE") else colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE")
   
   for (i in 1:n.iter) {
     
@@ -35,48 +35,68 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
                                                                  "mi Bayesian", "Amelia II", "missForest")
     
     sim <- dimple_sim(rownum, colnum, cormat)
-    res <- dimple_all_patterns(sim$Simulated_matrix, missfrac_per_var)
+    res <- dimple_all_patterns(sim$Simulated_matrix, missfrac_per_var, assumed_pattern)
     
-    collect_res[((14*(i-1))+1),2:4] <- as.data.frame(dimple_random_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+2),2:4] <- as.data.frame(dimple_median_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+3),2:4] <- as.data.frame(dimple_mean_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+4),2:4] <- as.data.frame(dimple_missMDA_regularized_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+5),2:4] <- as.data.frame(dimple_missMDA_EM_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+6),2:4] <- as.data.frame(dimple_pcaMethods_PPCA_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+7),2:4] <- as.data.frame(dimple_pcaMethods_svdImpute_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+8),2:4] <- as.data.frame(dimple_pcaMethods_BPCA_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+9),2:4] <- as.data.frame(dimple_pcaMethods_Nipals_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+10),2:4] <- as.data.frame(dimple_pcaMethods_NLPCA_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+11),2:4] <- as.data.frame(dimple_mice_mixed_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+12),2:4] <- as.data.frame(dimple_mi_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+13),2:4] <- as.data.frame(dimple_AmeliaII_imp(sim$Simulated_matrix, list = res))
-    collect_res[((14*(i-1))+14),2:4] <- as.data.frame(dimple_missForest_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+1),2:ncol(collect_res)] <- as.data.frame(dimple_random_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+2),2:ncol(collect_res)] <- as.data.frame(dimple_median_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+3),2:ncol(collect_res)] <- as.data.frame(dimple_mean_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+4),2:ncol(collect_res)] <- as.data.frame(dimple_missMDA_regularized_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+5),2:ncol(collect_res)] <- as.data.frame(dimple_missMDA_EM_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+6),2:ncol(collect_res)] <- as.data.frame(dimple_pcaMethods_PPCA_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+7),2:ncol(collect_res)] <- as.data.frame(dimple_pcaMethods_svdImpute_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+8),2:ncol(collect_res)] <- as.data.frame(dimple_pcaMethods_BPCA_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+9),2:ncol(collect_res)] <- as.data.frame(dimple_pcaMethods_Nipals_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+10),2:ncol(collect_res)] <- as.data.frame(dimple_pcaMethods_NLPCA_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+11),2:ncol(collect_res)] <- as.data.frame(dimple_mice_mixed_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+12),2:ncol(collect_res)] <- as.data.frame(dimple_mi_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+13),2:ncol(collect_res)] <- as.data.frame(dimple_AmeliaII_imp(sim$Simulated_matrix, list = res))
+    collect_res[((14*(i-1))+14),2:ncol(collect_res)] <- as.data.frame(dimple_missForest_imp(sim$Simulated_matrix, list = res))
     
   }
   
-  RMSE_stats <- collect_res %>%
-    group_by(Method) %>%
-    summarise(mean_RMSE_MCAR = mean(MCAR_RMSE, na.rm=T),
-              mean_RMSE_MAR = mean(MAR_RMSE, na.rm=T),
-              mean_RMSE_MNAR = mean(MNAR_RMSE, na.rm=T),
-              SD_RMSE_MCAR = sd(MCAR_RMSE, na.rm=T),
-              SD_RMSE_MAR = sd(MAR_RMSE, na.rm=T),
-              SD_RMSE_MNAR = sd(MNAR_RMSE, na.rm=T),
-              n_RMSE_MCAR = sum(!is.na(MCAR_RMSE)),
-              n_RMSE_MAR = sum(!is.na(MAR_RMSE)),
-              n_RMSE_MNAR = sum(!is.na(MNAR_RMSE))) %>%
-    mutate(SE_RMSE_MCAR = SD_RMSE_MCAR / sqrt(n_RMSE_MCAR),
-           lower.ci_RMSE_MCAR = mean_RMSE_MCAR - qt(1 - (0.05 / 2), n_RMSE_MCAR - 1) * SE_RMSE_MCAR,
-           upper.ci_RMSE_MCAR = mean_RMSE_MCAR + qt(1 - (0.05 / 2), n_RMSE_MCAR - 1) * SE_RMSE_MCAR,
-           SE_RMSE_MAR = SD_RMSE_MAR / sqrt(n_RMSE_MAR),
-           lower.ci_RMSE_MAR = mean_RMSE_MAR - qt(1 - (0.05 / 2), n_RMSE_MAR - 1) * SE_RMSE_MAR,
-           upper.ci_RMSE_MAR = mean_RMSE_MAR + qt(1 - (0.05 / 2), n_RMSE_MAR - 1) * SE_RMSE_MAR,
-           SE_RMSE_MNAR = SD_RMSE_MNAR / sqrt(n_RMSE_MNAR),
-           lower.ci_RMSE_MNAR = mean_RMSE_MNAR - qt(1 - (0.05 / 2), n_RMSE_MNAR - 1) * SE_RMSE_MNAR,
-           upper.ci_RMSE_MNAR = mean_RMSE_MNAR + qt(1 - (0.05 / 2), n_RMSE_MNAR - 1) * SE_RMSE_MNAR) %>% 
-    dplyr::select(Method, mean_RMSE_MCAR, mean_RMSE_MAR, mean_RMSE_MNAR, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR, 
-           lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR)
-
+  notmiss <- function(x) { sum(!is.na(x)) }
+  
+  notmiss <- function(x) { sum(!is.na(x)) }
+  
+  RMSE_statmaker <- function (x) {
+    if (ncol(x) == 5) {
+      RMSE_stats <- x %>%
+        group_by(Method) %>%
+        summarise_all(funs(mean(., na.rm = TRUE), sd(., na.rm = TRUE), notmiss)) %>%
+        mutate(SE_RMSE_MCAR = MCAR_RMSE_sd / sqrt(MCAR_RMSE_notmiss),
+               lower.ci_RMSE_MCAR = MCAR_RMSE_mean - qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+               upper.ci_RMSE_MCAR = MCAR_RMSE_mean + qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+               SE_RMSE_MAR = MAR_RMSE_sd / sqrt(MAR_RMSE_notmiss),
+               lower.ci_RMSE_MAR = MAR_RMSE_mean - qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+               upper.ci_RMSE_MAR = MAR_RMSE_mean + qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+               SE_RMSE_MNAR = MNAR_RMSE_sd / sqrt(MNAR_RMSE_notmiss),
+               lower.ci_RMSE_MNAR = MNAR_RMSE_mean - qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
+               upper.ci_RMSE_MNAR = MNAR_RMSE_mean + qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
+               SE_RMSE_MAP = MAP_RMSE_sd / sqrt(MAP_RMSE_notmiss),
+               lower.ci_RMSE_MAP = MAP_RMSE_mean - qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP,
+               upper.ci_RMSE_MAP = MAP_RMSE_mean + qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP) %>% 
+        dplyr::select(Method, MCAR_RMSE_mean, MAR_RMSE_mean, MNAR_RMSE_mean, MAP_RMSE_mean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR, 
+                      lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR, lower.ci_RMSE_MAP, upper.ci_RMSE_MAP) } else {
+                        RMSE_stats <- x %>%
+                          group_by(Method) %>%
+                          summarise_all(funs(mean(., na.rm = TRUE), sd(., na.rm = TRUE), notmiss)) %>%
+                          mutate(SE_RMSE_MCAR = MCAR_RMSE_sd / sqrt(MCAR_RMSE_notmiss),
+                                 lower.ci_RMSE_MCAR = MCAR_RMSE_mean - qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+                                 upper.ci_RMSE_MCAR = MCAR_RMSE_mean + qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+                                 SE_RMSE_MAR = MAR_RMSE_sd / sqrt(MAR_RMSE_notmiss),
+                                 lower.ci_RMSE_MAR = MAR_RMSE_mean - qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+                                 upper.ci_RMSE_MAR = MAR_RMSE_mean + qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+                                 SE_RMSE_MNAR = MNAR_RMSE_sd / sqrt(MNAR_RMSE_notmiss),
+                                 lower.ci_RMSE_MNAR = MNAR_RMSE_mean - qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
+                                 upper.ci_RMSE_MNAR = MNAR_RMSE_mean + qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR) %>% 
+                          dplyr::select(Method, MCAR_RMSE_mean, MAR_RMSE_mean, MNAR_RMSE_mean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR, 
+                                        lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR)
+                      }
+    list(RMSE_stats = RMSE_stats)
+  }
+  
+  summary <- RMSE_statmaker(collect_res)
+  
   
   #Best methods for the three missingness types
   Best_method_MCAR <- RMSE_stats %>%
@@ -128,5 +148,91 @@ wrap <- dimple_imp_wrapper(rownum = y$Rows,
                                n.iter = 3)
 
 
+collect_res <- wraps
+collect_res$MAP_RMSE <- collect_res$MCAR_RMSE
+
+notmiss <- function(x) { sum(!is.na(x)) }
+
+RMSE_statmaker <- function (x) {
+  if (ncol(x) == 5) {
+  RMSE_stats <- x %>%
+    group_by(Method) %>%
+    summarise_all(funs(mean(., na.rm = TRUE), sd(., na.rm = TRUE), notmiss)) %>%
+    mutate(SE_RMSE_MCAR = MCAR_RMSE_sd / sqrt(MCAR_RMSE_notmiss),
+           lower.ci_RMSE_MCAR = MCAR_RMSE_mean - qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+           upper.ci_RMSE_MCAR = MCAR_RMSE_mean + qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+           SE_RMSE_MAR = MAR_RMSE_sd / sqrt(MAR_RMSE_notmiss),
+           lower.ci_RMSE_MAR = MAR_RMSE_mean - qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+           upper.ci_RMSE_MAR = MAR_RMSE_mean + qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+           SE_RMSE_MNAR = MNAR_RMSE_sd / sqrt(MNAR_RMSE_notmiss),
+           lower.ci_RMSE_MNAR = MNAR_RMSE_mean - qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
+           upper.ci_RMSE_MNAR = MNAR_RMSE_mean + qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
+           SE_RMSE_MAP = MAP_RMSE_sd / sqrt(MAP_RMSE_notmiss),
+           lower.ci_RMSE_MAP = MAP_RMSE_mean - qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP,
+           upper.ci_RMSE_MAP = MAP_RMSE_mean + qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP) %>% 
+    dplyr::select(Method, MCAR_RMSE_mean, MAR_RMSE_mean, MNAR_RMSE_mean, MAP_RMSE_mean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR, 
+                  lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR, lower.ci_RMSE_MAP, upper.ci_RMSE_MAP) } else {
+                    RMSE_stats <- x %>%
+                      group_by(Method) %>%
+                      summarise_all(funs(mean(., na.rm = TRUE), sd(., na.rm = TRUE), notmiss)) %>%
+                      mutate(SE_RMSE_MCAR = MCAR_RMSE_sd / sqrt(MCAR_RMSE_notmiss),
+                             lower.ci_RMSE_MCAR = MCAR_RMSE_mean - qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+                             upper.ci_RMSE_MCAR = MCAR_RMSE_mean + qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+                             SE_RMSE_MAR = MAR_RMSE_sd / sqrt(MAR_RMSE_notmiss),
+                             lower.ci_RMSE_MAR = MAR_RMSE_mean - qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+                             upper.ci_RMSE_MAR = MAR_RMSE_mean + qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+                             SE_RMSE_MNAR = MNAR_RMSE_sd / sqrt(MNAR_RMSE_notmiss),
+                             lower.ci_RMSE_MNAR = MNAR_RMSE_mean - qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
+                             upper.ci_RMSE_MNAR = MNAR_RMSE_mean + qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR) %>% 
+                      dplyr::select(Method, MCAR_RMSE_mean, MAR_RMSE_mean, MNAR_RMSE_mean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR, 
+                                    lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR)
+                  }
+  list(RMSE_stats = RMSE_stats)
+}
+
+RMSE_statmaker(collect_res)
 
 
+
+#Best methods for the three missingness types
+Best_method_MCAR <- RMSE_stats %>%
+  filter(mean_RMSE_MCAR == min(mean_RMSE_MCAR)) %>%
+  dplyr::select(Method) %>%
+  as.character()
+
+Best_method_MAR <- RMSE_stats %>%
+  filter(mean_RMSE_MAR == min(mean_RMSE_MAR)) %>%
+  dplyr::select(Method) %>%
+  as.character()
+
+Best_method_MNAR <- RMSE_stats %>%
+  filter(mean_RMSE_MNAR == min(mean_RMSE_MNAR)) %>%
+  dplyr::select(Method) %>%
+  as.character()
+
+forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MNAR_RMSE, factor_key=TRUE)
+forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation", "Mean imputation", "missMDA Regularized", 
+                                                      "missMDA EM", "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA", 
+                                                      "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
+                                                      "mi Bayesian", "Amelia II", "missForest"))
+levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
+p <- ggplot(forgraph, aes(x=Method, y=RMSE, fill=Method)) + 
+  geom_boxplot() +
+  facet_grid(~Pattern, scale="free") + 
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
+  theme(plot.title = element_text(hjust = 0.5)) +
+  labs(x="") 
+
+
+
+
+
+askdadl <- iris %>%
+  mutate(Species = as.character(Species))  %>%
+  rowwise() %>%
+  mutate(species2 = case_when(
+    Species == 'vi%' ~ substr(Species, 0, nchar(Species) - 1),
+    Species != 'vi%' ~ substr(Species, 0, nchar(Species) - 2)
+  ))
+tail(askdadl)
