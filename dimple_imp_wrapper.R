@@ -130,10 +130,11 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
     labs(x="") 
   
   #output list
-  list(Imputation_RMSE = collect_res, Imputation_RMSE_means = RMSE_stats, Best_method_MCAR = Best_method_MCAR,
-       Best_method_MAR = Best_method_MAR, Best_method_MNAR = Best_method_MNAR, Plot = p)
+  if (!is.na(assumed_pattern)) list(Imputation_RMSE = collect_res, Imputation_RMSE_means = summary$RMSE_stats, Best_method_MCAR = Best_method_MCAR,
+                                    Best_method_MAR = Best_method_MAR, Best_method_MNAR = Best_method_MNAR, Best_method_MAP = Best_method_MAP, Plot = p) else list(Imputation_RMSE = collect_res, Imputation_RMSE_means = summary$RMSE_stats, Best_method_MCAR = Best_method_MCAR,
+                                    Best_method_MAR = Best_method_MAR, Best_method_MNAR = Best_method_MNAR, Plot = p)
   
-  
+
 }
 
 
@@ -146,94 +147,9 @@ wrap <- dimple_imp_wrapper(rownum = y$Rows,
                                colnum = y$Columns, 
                                cormat = y$Corr_matrix, 
                                missfrac_per_var =  y$Fraction_missingness_per_variable, 
-                               n.iter = 3)
+                               n.iter = 3, assumed_pattern = NA)
 
 
 collect_res <- wraps
 collect_res$MAP_RMSE <- collect_res$MCAR_RMSE
 
-notmiss <- function(x) { sum(!is.na(x)) }
-
-RMSE_statmaker <- function (x) {
-  if (ncol(x) == 5) {
-  RMSE_stats <- x %>%
-    group_by(Method) %>%
-    summarise_all(funs(mean(., na.rm = TRUE), sd(., na.rm = TRUE), notmiss)) %>%
-    mutate(SE_RMSE_MCAR = MCAR_RMSE_sd / sqrt(MCAR_RMSE_notmiss),
-           lower.ci_RMSE_MCAR = MCAR_RMSE_mean - qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
-           upper.ci_RMSE_MCAR = MCAR_RMSE_mean + qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
-           SE_RMSE_MAR = MAR_RMSE_sd / sqrt(MAR_RMSE_notmiss),
-           lower.ci_RMSE_MAR = MAR_RMSE_mean - qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
-           upper.ci_RMSE_MAR = MAR_RMSE_mean + qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
-           SE_RMSE_MNAR = MNAR_RMSE_sd / sqrt(MNAR_RMSE_notmiss),
-           lower.ci_RMSE_MNAR = MNAR_RMSE_mean - qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
-           upper.ci_RMSE_MNAR = MNAR_RMSE_mean + qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
-           SE_RMSE_MAP = MAP_RMSE_sd / sqrt(MAP_RMSE_notmiss),
-           lower.ci_RMSE_MAP = MAP_RMSE_mean - qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP,
-           upper.ci_RMSE_MAP = MAP_RMSE_mean + qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP) %>% 
-    dplyr::select(Method, MCAR_RMSE_mean, MAR_RMSE_mean, MNAR_RMSE_mean, MAP_RMSE_mean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR, 
-                  lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR, lower.ci_RMSE_MAP, upper.ci_RMSE_MAP) } else {
-                    RMSE_stats <- x %>%
-                      group_by(Method) %>%
-                      summarise_all(funs(mean(., na.rm = TRUE), sd(., na.rm = TRUE), notmiss)) %>%
-                      mutate(SE_RMSE_MCAR = MCAR_RMSE_sd / sqrt(MCAR_RMSE_notmiss),
-                             lower.ci_RMSE_MCAR = MCAR_RMSE_mean - qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
-                             upper.ci_RMSE_MCAR = MCAR_RMSE_mean + qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
-                             SE_RMSE_MAR = MAR_RMSE_sd / sqrt(MAR_RMSE_notmiss),
-                             lower.ci_RMSE_MAR = MAR_RMSE_mean - qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
-                             upper.ci_RMSE_MAR = MAR_RMSE_mean + qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
-                             SE_RMSE_MNAR = MNAR_RMSE_sd / sqrt(MNAR_RMSE_notmiss),
-                             lower.ci_RMSE_MNAR = MNAR_RMSE_mean - qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
-                             upper.ci_RMSE_MNAR = MNAR_RMSE_mean + qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR) %>% 
-                      dplyr::select(Method, MCAR_RMSE_mean, MAR_RMSE_mean, MNAR_RMSE_mean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR, 
-                                    lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR)
-                  }
-  list(RMSE_stats = RMSE_stats)
-}
-
-RMSE_statmaker(collect_res)
-
-
-
-#Best methods for the three missingness types
-Best_method_MCAR <- RMSE_stats %>%
-  filter(mean_RMSE_MCAR == min(mean_RMSE_MCAR)) %>%
-  dplyr::select(Method) %>%
-  as.character()
-
-Best_method_MAR <- RMSE_stats %>%
-  filter(mean_RMSE_MAR == min(mean_RMSE_MAR)) %>%
-  dplyr::select(Method) %>%
-  as.character()
-
-Best_method_MNAR <- RMSE_stats %>%
-  filter(mean_RMSE_MNAR == min(mean_RMSE_MNAR)) %>%
-  dplyr::select(Method) %>%
-  as.character()
-
-forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MNAR_RMSE, factor_key=TRUE)
-forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation", "Mean imputation", "missMDA Regularized", 
-                                                      "missMDA EM", "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA", 
-                                                      "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
-                                                      "mi Bayesian", "Amelia II", "missForest"))
-levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
-p <- ggplot(forgraph, aes(x=Method, y=RMSE, fill=Method)) + 
-  geom_boxplot() +
-  facet_grid(~Pattern, scale="free") + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
-  ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
-  theme(plot.title = element_text(hjust = 0.5)) +
-  labs(x="") 
-
-
-
-
-
-askdadl <- iris %>%
-  mutate(Species = as.character(Species))  %>%
-  rowwise() %>%
-  mutate(species2 = case_when(
-    Species == 'vi%' ~ substr(Species, 0, nchar(Species) - 1),
-    Species != 'vi%' ~ substr(Species, 0, nchar(Species) - 2)
-  ))
-tail(askdadl)
