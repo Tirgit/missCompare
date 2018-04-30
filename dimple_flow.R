@@ -55,7 +55,10 @@ data("BostonHousing")
 df <- BostonHousing
 df_miss <- prodNA(df, 0.2)
 
+y <- dimple_get_data(df_miss, matrixplot_sort = T)
+
 cleaned <- dimple_clean(df_miss)
+
 y <- dimple_get_data(cleaned$Dataframe_clean, matrixplot_sort = T)
 
 yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)

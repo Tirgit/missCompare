@@ -27,18 +27,23 @@ library(ggdendro)
 
 ###FUNCTION
 dimple_get_data <- function(X, matrixplot_sort = F, plot_transform = T) {
+  
+  vars_non_num <- names(X)[!sapply(X, is.numeric)]
+  if (length(vars_non_num) != 0) stop(paste("Warning! Variable(s) ",
+                                               (paste(vars_non_num,collapse=", ") ),
+                                               " is/are not numeric. Convert this/these variables to numeric using dimple_clean() and repeat the dimple_get_data() function until no warnings are shown.", sep= ""))
+  
   comp <- sum(complete.cases(X))
   rows <- nrow(X)
   cols <- ncol(X)
-  Xnum <- sapply(X, as.numeric)
-  mat <- cor(Xnum, use="pairwise.complete.obs", method="pearson") 
-  missfrac_per_df <- sum(is.na(Xnum))/(nrow(Xnum)*ncol(Xnum))
-  missfrac_per_var <- colMeans(is.na(Xnum))
-  na_per_df <-  sum(is.na(Xnum))
+  mat <- cor(X, use="pairwise.complete.obs", method="pearson") 
+  missfrac_per_df <- sum(is.na(X))/(nrow(X)*ncol(X))
+  missfrac_per_var <- colMeans(is.na(X))
+  na_per_df <-  sum(is.na(X))
   na_per_var <- sapply(X, function(x) sum(length(which(is.na(x))))) 
-  mdpat <- md.pattern(Xnum)
+  mdpat <- md.pattern(X)
   
-  if (plot_transform == T) X_update <- as.data.frame(scale(Xnum)) else X_update <- Xnum
+  if (plot_transform == T) X_update <- as.data.frame(scale(X)) else X_update <- X
   
   nm1 <- names(X_update)[colSums(is.na(X_update)) >0]
   arr_X <- X_update %>% 
@@ -95,6 +100,8 @@ dimple_get_data <- function(X, matrixplot_sort = F, plot_transform = T) {
 }
 
 
-str(cleaned$Dataframe_clean)
-dat <- sapply( cleaned$Dataframe_clean, as.numeric )
-Dataframe_clean)
+
+
+
+
+
