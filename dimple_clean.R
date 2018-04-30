@@ -22,7 +22,11 @@
 dimple_clean <- function(x, var_removal_threshold = 0.5, ind_removal_threshold = 1, missingness_coding = NA) {
   
   #convert all variables to numeric
-  x <- as.data.frame(sapply(x, as.numeric))
+  vars_non_num <- names(x)[!sapply(x, is.numeric)]
+  if (length(vars_non_num) != 0) x <- as.data.frame(sapply(x, as.numeric))
+  if (length(vars_non_num) != 0) message(paste("Variable(s) ",
+                                            (paste(vars_non_num,collapse=", ") ),
+                                            " converted to numeric.", sep= ""))
   
   #convert to NA
   x[x == missingness_coding] <- NA

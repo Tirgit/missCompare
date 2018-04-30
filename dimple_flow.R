@@ -66,11 +66,17 @@ yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
 res <- dimple_MCAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 res <- dimple_MNAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 res <- dimple_MAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+res <- dimple_MAP(yy$Simulated_matrix, y$Fraction_missingness_per_variable, 
+                  assumed_pattern = c(rep("MAR", 6),rep("MCAR", 4),rep("MNAR", 4)))
 
-res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable, 
+                           assumed_pattern = c(rep("MAR", 6),rep("MCAR", 4),rep("MNAR", 4)))
+
 matrixplot(res$MCAR_matrix, interactive = F, col= "red") 
 matrixplot(res$MAR_matrix, interactive = F, col= "red") 
 matrixplot(res$MNAR_matrix, interactive = F, col= "red") 
+matrixplot(res$MAP_matrix, interactive = F, col= "red") 
+
 
 dimple_median_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_mean_imp(X_hat = yy$Simulated_matrix, list = res)

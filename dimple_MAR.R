@@ -52,7 +52,7 @@ dimple_MAR <- function(X_hat, missfrac_per_var) {
   
   if (logi2==0) to_NA <- sample(rownames(X_hat)[low_ind | NAs], missfrac_per_var[length(missfrac_per_var)]*nrow(X_hat)) else if (logi2==1) to_NA <- sample(rownames(X_hat)[mid_ind | NAs], missfrac_per_var[length(missfrac_per_var)]*nrow(X_hat)) else to_NA <- sample(rownames(X_hat)[high_ind | NAs], missfrac_per_var[length(missfrac_per_var)]*nrow(X_hat))
   
-  X_hat[,10][to_NA] <- NA      
+  X_hat[,length(missfrac_per_var)][to_NA] <- NA      
   X_hat <- X_hat[ order(as.numeric(row.names(X_hat))),]
   
   missfrac_per_ind <- rowMeans(is.na(X_hat))
