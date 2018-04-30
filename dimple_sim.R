@@ -38,10 +38,4 @@ dimple_sim <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
 
 
 ###LAB
-yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
-
-
-
-
-
-
+#yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)

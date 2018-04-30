@@ -95,26 +95,3 @@ dimple_get_data <- function(X, matrixplot_sort = F, plot_transform = T) {
 
 
 
-
-
-
-
-###LAB
-df <- data.frame(replicate(10,sample(0:20,1000,rep=TRUE)))
-df_miss <- prodNA(df, 0.2)
-
-
-y <- dimple_get_data(df_miss, matrixplot_sort = T, plot_transform = T)
-
-pdf("/Users/med-tv_/Documents/Projects/missingdata/Matrix_plot.pdf")
-y$Matrix_plot
-dev.off()
-
-pdf("/Users/med-tv_/Documents/Projects/missingdata/Cluster_plot.pdf", width=10, height=6)
-y$Cluster_plot
-dev.off()
-
-summary(scale(mydata))
-
-
-

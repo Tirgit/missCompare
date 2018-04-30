@@ -58,8 +58,8 @@ dimple_missMDA_regularized_imp <- function(X_hat, list) {
 
 
 #LAB
-res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-dimple_missMDA_regularized_imp(X_hat = yy$Simulated_matrix, list = res)
+#res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+#dimple_missMDA_regularized_imp(X_hat = yy$Simulated_matrix, list = res)
 
 
 

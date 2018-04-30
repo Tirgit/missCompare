@@ -29,10 +29,10 @@ dimple_all_patterns <- function(X_hat, missfrac_per_var, assumed_pattern = NA) {
 
 
 ###LAB
-res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+#res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 
-res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable, 
-                           assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MAR", "MAR", "MNAR", "MNAR"))
+#res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable, 
+#                           assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MAR", "MAR", "MNAR", "MNAR"))
 
 
-assumed_pattern <- c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MAR", "MAR", "MNAR", "MNAR")
+#assumed_pattern <- c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MAR", "MAR", "MNAR", "MNAR")

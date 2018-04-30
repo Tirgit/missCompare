@@ -68,8 +68,8 @@ dimple_MAR <- function(X_hat, missfrac_per_var) {
 
 
 ###LAB
-res <- dimple_MAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-matrixplot(res$MAR_matrix, interactive = F, col= "red") 
+#res <- dimple_MAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+#matrixplot(res$MAR_matrix, interactive = F, col= "red") 
 
 
 

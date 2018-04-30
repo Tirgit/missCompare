@@ -19,7 +19,7 @@ dimple_summary <- function(wrapper_output) {
 }
 
 
-dimple_summary(wrap)
+#dimple_summary(wrap)
 
 
 

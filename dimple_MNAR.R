@@ -54,6 +54,6 @@ dimple_MNAR <- function(X_hat, missfrac_per_var) {
 
 
 ###LAB
-res <- dimple_MNAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-matrixplot(res$MNAR_matrix, interactive = F, col= "red") 
-hist(res$MNAR_matrix[,4])
+#res <- dimple_MNAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+#matrixplot(res$MNAR_matrix, interactive = F, col= "red") 
+#hist(res$MNAR_matrix[,4])

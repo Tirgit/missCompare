@@ -109,10 +109,10 @@ dimple_MAP <- function(X_hat, missfrac_per_var, assumed_pattern) {
 
 
 ###LAB
-res <- dimple_MAP(yy$Simulated_matrix, y$Fraction_missingness_per_variable, 
-                   assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MAR", "MAR", "MNAR", "MNAR"))
-matrixplot(res$MAP_matrix, interactive = F, col= "red") 
-hist(res$MAP_matrix[,10])
+#res <- dimple_MAP(yy$Simulated_matrix, y$Fraction_missingness_per_variable, 
+#                   assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MAR", "MAR", "MNAR", "MNAR"))
+#matrixplot(res$MAP_matrix, interactive = F, col= "red") 
+#hist(res$MAP_matrix[,10])
 
 
 
