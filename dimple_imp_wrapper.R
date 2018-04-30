@@ -143,13 +143,13 @@ dimple_imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter 
 
 
 #LAB
-wrap <- dimple_imp_wrapper(rownum = y$Rows, 
-                               colnum = y$Columns, 
-                               cormat = y$Corr_matrix, 
-                               missfrac_per_var =  y$Fraction_missingness_per_variable, 
-                               n.iter = 3, assumed_pattern = NA)
+#wrap <- dimple_imp_wrapper(rownum = y$Rows, 
+#                               colnum = y$Columns, 
+#                               cormat = y$Corr_matrix, 
+#                               missfrac_per_var =  y$Fraction_missingness_per_variable, 
+#                               n.iter = 3, assumed_pattern = NA)
 
 
-collect_res <- wraps
-collect_res$MAP_RMSE <- collect_res$MCAR_RMSE
+#collect_res <- wraps
+#collect_res$MAP_RMSE <- collect_res$MCAR_RMSE
 

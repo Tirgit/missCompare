@@ -30,14 +30,15 @@ dimple_get_data <- function(X, matrixplot_sort = F, plot_transform = T) {
   comp <- sum(complete.cases(X))
   rows <- nrow(X)
   cols <- ncol(X)
-  mat <- cor(X, use="pairwise.complete.obs", method="pearson") 
-  missfrac_per_df <- sum(is.na(X))/(nrow(X)*ncol(X))
-  missfrac_per_var <- colMeans(is.na(X))
-  na_per_df <-  sum(is.na(X))
+  Xnum <- sapply(X, as.numeric)
+  mat <- cor(Xnum, use="pairwise.complete.obs", method="pearson") 
+  missfrac_per_df <- sum(is.na(Xnum))/(nrow(Xnum)*ncol(Xnum))
+  missfrac_per_var <- colMeans(is.na(Xnum))
+  na_per_df <-  sum(is.na(Xnum))
   na_per_var <- sapply(X, function(x) sum(length(which(is.na(x))))) 
-  mdpat <- md.pattern(X)
+  mdpat <- md.pattern(Xnum)
   
-  if (plot_transform == T) X_update <- as.data.frame(scale(X)) else X_update <- X
+  if (plot_transform == T) X_update <- as.data.frame(scale(Xnum)) else X_update <- Xnum
   
   nm1 <- names(X_update)[colSums(is.na(X_update)) >0]
   arr_X <- X_update %>% 
@@ -94,4 +95,6 @@ dimple_get_data <- function(X, matrixplot_sort = F, plot_transform = T) {
 }
 
 
-
+str(cleaned$Dataframe_clean)
+dat <- sapply( cleaned$Dataframe_clean, as.numeric )
+Dataframe_clean)

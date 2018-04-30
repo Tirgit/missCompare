@@ -16,7 +16,7 @@ library(pROC)
 library(ROCR)  
 library(Hmisc)
 library(ggdendro)
-
+library(mlbench)
 
 ###FUNCTIONS
 setwd("/Users/med-tv_/Documents/GitHub/missingdata")
@@ -28,7 +28,7 @@ source("dimple_MAR.R")
 source("dimple_MNAR.R")
 source("dimple_MAP.R")
 source("dimple_all_patterns.R")
-source("dimple_predict_missing.R")
+#source("dimple_predict_missing.R")
 
 source("dimple_random_imp.R")
 source("dimple_median_imp.R")
@@ -51,7 +51,8 @@ source("dimple_get_data.R")
 
 
 ###LAB
-df <- data.frame(replicate(10,sample(0:1,1000,rep=TRUE)))
+data("BostonHousing")
+df <- BostonHousing
 df_miss <- prodNA(df, 0.2)
 
 cleaned <- dimple_clean(df_miss)
