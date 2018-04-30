@@ -21,10 +21,13 @@
 #FUNCTION
 dimple_clean <- function(x, var_removal_threshold = 0.5, ind_removal_threshold = 1, missingness_coding = NA) {
   
+  #convert all variables to numeric
   x <- as.data.frame(sapply(x, as.numeric))
   
+  #convert to NA
   x[x == missingness_coding] <- NA
   
+  #remove variables above missingness threshold
   missfrac_per_var <- colMeans(is.na(x))
   vars_above_thres <- colnames(x)[missfrac_per_var >= var_removal_threshold]
   if (length(vars_above_thres) != 0) new_df <- x[, -which(missfrac_per_var >= var_removal_threshold)] else new_df <- x
@@ -35,6 +38,7 @@ dimple_clean <- function(x, var_removal_threshold = 0.5, ind_removal_threshold =
                                                   var_removal_threshold*100,
                                                   "%) for missingness.", sep= ""))
   
+  #remove individuals above missingness threshold
   missfrac_per_ind <- rowMeans(is.na(new_df))
   inds_above_thres <- rownames(x)[missfrac_per_ind >= ind_removal_threshold]
   if (length(inds_above_thres) != 0) clean_df <- new_df[-which(missfrac_per_ind >= ind_removal_threshold), ] else clean_df <- new_df
