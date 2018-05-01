@@ -1,3 +1,8 @@
+install.packages("devtools")
+library("devtools")
+devtools::install_github("klutometis/roxygen")
+library(roxygen2)
+
 ###PACKAGES
 library(mice)
 library(VIM)
@@ -49,7 +54,6 @@ source("dimple_kNN_imp.R")
 
 source("dimple_imp_wrapper.R")
 source("dimple_summary.R")
-source("dimple_get_data.R")
 
 
 ###LAB
