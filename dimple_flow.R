@@ -53,7 +53,7 @@ source("dimple_get_data.R")
 ###LAB
 data("BostonHousing")
 df <- BostonHousing
-df_miss <- prodNA(df, 0.2)
+df_miss <- prodNA(df, 0.5)
 
 y <- dimple_get_data(df_miss, matrixplot_sort = T)
 
@@ -98,7 +98,7 @@ wrap <- dimple_imp_wrapper(rownum = y$Rows,
                            colnum = y$Columns, 
                            cormat = y$Corr_matrix, 
                            missfrac_per_var =  y$Fraction_missingness_per_variable, 
-                           n.iter = 3)
+                           n.iter = 5)
 
 
 
@@ -195,5 +195,14 @@ arr_MNAR_spike <- MNAR_spike %>%
 matrixplot(arr_MNAR_spike, interactive = F, col= "red")
 
 
+
+zzz <- sink(dimple_missForest_imp(X_hat = yy$Simulated_matrix, list = res))
+
+hush <- function(code){
+  sink("NUL") # use /dev/null in UNIX
+  tmp = code
+  sink()
+  return(tmp)
+}
 
 

@@ -55,6 +55,6 @@ if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE
 
 
 #LAB
-res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-dimple_random_imp(X_hat = yy$Simulated_matrix, list = res)
+#res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+#dimple_random_imp(X_hat = yy$Simulated_matrix, list = res)
 
