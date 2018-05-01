@@ -1,0 +1,20 @@
+{
+    "collab_server" : "",
+    "contents" : "Package: dimple\nType: Package\nTitle: dimple - Data IMPutation made simpLE\nVersion: 0.0.0.9000\nAuthors@R: person(\"Tibor\", \"V. Varga\", email = \"tibor.varga@cpr.ku.dk\", role = c(\"aut\", \"cre\"))\nDescription: Tests various imputation strategies under various conditions.\nDepends: R (>= 3.3.2)\nLicense: CC-BY-4.0\nEncoding: UTF-8\nLazyData: true\nImports:\n  mice,\n  VIM,\n  ggplot2,\n  magrittr,\n  dplyr,\n  MASS,\n  Matrix,\n  missForest,\n  missMDA,\n  pcaMethods,\n  mi,\n  Amelia,\n  tidyr,\n  pROC,\n  ROCR,  \n  Hmisc,\n  ggdendro,\n  mlbench\n",
+    "created" : 1525180743106.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "1839547864",
+    "id" : "D3117D99",
+    "lastKnownWriteTime" : 1525180948,
+    "last_content_update" : 1525180948144,
+    "path" : "~/Documents/GitHub/missingdata/dimple/DESCRIPTION",
+    "project_path" : "dimple/DESCRIPTION",
+    "properties" : {
+    },
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "dcf"
+}

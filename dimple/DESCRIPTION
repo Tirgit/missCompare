@@ -1,0 +1,29 @@
+Package: dimple
+Type: Package
+Title: dimple - Data IMPutation made simpLE
+Version: 0.0.0.9000
+Authors@R: person("Tibor", "V. Varga", email = "tibor.varga@cpr.ku.dk", role = c("aut", "cre"))
+Description: Tests various imputation strategies under various conditions.
+Depends: R (>= 3.3.2)
+License: CC-BY-4.0
+Encoding: UTF-8
+LazyData: true
+Imports:
+  mice,
+  VIM,
+  ggplot2,
+  magrittr,
+  dplyr,
+  MASS,
+  Matrix,
+  missForest,
+  missMDA,
+  pcaMethods,
+  mi,
+  Amelia,
+  tidyr,
+  pROC,
+  ROCR,  
+  Hmisc,
+  ggdendro,
+  mlbench
