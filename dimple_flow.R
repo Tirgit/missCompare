@@ -44,6 +44,8 @@ source("dimple_mi_imp.R")
 source("dimple_mice_mixed_imp.R")
 source("dimple_missForest_imp.R")
 source("dimple_AmeliaII_imp.R")
+source("dimple_aregImpute_imp.R")
+source("dimple_kNN_imp.R")
 
 source("dimple_imp_wrapper.R")
 source("dimple_summary.R")
@@ -53,7 +55,7 @@ source("dimple_get_data.R")
 ###LAB
 data("BostonHousing")
 df <- BostonHousing
-df_miss <- prodNA(df, 0.5)
+df_miss <- prodNA(df, 0.1)
 
 y <- dimple_get_data(df_miss, matrixplot_sort = T)
 
@@ -91,7 +93,8 @@ dimple_mice_mixed_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_mi_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_AmeliaII_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_missForest_imp(X_hat = yy$Simulated_matrix, list = res)
-
+dimple_aregImpute_imp(X_hat = yy$Simulated_matrix, list = res)
+dimple_kNN_imp(X_hat = yy$Simulated_matrix, list = res)
 
 
 wrap <- dimple_imp_wrapper(rownum = y$Rows, 
@@ -205,4 +208,10 @@ hush <- function(code){
   return(tmp)
 }
 
+
+zzz <- as.data.frame(res$MCAR_matrix)
+zzzcolnames <- colnames(zzz)
+
+resu <- kNN(data = zzz, variable = zzzcolnames, k=6, trace = F, imp_var = F)
+?kNN
 
