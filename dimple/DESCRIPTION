@@ -1,29 +1,11 @@
 Package: dimple
 Type: Package
-Title: dimple - Data IMPutation made simpLE
-Version: 0.0.0.9000
-Authors@R: person("Tibor", "V. Varga", email = "tibor.varga@cpr.ku.dk", role = c("aut", "cre"))
-Description: Tests various imputation strategies under various conditions.
-Depends: R (>= 3.3.2)
-License: CC-BY-4.0
+Title: dimple - Data Imputation Made Simple
+Version: 0.1.0
+Author: Who wrote it
+Maintainer: The package maintainer <yourself@somewhere.net>
+Description: More about what it does (maybe more than one line)
+    Use four spaces when indenting paragraphs within the Description.
+License: What license is it under?
 Encoding: UTF-8
 LazyData: true
-Imports:
-  mice,
-  VIM,
-  ggplot2,
-  magrittr,
-  dplyr,
-  MASS,
-  Matrix,
-  missForest,
-  missMDA,
-  pcaMethods,
-  mi,
-  Amelia,
-  tidyr,
-  pROC,
-  ROCR,  
-  Hmisc,
-  ggdendro,
-  mlbench

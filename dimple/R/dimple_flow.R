@@ -18,13 +18,13 @@ library(mi)
 library(Amelia)
 library(tidyr)
 library(pROC)
-library(ROCR)  
+library(ROCR)
 library(Hmisc)
 library(ggdendro)
 library(mlbench)
 
 ###FUNCTIONS
-setwd("/Users/med-tv_/Documents/GitHub/missingdata")
+setwd("/Users/med-tv_/Documents/GitHub/missingdata/dimple")
 source("dimple_clean.R")
 source("dimple_get_data.R")
 source("dimple_sim.R")
@@ -72,16 +72,16 @@ yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
 res <- dimple_MCAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 res <- dimple_MNAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 res <- dimple_MAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-res <- dimple_MAP(yy$Simulated_matrix, y$Fraction_missingness_per_variable, 
+res <- dimple_MAP(yy$Simulated_matrix, y$Fraction_missingness_per_variable,
                   assumed_pattern = c(rep("MAR", 6),rep("MCAR", 4),rep("MNAR", 4)))
 
-res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable, 
+res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable,
                            assumed_pattern = c(rep("MAR", 6),rep("MCAR", 4),rep("MNAR", 4)))
 
-matrixplot(res$MCAR_matrix, interactive = F, col= "red") 
-matrixplot(res$MAR_matrix, interactive = F, col= "red") 
-matrixplot(res$MNAR_matrix, interactive = F, col= "red") 
-matrixplot(res$MAP_matrix, interactive = F, col= "red") 
+matrixplot(res$MCAR_matrix, interactive = F, col= "red")
+matrixplot(res$MAR_matrix, interactive = F, col= "red")
+matrixplot(res$MNAR_matrix, interactive = F, col= "red")
+matrixplot(res$MAP_matrix, interactive = F, col= "red")
 
 
 dimple_median_imp(X_hat = yy$Simulated_matrix, list = res)
@@ -101,10 +101,10 @@ dimple_aregImpute_imp(X_hat = yy$Simulated_matrix, list = res)
 dimple_kNN_imp(X_hat = yy$Simulated_matrix, list = res)
 
 
-wrap <- dimple_imp_wrapper(rownum = y$Rows, 
-                           colnum = y$Columns, 
-                           cormat = y$Corr_matrix, 
-                           missfrac_per_var =  y$Fraction_missingness_per_variable, 
+wrap <- dimple_imp_wrapper(rownum = y$Rows,
+                           colnum = y$Columns,
+                           cormat = y$Corr_matrix,
+                           missfrac_per_var =  y$Fraction_missingness_per_variable,
                            n.iter = 5)
 
 
@@ -117,18 +117,18 @@ saveRDS(Imputation_RMSE, file = "/Users/med-tv_/Documents/Projects/missingdata/w
 
 
 forgraph <- gather(Imputation_RMSE, Pattern, RMSE, MCAR_RMSE:MNAR_RMSE, factor_key=TRUE)
-forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation", "Mean imputation", "missMDA Regularized", 
-                                                      "missMDA EM", "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA", 
+forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation", "Mean imputation", "missMDA Regularized",
+                                                      "missMDA EM", "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA",
                                                       "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
                                                       "mi Bayesian", "Amelia II", "missForest"))
 levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
-p <- ggplot(forgraph, aes(x=Method, y=RMSE, fill=Method)) + 
+p <- ggplot(forgraph, aes(x=Method, y=RMSE, fill=Method)) +
   geom_boxplot() +
-  facet_grid(~Pattern, scale="free") + 
-  theme(axis.text.x = element_text(angle = 90, hjust = 1)) + 
+  facet_grid(~Pattern, scale="free") +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
   ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
   theme(plot.title = element_text(hjust = 0.5)) +
-  labs(x="") 
+  labs(x="")
 
 
 
@@ -158,7 +158,7 @@ to_exclude <- c(grep("da", names(mydata), value=TRUE) ,
                 grep("upps", names(mydata), value=TRUE),
                 grep("delp", names(mydata), value=TRUE)
                 )
-mydata <- mydata[, !(names(mydata) %in% to_exclude )] 
+mydata <- mydata[, !(names(mydata) %in% to_exclude )]
 mydata <- mydata[mydata$besok == 1,]
 mydata <- mydata[!is.na(mydata$id),]
 mydata <- mydata[1:2000, 2:16]
@@ -178,10 +178,10 @@ yy <- dimple_sim(rownum = y$Rows, colnum = y$Columns, cormat = y$Corr_matrix)
 n <- naclus(clean$Dataframe_clean)
 plot(n)
 
-wrap <- dimple_imp_wrapper(rownum = y$Rows, 
-                           colnum = y$Columns, 
-                           cormat = y$Corr_matrix, 
-                           missfrac_per_var =  y$Fraction_missingness_per_variable, 
+wrap <- dimple_imp_wrapper(rownum = y$Rows,
+                           colnum = y$Columns,
+                           cormat = y$Corr_matrix,
+                           missfrac_per_var =  y$Fraction_missingness_per_variable,
                            n.iter = 5)
 dimple_summary(wrap)
 
@@ -196,8 +196,8 @@ as.data.frame(scale(mydata))
 MNAR_spike <- res$MNAR_matrix
 colnames(MNAR_spike) <- c("X1", "X2","X3","X4","X5","X6","X7","X8","X9","X10")
 nm1 <- colnames(MNAR_spike)[colSums(is.na(MNAR_spike)) >0]
-arr_MNAR_spike <- MNAR_spike %>% 
-  as.data.frame() %>% 
+arr_MNAR_spike <- MNAR_spike %>%
+  as.data.frame() %>%
   arrange_at(vars(nm1), funs(desc(is.na(.))))
 matrixplot(arr_MNAR_spike, interactive = F, col= "red")
 
