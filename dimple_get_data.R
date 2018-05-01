@@ -52,7 +52,7 @@ dimple_get_data <- function(X, matrixplot_sort = F, plot_transform = T) {
   vars_above_half <- colnames(X_update)[missfrac_per_var>=0.5]
   if (length(vars_above_half) != 0) message(paste("Warning! Missingness exceeds 50% for variable(s) ",
                 (paste(vars_above_half,collapse=", ") ),
-                ". Consider excluding these variables using dimple_clean() and repeating function until no warnings are shown.", sep= ""))
+                ". Although the pipeline will function with variables with high missingness, consider excluding these variables using dimple_clean() and repeating function until no warnings are shown.", sep= ""))
 
   #matrix plot
   df_miss_id <- cbind(c(1:rows), arr_X)
@@ -78,7 +78,6 @@ dimple_get_data <- function(X, matrixplot_sort = F, plot_transform = T) {
   if (matrixplot_sort == F) matrix_plot <- matrixplot_unsorted else matrix_plot <- matrixplot_sorted
   
   #cluster plot
-  
   any_miss <- X_update[,which(!colSums(is.na(X_update))==0)]
   
   yesno <- any_miss %>% 
