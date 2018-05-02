@@ -2,10 +2,33 @@ Package: dimple
 Type: Package
 Title: dimple - Data Imputation Made Simple
 Version: 0.1.0
-Author: Who wrote it
+Authors@R: c(
+            person("Tibor", "V. Varga", email = "tibor.varga@cpr.ku.dk",role = c("aut", "cre")),
+            person("David", "Westergaard", email = "david.westergaard@cpr.ku.dk",role = c("aut")))
 Maintainer: The package maintainer <yourself@somewhere.net>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: CC0
 Encoding: UTF-8
 LazyData: true
+RoxygenNote: 6.0.1.9000
+BugReports: https://github.com/Tirgit/missingdata/issues
+Imports:
+  Amelia,
+  dplyr,
+  ggdendro,
+  ggplot2,
+  Hmisc,
+  magrittr,
+  MASS,
+  Matrix,
+  mi,
+  mice,
+  missForest,
+  missMDA,
+  mlbench,
+  pcaMethods,
+  pROC,
+  ROCR,
+  tidyr,
+  VIM
