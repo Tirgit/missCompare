@@ -4,9 +4,16 @@
 #' MAP() spikes in missingness using missing-at-assumed (MAP) pattern
 #'
 #' @details
-#' This function uses the generated simulated matrix and generates missing datapoints in an assumed pattern per variable.
-#' This is achieved by sorting each column and removing the top/bottom of the column (according to the original missingness).
-#' Selection from top or bottom is random.
+#' This function uses the generated simulated matrix and generates missing datapoints in a missing-not-at-random
+#' pattern for each variable, considering the fraction of missingness for each variable, so potential missing data fraction
+#' imbalances between variables in the original data will be retained. Here the user needs to define a character vector
+#' (of length the same as the fraction of missingness per variable vector) that specifies which missingness pattern corresponds
+#' to the variables. In case the first four columns are assumed missing at random, the next one missing completely at random and
+#' the last two column not at random, the input vector will be:
+#' c(rep("MAR", 4), "MCAR", rep("MNAR",2))
+#' The algorithm will spike in missing values according to the specified pattern. For more information, please see documentation for fuctions
+#' MCAR(), MAR() and MNAR().
+#'
 #'
 #' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the simulate() function)
 #' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the get_data() function)

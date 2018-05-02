@@ -33,6 +33,6 @@ distribution and fixed mean and standard deviation. This matrix will subsequentl
 values and test various missing data imputation algorithms.
 }
 \examples{
-simulate(rownum = metadata$Rows, colnum = metadata$Columns, cormat = metadata$Corr_matrix)
+simulated <- simulate(rownum = metadata$Rows, colnum = metadata$Columns, cormat = metadata$Corr_matrix)
 
 }

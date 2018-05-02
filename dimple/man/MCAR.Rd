@@ -18,9 +18,9 @@
 MCAR() spikes in missingness using missing-completely-at-random (MCAR) pattern
 }
 \details{
-This function uses the generated simulated matrix and generates missing datapoints in an assumed pattern per variable.
-This is achieved by sorting each column and removing the top/bottom of the column (according to the original missingness).
-Selection from top or bottom is random.
+This function uses the generated simulated matrix and generates missing datapoints in a missing-completely-at-random
+pattern for each variable, considering the fraction of missingness for each variable, so potential missing data fraction
+imbalances between variables in the original data will be retained. The missing data spike-in is completely at random.
 }
 \examples{
 MCAR(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable)

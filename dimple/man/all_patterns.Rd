@@ -27,7 +27,7 @@ This is achieved by sorting each column and removing the top/bottom of the colum
 Selection from top or bottom is random.
 }
 \examples{
-all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
-all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, window = 0.2)
+miss_list <- all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
+miss_list <- all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, window = 0.2)
 
 }

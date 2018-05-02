@@ -27,7 +27,7 @@
 #' \item{NearPD_correlation_sample}{Sample of the nearPD (nearest positive definitive matrix) correlation structure of the simulated matrix (for comparison)}
 #'
 #' @examples
-#' simulate(rownum = metadata$Rows, colnum = metadata$Columns, cormat = metadata$Corr_matrix)
+#' simulated <- simulate(rownum = metadata$Rows, colnum = metadata$Columns, cormat = metadata$Corr_matrix)
 #'
 #' @export
 
