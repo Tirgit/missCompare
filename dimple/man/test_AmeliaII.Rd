@@ -3,6 +3,9 @@
 \name{test_AmeliaII}
 \alias{test_AmeliaII}
 \title{Testing the Amelia 2 missing data imputation algorithm}
+\usage{
+test_AmeliaII(X_hat, list)
+}
 \arguments{
 \item{X_hat}{Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the \code{\link{simulate}} function)}
 

@@ -3,6 +3,9 @@
 \name{simulate}
 \alias{simulate}
 \title{Simulation of matrix with no missingess}
+\usage{
+simulate(rownum, colnum, cormat, meanval = 0, sdval = 1)
+}
 \arguments{
 \item{rownum}{Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)}
 

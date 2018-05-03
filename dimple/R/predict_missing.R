@@ -5,11 +5,6 @@
 #set up logistic regression model and random forest to predict 0/1 outcome
 
 
-#LIBRARIES
-library(pROC)
-library(ROCR)
-
-
 #FUNCTION
 predict_missing <- function(rownum, colnum, cormat, missfrac_per_var, bootstrap) {
 

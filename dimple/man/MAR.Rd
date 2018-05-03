@@ -3,6 +3,9 @@
 \name{MAR}
 \alias{MAR}
 \title{Missing data spike-in in MAR pattern}
+\usage{
+MAR(X_hat, missfrac_per_var, window = 0.5)
+}
 \arguments{
 \item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)}
 

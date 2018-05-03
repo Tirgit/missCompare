@@ -35,17 +35,6 @@
 #' @export
 
 
-
-###PACKAGES
-library(mice)
-library(VIM)
-library(ggplot2)
-library(magrittr)
-library(dplyr)
-library(Hmisc)
-library(ggdendro)
-
-
 ###FUNCTION
 get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
 

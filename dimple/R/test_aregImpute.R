@@ -25,11 +25,7 @@
 #' @export
 
 
-###PACKAGES
-library(Hmisc)
-
 #FUNCTION
-
 test_aregImpute <- function(X_hat, list) {
 
   index <- lapply(list, is.na)

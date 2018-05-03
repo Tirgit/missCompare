@@ -32,11 +32,6 @@
 #' @export
 
 
-
-###PACKAGES
-library(missForest)
-
-
 ###FUNCTION
 all_patterns <- function(X_hat, missfrac_per_var, assumed_pattern = NA, window = 0.5) {
 

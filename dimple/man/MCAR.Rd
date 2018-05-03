@@ -3,12 +3,13 @@
 \name{MCAR}
 \alias{MCAR}
 \title{Missing data spike-in in MCAR pattern}
+\usage{
+MCAR(X_hat, missfrac_per_var)
+}
 \arguments{
 \item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)}
 
 \item{missfrac_per_var}{Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)}
-
-\item{window}{Window (with default 0.5). This regulates the "extremity" of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)}
 }
 \value{
 \item{MCAR_matrix}{Matrix with MCAR pred-defined missingess pattern}

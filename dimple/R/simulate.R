@@ -35,11 +35,6 @@
 #' @export
 
 
-###PACKAGES
-library(MASS)
-library(Matrix)
-
-
 ###FUNCTION
 simulate <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
   pd_corr_matrix <- Matrix::nearPD(cormat, keepDiag=T, conv.tol = 1e-7, corr=T)

@@ -29,10 +29,6 @@
 #' @export
 
 
-###PACKAGES
-library(Amelia)
-
-
 #FUNCTION
 test_AmeliaII <- function(X_hat, list) {
 

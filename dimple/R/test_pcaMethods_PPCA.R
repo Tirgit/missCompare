@@ -24,9 +24,6 @@
 #'
 #' @export
 
-###PACKAGES
-library(pcaMethods)
-
 
 #FUNCTION
 

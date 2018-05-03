@@ -24,11 +24,8 @@
 #'
 #' @export
 
-###PACKAGES
-library(missForest)
 
 #FUNCTION
-
 test_missForest <- function(X_hat, list) {
 
   index <- lapply(list, is.na)

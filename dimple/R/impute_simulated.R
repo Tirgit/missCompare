@@ -1,7 +1,7 @@
-#' @title Imputation algoritm wrapper
+#' @title Imputation algoritm tester on simulated data
 #'
 #' @description
-#' \code{\link{imp_wrapper}} tests the imputation accuracy of all missing data imputation algorithms on matrices with various missing data patterns
+#' \code{\link{impute_simulated}} tests the imputation accuracy of all missing data imputation algorithms on matrices with various missing data patterns
 #'
 #' @details
 #' This function tests the imputation accuracy of the a curated list of missing data imputation algorithms (16 algoritms at the moment) by comparing the
@@ -17,7 +17,7 @@
 #' @param n.iter Number of iterations to perform with default 10.
 #' @param assumed_pattern Vector of missingess types (must be same length as missingness fraction per variable) (optional parameter)
 
-#' @name imp_wrapper
+#' @name impute_simulated
 #'
 #' @return
 #' \item{Imputation_RMSE}{Raw RMSE values per method, per missingness pattern, per iteration)}
@@ -31,14 +31,14 @@
 #' @examples
 #' \dontrun{
 #' #in case there is no assumed missingness pattern per variable
-#' wrap <- imp_wrapper(rownum = y$Rows,
+#' wrap <- impute_simulated(rownum = y$Rows,
 #'                     colnum = y$Columns,
 #'                     cormat = y$Corr_matrix,
 #'                     missfrac_per_var =  y$Fraction_missingness_per_variable,
 #'                     n.iter = 15, assumed_pattern = NA)
 #'
 #' #in case there is a pre-defined assumed pattern
-#' wrap <- imp_wrapper(rownum = y$Rows,
+#' wrap <- impute_simulated(rownum = y$Rows,
 #'                     colnum = y$Columns,
 #'                     cormat = y$Corr_matrix,
 #'                     missfrac_per_var =  y$Fraction_missingness_per_variable,
@@ -49,32 +49,8 @@
 #' @export
 
 
-
-#################################################################################################################################################
-#
-#The purpose of this function is impute missing datapoints using all missing data imputation algoritms implemented in dimple
-
-#The function takes arguments from the beginning of the pipeline:
-#
-#Dimensions of the dataset
-#Correlation matrix
-#Fraction of missingess per variable
-#
-#The function outputs a list of RMSE values between the full matrix and the matrices with missingess.
-#Also, there is an output summarizing the RMSE values (mean, 95 CIs).
-#A plot is drawn to compare the missingness patterns.
-#The best methods for each missingess patterns are also output.
-#
-#################################################################################################################################################
-
-
-###PACKAGES
-library(tidyr)
-library(dplyr)
-library(ggplot2)
-
 #FUNCTION
-imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10, assumed_pattern = NA) {
+impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10, assumed_pattern = NA) {
 
   if (!is.na(assumed_pattern)) collect_res <- data.frame(matrix(NA, nrow = 16*n.iter, ncol = 5)) else collect_res <- data.frame(matrix(NA, nrow = 16*n.iter, ncol = 4))
   if (!is.na(assumed_pattern)) colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE", "MAP_RMSE") else colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE")
@@ -197,13 +173,10 @@ imp_wrapper <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10, a
 
 
 #LAB
-#wrap <- imp_wrapper(rownum = y$Rows,
+#wrap <- impute_simulated(rownum = y$Rows,
 #                               colnum = y$Columns,
 #                               cormat = y$Corr_matrix,
 #                               missfrac_per_var =  y$Fraction_missingness_per_variable,
 #                               n.iter = 3, assumed_pattern = NA)
 
-
-#collect_res <- wraps
-#collect_res$MAP_RMSE <- collect_res$MCAR_RMSE
 

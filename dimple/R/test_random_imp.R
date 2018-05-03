@@ -26,7 +26,6 @@
 
 
 #FUNCTION
-
 test_random_imp <- function(X_hat, list) {
 
 index <- lapply(list, is.na)
@@ -68,4 +67,3 @@ if (length(index)==4) list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE
 #LAB
 #res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
 #test_random_imp(X_hat = yy$Simulated_matrix, list = res)
-

@@ -3,6 +3,9 @@
 \name{test_missForest}
 \alias{test_missForest}
 \title{Testing the missForest missing data imputation algorithm}
+\usage{
+test_missForest(X_hat, list)
+}
 \arguments{
 \item{X_hat}{Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the \code{\link{simulate}} function)}
 

@@ -3,6 +3,9 @@
 \name{test_kNN}
 \alias{test_kNN}
 \title{Testing the VIM kNN missing data imputation algorithm}
+\usage{
+test_kNN(X_hat, list)
+}
 \arguments{
 \item{X_hat}{Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the \code{\link{simulate}} function)}
 

@@ -3,6 +3,9 @@
 \name{get_data}
 \alias{get_data}
 \title{Extraction of meta-data from dataframes}
+\usage{
+get_data(X, matrixplot_sort = T, plot_transform = T)
+}
 \arguments{
 \item{X}{Original dataframe with samples in rows and variables as columns. Can also use the resulting object from the \code{\link{clean}} function}
 

@@ -25,10 +25,6 @@
 #' @export
 
 
-###PACKAGES
-library(pcaMethods)
-
-
 #FUNCTION
 
 test_pcaMethods_Nipals <- function(X_hat, list) {

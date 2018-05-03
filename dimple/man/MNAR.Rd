@@ -3,6 +3,9 @@
 \name{MNAR}
 \alias{MNAR}
 \title{Missing data spike-in in MNAR pattern}
+\usage{
+MNAR(X_hat, missfrac_per_var, window = 0.5)
+}
 \arguments{
 \item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)}
 

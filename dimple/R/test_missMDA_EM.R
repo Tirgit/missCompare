@@ -25,12 +25,7 @@
 #' @export
 
 
-###PACKAGES
-library(missMDA)
-
-
 #FUNCTION
-
 test_missMDA_EM <- function(X_hat, list) {
 
   index <- lapply(list, is.na)

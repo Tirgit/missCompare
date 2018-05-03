@@ -24,8 +24,8 @@
 #'
 #' @export
 
-#FUNCTION
 
+#FUNCTION
 test_mean_imp <- function(X_hat, list) {
 
   index <- lapply(list, is.na)

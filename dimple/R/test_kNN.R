@@ -25,11 +25,7 @@
 #' @export
 
 
-###PACKAGES
-library(VIM)
-
 #FUNCTION
-
 test_kNN <- function(X_hat, list) {
 
   index <- lapply(list, is.na)

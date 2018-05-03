@@ -41,10 +41,6 @@
 #' @export
 
 
-###PACKAGES
-library(missForest)
-
-
 ###FUNCTION
 MAR <- function(X_hat, missfrac_per_var, window = 0.5) {
 

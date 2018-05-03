@@ -3,6 +3,9 @@
 \name{all_patterns}
 \alias{all_patterns}
 \title{Missing data spike-in in various missing data patterns}
+\usage{
+all_patterns(X_hat, missfrac_per_var, assumed_pattern = NA, window = 0.5)
+}
 \arguments{
 \item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)}
 

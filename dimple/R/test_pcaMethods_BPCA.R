@@ -24,12 +24,8 @@
 #'
 #' @export
 
-###PACKAGES
-library(pcaMethods)
-
 
 #FUNCTION
-
 test_pcaMethods_BPCA <- function(X_hat, list) {
 
   index <- lapply(list, is.na)

@@ -25,11 +25,7 @@
 #' @export
 
 
-###PACKAGES
-library(mi)
-
 #FUNCTION
-
 test_mi <- function(X_hat, list) {
 
   index <- lapply(list, is.na)

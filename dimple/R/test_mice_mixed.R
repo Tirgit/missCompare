@@ -25,12 +25,7 @@
 #' @export
 
 
-###PACKAGES
-library(mice)
-
-
 #FUNCTION
-
 test_mice_mixed <- function(X_hat, list) {
 
   index <- lapply(list, is.na)

@@ -6,7 +6,7 @@
 \alias{dimple-package}
 \title{dimple: Data Imputation Made Simple}
 \description{
-The dimple package offers a convenient pipeline to test and compare various missing data
+The \strong{dimple} package offers a convenient pipeline to test and compare various missing data
 imputation algoritms on simulated data. The central assumption behind dimple is that structurally
 different datasets (e.g. larger datasets with a large number of correlated variables vs. smaller datasets
 with non correlated variables) will benefit differently from different missing data imputation algorithms.
@@ -15,6 +15,19 @@ sophisticated missing data imputation algorithms and compare them assuming custo
 Dimple WILL NOT impute your dataset for you. However, dimple WILL give a comparative analysis of algorithms
 and offer a report with the best performing algorithms assuming various missing data patterns and publication
 ready visualizations to help you better understand missing data in your dataset.
+}
+\details{
+\tabular{ll}{
+Package \tab dimple\cr
+Type \tab Package\cr
+Version:  \tab 0.1.0\cr
+Date:  \tab 2018-05-03\cr
+License:  \tab CC0\cr
+LazyLoad:  \tab Yes
+}
+}
+\seealso{
+\url{https://github.com/Tirgit/missingdata}
 }
 \author{
 \itemize{

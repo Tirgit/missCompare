@@ -10,7 +10,6 @@
 #'
 #' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)
 #' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
-#' @param window Window (with default 0.5). This regulates the "extremity" of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)
 #'
 #' @name MCAR
 #'
@@ -25,9 +24,6 @@
 #' }
 #'
 #' @export
-
-###PACKAGES
-library(missForest)
 
 
 ###FUNCTION

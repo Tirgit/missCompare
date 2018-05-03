@@ -25,10 +25,6 @@
 #' @export
 
 
-###PACKAGES
-library(missMDA)
-
-
 #FUNCTION
 
 test_missMDA_reg <- function(X_hat, list) {
