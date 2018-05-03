@@ -14,23 +14,36 @@
 #' @param colnum Number of rows (variables) in the original dataframe (Columns output from the \code{\link{get_data}} function)
 #' @param cormat Correlation matrix of the original dataframe (Corr_matrix output from the \code{\link{get_data}} function)
 #' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
-#' @param n.iter xxx
+#' @param n.iter Number of iterations to perform with default 10.
 #' @param assumed_pattern Vector of missingess types (must be same length as missingness fraction per variable) (optional parameter)
 
 #' @name imp_wrapper
 #'
 #' @return
-#' \item{Imputation_RMSE}{Number of complete cases (samples with no missing data in any columns)}
-#' \item{Imputation_RMSE_means}{Total number of rows (samples) in the dataframe}
-#' \item{Best_method_MCAR}{Total number of columns (variables) in the dataframe}
-#' \item{Best_method_MAR}{Total number of columns (variables) in the dataframe}
-#' \item{Best_method_MNAR}{Total number of columns (variables) in the dataframe}
-#' \item{Best_method_MAP}{Total number of columns (variables) in the dataframe}
-#' \item{Plot}{Total number of columns (variables) in the dataframe}
+#' \item{Imputation_RMSE}{Raw RMSE values per method, per missingness pattern, per iteration)}
+#' \item{Imputation_RMSE_means}{RMSE summary statistics including mean, standard error and 95\% confidence intervals per method and missingness pattern}
+#' \item{Best_method_MCAR}{The best performing method with MCAR assumption. The method with the lowest mean RMSE calculated from RMSE values from all iterations (default output)}
+#' \item{Best_method_MAR}{The best performing method with MAR assumption. The method with the lowest mean RMSE calculated from RMSE values from all iterations (default output)}
+#' \item{Best_method_MNAR}{The best performing method with MNAR assumption. The method with the lowest mean RMSE calculated from RMSE values from all iterations (default output)}
+#' \item{Best_method_MAP}{The best performing method with MAP assumption. The method with the lowest mean RMSE calculated from RMSE values from all iterations (optional output)}
+#' \item{Plot}{Faceted boxplot of RMSE values per missiness pattern and missing data imputation algorithm}
 #'
 #' @examples
 #' \dontrun{
-#' test_mi(X_hat = simulated$Simulated_matrix, list = miss_list)
+#' #in case there is no assumed missingness pattern per variable
+#' wrap <- imp_wrapper(rownum = y$Rows,
+#'                     colnum = y$Columns,
+#'                     cormat = y$Corr_matrix,
+#'                     missfrac_per_var =  y$Fraction_missingness_per_variable,
+#'                     n.iter = 15, assumed_pattern = NA)
+#'
+#' #in case there is a pre-defined assumed pattern
+#' wrap <- imp_wrapper(rownum = y$Rows,
+#'                     colnum = y$Columns,
+#'                     cormat = y$Corr_matrix,
+#'                     missfrac_per_var =  y$Fraction_missingness_per_variable,
+#'                     n.iter = 15,
+#'                     assumed_pattern = c(rep("MAR", 4), "MCAR", rep("MNAR",2)))
 #' }
 #'
 #' @export
