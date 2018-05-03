@@ -1,7 +1,7 @@
 #' @title Testing the mean imputation algorithm
 #'
 #' @description
-#' test_mean_imp() tests the imputation accuracy of the mean imputation algorithm on matrices with various missing data patterns
+#' \code{\link{test_mean_imp}} tests the imputation accuracy of the mean imputation algorithm on matrices with various missing data patterns
 #'
 #' @details
 #' This function tests the imputation accuracy of the mean imputation algorithm by comparing the
@@ -10,15 +10,17 @@
 #' between the imputed datapoints and the original datapoints (that were subsequently set to missing). The function will
 #' automatically detect whether there is a MAP matrix in the list and calculate RMSE for all matrices provided in the list.
 #'
-#' @param X_hat Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the simulate() function)
-#' @param list List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the all_patterns() function)
+#' @param X_hat Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the \code{\link{simulate}} function)
+#' @param list List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the \code{\link{all_patterns}} function)
 #'
 #' @name test_mean_imp
 #'
 #' @inherit test_AmeliaII return
 #'
 #' @examples
+#' \dontrun{
 #' test_mean_imp(X_hat = simulated$Simulated_matrix, list = miss_list)
+#' }
 #'
 #' @export
 

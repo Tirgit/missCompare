@@ -3,10 +3,13 @@
 \name{MAP}
 \alias{MAP}
 \title{Missing data spike-in in MAP pattern}
+\usage{
+MAP(X_hat, missfrac_per_var, assumed_pattern, window = 0.5)
+}
 \arguments{
-\item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the simulate() function)}
+\item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)}
 
-\item{missfrac_per_var}{Fraction of missingness per variable (Fraction_missingness_per_variable output from the get_data() function)}
+\item{missfrac_per_var}{Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)}
 
 \item{assumed_pattern}{Vector of missingess types (must be same length as missingness fraction per variable)}
 
@@ -17,7 +20,7 @@
 \item{Summary}{Summary of MAP_matrix including number of missing values per variable}
 }
 \description{
-MAP() spikes in missingness using missing-at-assumed (MAP) pattern
+\code{\link{MAP}} spikes in missingness using missing-at-assumed (MAP) pattern
 }
 \details{
 This function uses the generated simulated matrix and generates missing datapoints in a missing-not-at-random
@@ -26,12 +29,16 @@ imbalances between variables in the original data will be retained. Here the use
 (of length the same as the fraction of missingness per variable vector) that specifies which missingness pattern corresponds
 to the variables. In case the first four columns are assumed missing at random, the next one missing completely at random and
 the last two column not at random, the input vector will be:
-c(rep("MAR", 4), "MCAR", rep("MNAR",2))
+\code{c(rep("MAR", 4), "MCAR", rep("MNAR",2))}
 The algorithm will spike in missing values according to the specified pattern. For more information, please see documentation for fuctions
-MCAR(), MAR() and MNAR().
+\code{\link{MCAR}}, \code{\link{MAR}} and \code{\link{MNAR}}.
 }
 \examples{
-MAP(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
-MAP(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"), window = 0.2)
+\dontrun{
+MAP(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
+assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
+MAP(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
+assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"), window = 0.2)
+}
 
 }

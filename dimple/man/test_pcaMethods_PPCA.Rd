@@ -4,9 +4,9 @@
 \alias{test_pcaMethods_PPCA}
 \title{Testing the pcaMethods PPCA missing data imputation algorithm}
 \arguments{
-\item{X_hat}{Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the simulate() function)}
+\item{X_hat}{Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the \code{\link{simulate}} function)}
 
-\item{list}{List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the all_patterns() function)}
+\item{list}{List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the \code{\link{all_patterns}} function)}
 }
 \value{
 \item{MCAR_RMSE}{Root-mean-square error (RMSE) between the indexed original values and the imputed values in an MCAR missingess pattern (default output)}
@@ -15,7 +15,7 @@
 \item{MAP_RMSE}{Root-mean-square error (RMSE) between the indexed original values and the imputed values in an MAP missingess pattern (optional output)}
 }
 \description{
-test_pcaMethods_PPCA() tests the imputation accuracy of the pcaMethods PPCA missing data imputation algorithm on matrices with various missing data patterns
+\code{\link{test_pcaMethods_PPCA}} tests the imputation accuracy of the pcaMethods PPCA missing data imputation algorithm on matrices with various missing data patterns
 }
 \details{
 This function tests the imputation accuracy of the pcaMethods PPCA missing data imputation algorithm by comparing the
@@ -25,6 +25,8 @@ between the imputed datapoints and the original datapoints (that were subsequent
 automatically detect whether there is a MAP matrix in the list and calculate RMSE for all matrices provided in the list.
 }
 \examples{
+\dontrun{
 test_pcaMethods_PPCA(X_hat = simulated$Simulated_matrix, list = miss_list)
+}
 
 }

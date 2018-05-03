@@ -4,11 +4,11 @@
 \alias{simulate}
 \title{Simulation of matrix with no missingess}
 \arguments{
-\item{rownum}{Number of rows (samples) in the original dataframe (Rows output from the get_data() function)}
+\item{rownum}{Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)}
 
-\item{colnum}{Number of rows (variables) in the original dataframe (Columns output from the get_data() function)}
+\item{colnum}{Number of rows (variables) in the original dataframe (Columns output from the \code{\link{get_data}} function)}
 
-\item{cormat}{Correlation matrix of the original dataframe (Corr_matrix output from the get_data() function)}
+\item{cormat}{Correlation matrix of the original dataframe (Corr_matrix output from the \code{\link{get_data}} function)}
 
 \item{meanval}{Desired mean value for the simulated variables, default = 0}
 
@@ -20,7 +20,7 @@
 \item{NearPD_correlation_sample}{Sample of the nearPD (nearest positive definitive matrix) correlation structure of the simulated matrix (for comparison)}
 }
 \description{
-simulate() simulates a clean matrix with no missingness based on the original data structure
+\code{\link{simulate}} simulates a clean matrix with no missingness based on the original data structure
 where all variables have the same mean and standard deviation and are normally distributed.
 }
 \details{
@@ -33,6 +33,9 @@ distribution and fixed mean and standard deviation. This matrix will subsequentl
 values and test various missing data imputation algorithms.
 }
 \examples{
-simulated <- simulate(rownum = metadata$Rows, colnum = metadata$Columns, cormat = metadata$Corr_matrix)
+\dontrun{
+simulated <- simulate(rownum = metadata$Rows, colnum = metadata$Columns,
+cormat = metadata$Corr_matrix)
+}
 
 }

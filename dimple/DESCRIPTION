@@ -15,6 +15,7 @@ RoxygenNote: 6.0.1.9000
 BugReports: https://github.com/Tirgit/missingdata/issues
 Imports:
   Amelia,
+  data.table,
   dplyr,
   ggdendro,
   ggplot2,
@@ -26,9 +27,10 @@ Imports:
   mice,
   missForest,
   missMDA,
-  mlbench,
   pcaMethods,
   pROC,
   ROCR,
   tidyr,
   VIM
+Suggests: 
+  testthat

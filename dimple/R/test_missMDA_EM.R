@@ -1,7 +1,7 @@
 #' @title Testing the missMDA EM missing data imputation algorithm
 #'
 #' @description
-#' test_missMDA_EM() tests the imputation accuracy of the missMDA EM missing data imputation algorithm on matrices with various missing data patterns
+#' \code{\link{test_missMDA_EM}} tests the imputation accuracy of the missMDA EM missing data imputation algorithm on matrices with various missing data patterns
 #'
 #' @details
 #' This function tests the imputation accuracy of the missMDA EM missing data imputation algorithm by comparing the
@@ -10,15 +10,17 @@
 #' between the imputed datapoints and the original datapoints (that were subsequently set to missing). The function will
 #' automatically detect whether there is a MAP matrix in the list and calculate RMSE for all matrices provided in the list.
 #'
-#' @param X_hat Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the simulate() function)
-#' @param list List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the all_patterns() function)
+#' @param X_hat Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the \code{\link{simulate}} function)
+#' @param list List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the \code{\link{all_patterns}} function)
 #'
 #' @name test_missMDA_EM
 #'
 #' @inherit test_AmeliaII return
 #'
 #' @examples
+#' \dontrun{
 #' test_missMDA_EM(X_hat = simulated$Simulated_matrix, list = miss_list)
+#' }
 #'
 #' @export
 
@@ -34,8 +36,8 @@ test_missMDA_EM <- function(X_hat, list) {
   index <- lapply(list, is.na)
 
   missMDA_EM_imp <- function(X) {
-    ncomp <- estim_ncpPCA(X)
-    res.imp <- imputePCA(X, ncp= ncomp$ncp, method = "EM")
+    ncomp <- missMDA::estim_ncpPCA(X)
+    res.imp <- missMDA::imputePCA(X, ncp= ncomp$ncp, method = "EM")
     imp_matrix <- res.imp$completeObs
 
     list(Imputed = imp_matrix)

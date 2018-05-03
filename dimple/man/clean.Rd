@@ -20,7 +20,7 @@ clean(X, var_removal_threshold = 0.5, ind_removal_threshold = 1,
 \item{Dataframe_clean}{Clean dataset with NAs as missing values and rows/columns above the pre-specified missingness thresholds removed}
 }
 \description{
-clean() helps in the conversion of missing values, variable types and removes rows and columns above
+\code{\link{clean}} helps in the conversion of missing values, variable types and removes rows and columns above
 pre-specified missingess
 }
 \details{
@@ -29,7 +29,9 @@ missingness rates might negatively impact missing data imputation algorithms. Th
 dataframe by removing rows (samples) and columns (variables) above pre-specified thresholds.
 }
 \examples{
+\dontrun{
 cleaned <- clean(df)
 cleaned <- clean(df, var_removal_threshold = 0.75, ind_removal_threshold = 0.9)
+}
 
 }

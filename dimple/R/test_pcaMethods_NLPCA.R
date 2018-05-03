@@ -1,7 +1,7 @@
 #' @title Testing the pcaMethods NLPCA missing data imputation algorithm
 #'
 #' @description
-#' test_pcaMethods_NLPCA() tests the imputation accuracy of the pcaMethods NLPCA missing data imputation algorithm on matrices with various missing data patterns
+#' \code{\link{test_pcaMethods_NLPCA}} tests the imputation accuracy of the pcaMethods NLPCA missing data imputation algorithm on matrices with various missing data patterns
 #'
 #' @details
 #' This function tests the imputation accuracy of the pcaMethods NLPCA missing data imputation algorithm by comparing the
@@ -10,15 +10,17 @@
 #' between the imputed datapoints and the original datapoints (that were subsequently set to missing). The function will
 #' automatically detect whether there is a MAP matrix in the list and calculate RMSE for all matrices provided in the list.
 #'
-#' @param X_hat Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the simulate() function)
-#' @param list List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the all_patterns() function)
+#' @param X_hat Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the \code{\link{simulate}} function)
+#' @param list List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the \code{\link{all_patterns}} function)
 #'
 #' @name test_pcaMethods_NLPCA
 #'
 #' @inherit test_AmeliaII return
 #'
 #' @examples
+#' \dontrun{
 #' test_pcaMethods_NLPCA(X_hat = simulated$Simulated_matrix, list = miss_list)
+#' }
 #'
 #' @export
 
@@ -33,8 +35,8 @@ test_pcaMethods_NLPCA <- function(X_hat, list) {
   index <- lapply(list, is.na)
 
   pcaMethods_NLPCA_imp <- function(X) {
-    ncomp <- estim_ncpPCA(X)
-    if (ncomp$ncp>0) resNLPCA <- pca(X, method="nlpca", center=FALSE, nPcs=ncomp$ncp, maxSteps=100) else resNLPCA <- pca(X, method="nlpca", center=FALSE, nPcs=2, maxSteps=100)
+    ncomp <- missMDA::estim_ncpPCA(X)
+    if (ncomp$ncp>0) resNLPCA <- pcaMethods::pca(X, method="nlpca", center=FALSE, nPcs=ncomp$ncp, maxSteps=100) else resNLPCA <- pca(X, method="nlpca", center=FALSE, nPcs=2, maxSteps=100)
     imp_matrix <- resNLPCA@completeObs
 
     list(Imputed = imp_matrix)

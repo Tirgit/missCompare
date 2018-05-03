@@ -1,7 +1,7 @@
 #' @title Testing the Hmisc aregImpute missing data imputation algorithm
 #'
 #' @description
-#' test_AmeliaII() tests the imputation accuracy of the Hmisc aregImpute missing data imputation algorithm on matrices with various missing data patterns
+#' \code{\link{test_aregImpute}} tests the imputation accuracy of the Hmisc aregImpute missing data imputation algorithm on matrices with various missing data patterns
 #'
 #' @details
 #' This function tests the imputation accuracy of the Hmisc aregImpute missing data imputation algorithm by comparing the
@@ -10,15 +10,17 @@
 #' between the imputed datapoints and the original datapoints (that were subsequently set to missing). The function will
 #' automatically detect whether there is a MAP matrix in the list and calculate RMSE for all matrices provided in the list.
 #'
-#' @param X_hat Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the simulate() function)
-#' @param list List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the all_patterns() function)
+#' @param X_hat Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the \code{\link{simulate}} function)
+#' @param list List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the \code{\link{all_patterns}} function)
 #'
 #' @name test_aregImpute
 #'
 #' @inherit test_AmeliaII return
 #'
 #' @examples
+#' \dontrun{
 #' test_aregImpute(X_hat = simulated$Simulated_matrix, list = miss_list)
+#' }
 #'
 #' @export
 
@@ -35,10 +37,10 @@ test_aregImpute <- function(X_hat, list) {
   aregImpute_imp <- function(X) {
     Xdf <- as.data.frame(X)
     Xcolnames <- colnames(Xdf)
-    Xformula <- as.formula(paste("~",paste(Xcolnames,collapse="+")))
+    Xformula <- stats::as.formula(paste("~",paste(Xcolnames,collapse="+")))
 
-    hmisc_algo <- aregImpute(formula = Xformula, data= Xdf, n.impute = 1, burnin=5, nk=3, type='pmm', pmmtype=2)
-    completeData <- as.data.frame(impute.transcan(hmisc_algo, imputation=1, data= Xdf, list.out=TRUE, pr=FALSE, check=FALSE))
+    hmisc_algo <- Hmisc::aregImpute(formula = Xformula, data= Xdf, n.impute = 1, burnin=5, nk=3, type='pmm', pmmtype=2)
+    completeData <- as.data.frame(Hmisc::impute.transcan(hmisc_algo, imputation=1, data= Xdf, list.out=TRUE, pr=FALSE, check=FALSE))
 
     imp_matrix <- as.matrix(completeData)
 

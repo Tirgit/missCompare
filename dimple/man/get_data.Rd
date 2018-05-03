@@ -4,7 +4,7 @@
 \alias{get_data}
 \title{Extraction of meta-data from dataframes}
 \arguments{
-\item{X}{Original dataframe with samples in rows and variables as columns}
+\item{X}{Original dataframe with samples in rows and variables as columns. Can also use the resulting object from the \code{\link{clean}} function}
 
 \item{matrixplot_sort}{Boolean with default TRUE. If TRUE, the matrixplot will be sorted by missing/non-missing status. If FALSE, the original order of rows will be retained}
 
@@ -19,19 +19,21 @@
 \item{Fraction_missingness_per_variable}{Fraction of missingness per variable. A (named) numeric vector of length the number of columns. Each variable missingess values are expressed as numbers between 0 and 1, where 1 means 100\% of data is missing and 0 means there are no missing values}
 \item{Total_NA}{Total number of missing values in the dataframe}
 \item{NA_per_variable}{Number of missing values per variables in the dataframe. A (named) numeric vector of length the number of columns}
-\item{MD_Pattern}{Missing data pattern calculated using mice::md_pattern (see documentation in the mice package)}
+\item{MD_Pattern}{Missing data pattern calculated using mice::md_pattern (see \code{\link[mice]{md.pattern}} in the mice package)}
 \item{Vars_above_half}{Character vector of variables names with missingness higher than 50\%}
 \item{Matrix_plot}{Matrixplot where missing values are colored gray and available values are colored based on value range}
 \item{Cluster_plot}{Cluster plot of co-missingness. Variables demostrating shared missingness patterns will branch at closer to the bottom of the plot, while no patterns will be represented by branches high in the plot}
 }
 \description{
-get_data() extracts descriptive meta-data from the dataframe including information on missing data
+\code{\link{get_data}} extracts descriptive meta-data from the dataframe including information on missing data
 }
 \details{
 This function uses the original dataframe and extracts descriptive meta-data.
 }
 \examples{
+\dontrun{
 metadata <- get_data(df)
 metadata <- get_data(cleaned$Dataframe_clean, matrixplot_sort = F)
+}
 
 }

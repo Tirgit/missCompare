@@ -1,7 +1,7 @@
 #' @title Testing the Amelia 2 missing data imputation algorithm
 #'
 #' @description
-#' test_AmeliaII() tests the imputation accuracy of the Amelia 2 missing data imputation algorithm on matrices with various missing data patterns
+#' \code{\link{test_AmeliaII}} tests the imputation accuracy of the Amelia 2 missing data imputation algorithm on matrices with various missing data patterns
 #'
 #' @details
 #' This function tests the imputation accuracy of the Amelia 2 missing data imputation algorithm by comparing the
@@ -10,8 +10,8 @@
 #' between the imputed datapoints and the original datapoints (that were subsequently set to missing). The function will
 #' automatically detect whether there is a MAP matrix in the list and calculate RMSE for all matrices provided in the list.
 #'
-#' @param X_hat Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the simulate() function)
-#' @param list List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the all_patterns() function)
+#' @param X_hat Simulated matrix with no missingess (this matrix will be used to obtain the error between the original and imputed values). (Simulated_matrix output from the \code{\link{simulate}} function)
+#' @param list List of matrices with various missingness patterns (MCAR, MAR, MNAR and optionally, MAP). (The input is ideally the R object that was generated using the \code{\link{all_patterns}} function)
 #'
 #' @name test_AmeliaII
 #'
@@ -22,7 +22,9 @@
 #' \item{MAP_RMSE}{Root-mean-square error (RMSE) between the indexed original values and the imputed values in an MAP missingess pattern (optional output)}
 #'
 #' @examples
+#' \dontrun{
 #' test_AmeliaII(X_hat = simulated$Simulated_matrix, list = miss_list)
+#' }
 #'
 #' @export
 
@@ -37,7 +39,7 @@ test_AmeliaII <- function(X_hat, list) {
   index <- lapply(list, is.na)
 
   AmeliaII_imp <- function(X) {
-    amelia_fit <- amelia(X, m=1)
+    amelia_fit <- Amelia::amelia(X, m=1)
     imp_matrix <- amelia_fit$imputations[[1]]
 
     list(Imputed = imp_matrix)

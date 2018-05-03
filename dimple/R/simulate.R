@@ -1,7 +1,7 @@
 #' @title Simulation of matrix with no missingess
 #'
 #' @description
-#' simulate() simulates a clean matrix with no missingness based on the original data structure
+#' \code{\link{simulate}} simulates a clean matrix with no missingness based on the original data structure
 #' where all variables have the same mean and standard deviation and are normally distributed.
 #'
 #' @details
@@ -13,9 +13,9 @@
 #' distribution and fixed mean and standard deviation. This matrix will subsequently used for spiking in missing
 #' values and test various missing data imputation algorithms.
 #'
-#' @param rownum Number of rows (samples) in the original dataframe (Rows output from the get_data() function)
-#' @param colnum Number of rows (variables) in the original dataframe (Columns output from the get_data() function)
-#' @param cormat Correlation matrix of the original dataframe (Corr_matrix output from the get_data() function)
+#' @param rownum Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)
+#' @param colnum Number of rows (variables) in the original dataframe (Columns output from the \code{\link{get_data}} function)
+#' @param cormat Correlation matrix of the original dataframe (Corr_matrix output from the \code{\link{get_data}} function)
 #' @param meanval Desired mean value for the simulated variables, default = 0
 #' @param sdval Desired standard deviation value for the simulated variables, default = 1
 #'
@@ -27,7 +27,10 @@
 #' \item{NearPD_correlation_sample}{Sample of the nearPD (nearest positive definitive matrix) correlation structure of the simulated matrix (for comparison)}
 #'
 #' @examples
-#' simulated <- simulate(rownum = metadata$Rows, colnum = metadata$Columns, cormat = metadata$Corr_matrix)
+#' \dontrun{
+#' simulated <- simulate(rownum = metadata$Rows, colnum = metadata$Columns,
+#' cormat = metadata$Corr_matrix)
+#' }
 #'
 #' @export
 
@@ -39,13 +42,13 @@ library(Matrix)
 
 ###FUNCTION
 simulate <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
-  pd_corr_matrix <- nearPD(cormat, keepDiag=T, conv.tol = 1e-7, corr=T)
+  pd_corr_matrix <- Matrix::nearPD(cormat, keepDiag=T, conv.tol = 1e-7, corr=T)
   mu <- rep(meanval,colnum)
   stddev <- rep(sdval,colnum)
   covMat <- stddev %*% t(stddev) * pd_corr_matrix$mat
-  X_hat <- mvrnorm(n=rownum, mu=mu, Sigma=covMat, empirical=TRUE) # Simulated values
+  X_hat <- MASS::mvrnorm(n=rownum, mu=mu, Sigma=covMat, empirical=TRUE) # Simulated values
   if (colnum >5) original_sample <- cormat[1:5,1:5] else original_sample <- cormat[1:colnum,1:colnum]
-  if (colnum >5) nearPD_sample <- cor(X_hat)[1:5,1:5] else nearPD_sample <- cor(X_hat)[1:colnum,1:colnum]
+  if (colnum >5) nearPD_sample <- stats::cor(X_hat)[1:5,1:5] else nearPD_sample <- stats::cor(X_hat)[1:colnum,1:colnum]
 
   rownames(X_hat) <- 1:nrow(X_hat)
 

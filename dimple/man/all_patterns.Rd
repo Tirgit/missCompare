@@ -4,9 +4,9 @@
 \alias{all_patterns}
 \title{Missing data spike-in in various missing data patterns}
 \arguments{
-\item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the simulate() function)}
+\item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)}
 
-\item{missfrac_per_var}{Fraction of missingness per variable (Fraction_missingness_per_variable output from the get_data() function)}
+\item{missfrac_per_var}{Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)}
 
 \item{assumed_pattern}{Vector of missingess types (must be same length as missingness fraction per variable). If this input is specified, the function will spike in missing datapoints in a MAP pattern as well.}
 
@@ -19,7 +19,7 @@
 \item{MAP_matrix}{Matrix with MAP pred-defined missingess pattern (optional output)}
 }
 \description{
-all_patterns() spikes in missingness using MCAR, MAR, MNAR (default) and MAP (optional) patterns
+\code{\link{all_patterns}} spikes in missingness using MCAR, MAR, MNAR (default) and MAP (optional) patterns
 }
 \details{
 This function uses the generated simulated matrix and generates missing datapoints in an assumed pattern per variable.
@@ -27,7 +27,11 @@ This is achieved by sorting each column and removing the top/bottom of the colum
 Selection from top or bottom is random.
 }
 \examples{
-miss_list <- all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
-miss_list <- all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, window = 0.2)
+\dontrun{
+miss_list <- all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
+assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
+miss_list <- all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
+window = 0.2)
+}
 
 }

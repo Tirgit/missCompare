@@ -1,15 +1,15 @@
 #' @title Missing data spike-in in MCAR pattern
 #'
 #' @description
-#' MCAR() spikes in missingness using missing-completely-at-random (MCAR) pattern
+#' \code{\link{MCAR}} spikes in missingness using missing-completely-at-random (MCAR) pattern
 #'
 #' @details
 #' This function uses the generated simulated matrix and generates missing datapoints in a missing-completely-at-random
 #' pattern for each variable, considering the fraction of missingness for each variable, so potential missing data fraction
 #' imbalances between variables in the original data will be retained. The missing data spike-in is completely at random.
 #'
-#' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the simulate() function)
-#' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the get_data() function)
+#' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)
+#' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
 #' @param window Window (with default 0.5). This regulates the "extremity" of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)
 #'
 #' @name MCAR
@@ -19,8 +19,10 @@
 #' \item{Summary}{Summary of MCAR_matrix including number of missing values per variable}
 #'
 #' @examples
+#' \dontrun{
 #' MCAR(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable)
 #' MCAR(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, window = 0.2)
+#' }
 #'
 #' @export
 

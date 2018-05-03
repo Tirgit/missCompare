@@ -1,7 +1,7 @@
 #' @title Dataframe cleaning for missing data handling
 #'
 #' @description
-#' clean() helps in the conversion of missing values, variable types and removes rows and columns above
+#' \code{\link{clean}} helps in the conversion of missing values, variable types and removes rows and columns above
 #' pre-specified missingess
 #'
 #' @details
@@ -20,8 +20,10 @@
 #' \item{Dataframe_clean}{Clean dataset with NAs as missing values and rows/columns above the pre-specified missingness thresholds removed}
 #'
 #' @examples
+#' \dontrun{
 #' cleaned <- clean(df)
 #' cleaned <- clean(df, var_removal_threshold = 0.75, ind_removal_threshold = 0.9)
+#' }
 #'
 #' @export
 

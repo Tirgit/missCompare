@@ -1,7 +1,7 @@
 #' @title Missing data spike-in in MNAR pattern
 #'
 #' @description
-#' MNAR() spikes in missingness using missing-not-at-random (MNAR) pattern
+#' \code{\link{MNAR}} spikes in missingness using missing-not-at-random (MNAR) pattern
 #'
 #' @details
 #' This function uses the generated simulated matrix and generates missing datapoints in a missing-not-at-random
@@ -19,11 +19,11 @@
 #' The user should note that in case the fraction of missingness + the window gets closer to 100\% (e.g. a window of 0.4 and
 #' a variable missingess of 55\%), the more the algorithm will spike in missingness that will resemble a random pattern
 #' (as the random "window" will represent (almost) all the data in a variable). Hence, it is suggested that the user carefully
-#' examines the missing data fractions, excludes variables with high missingess using the clean() function and
+#' examines the missing data fractions, excludes variables with high missingess using the \code{\link{clean}} function and
 #' sets a sensible window for the analysis.
 #'
-#' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the simulate() function)
-#' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the get_data() function)
+#' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)
+#' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
 #' @param window Window (with default 0.5). This regulates the "extremity" of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)
 #'
 #' @name MNAR
@@ -33,8 +33,10 @@
 #' \item{Summary}{Summary of MNAR_matrix including number of missing values per variable}
 #'
 #' @examples
+#' \dontrun{
 #' MNAR(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable)
 #' MNAR(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, window = 0.2)
+#' }
 #'
 #' @export
 
@@ -49,9 +51,9 @@ MNAR <- function(X_hat, missfrac_per_var, window = 0.5) {
   rownames(X_hat) <- 1:nrow(X_hat)
 
   for (i in 1:length(missfrac_per_var)) {
-    window_start <- runif(1, min=0, max=1-window-missfrac_per_var[i])
+    window_start <- stats::runif(1, min=0, max=1-window-missfrac_per_var[i])
     window_end <- window_start+missfrac_per_var[i]+window
-    quants <- quantile(X_hat[,i], c(window_start, window_end))
+    quants <- stats::quantile(X_hat[,i], c(window_start, window_end))
     ind <- X_hat[,i] <= quants[2] & X_hat[,i] >= quants[1]
     to_NA <- sample(rownames(X_hat)[ind], missfrac_per_var[i]*nrow(X_hat))
     X_hat[,i][to_NA] <- NA

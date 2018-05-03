@@ -1,7 +1,7 @@
 #' @title Missing data spike-in in MAP pattern
 #'
 #' @description
-#' MAP() spikes in missingness using missing-at-assumed (MAP) pattern
+#' \code{\link{MAP}} spikes in missingness using missing-at-assumed (MAP) pattern
 #'
 #' @details
 #' This function uses the generated simulated matrix and generates missing datapoints in a missing-not-at-random
@@ -10,13 +10,13 @@
 #' (of length the same as the fraction of missingness per variable vector) that specifies which missingness pattern corresponds
 #' to the variables. In case the first four columns are assumed missing at random, the next one missing completely at random and
 #' the last two column not at random, the input vector will be:
-#' c(rep("MAR", 4), "MCAR", rep("MNAR",2))
+#' \code{c(rep("MAR", 4), "MCAR", rep("MNAR",2))}
 #' The algorithm will spike in missing values according to the specified pattern. For more information, please see documentation for fuctions
-#' MCAR(), MAR() and MNAR().
+#' \code{\link{MCAR}}, \code{\link{MAR}} and \code{\link{MNAR}}.
 #'
 #'
-#' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the simulate() function)
-#' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the get_data() function)
+#' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)
+#' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
 #' @param assumed_pattern Vector of missingess types (must be same length as missingness fraction per variable)
 #' @param window Window (with default 0.5). This regulates the "extremity" of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)
 #'
@@ -27,14 +27,14 @@
 #' \item{Summary}{Summary of MAP_matrix including number of missing values per variable}
 #'
 #' @examples
-#' MAP(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
-#' MAP(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"), window = 0.2)
+#' \dontrun{
+#' MAP(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
+#' assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
+#' MAP(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
+#' assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"), window = 0.2)
+#' }
 #'
 #' @export
-
-###PACKAGES
-library(missForest)
-
 
 ###FUNCTION
 MAP <- function(X_hat, missfrac_per_var, assumed_pattern, window = 0.5) {
@@ -58,9 +58,9 @@ MAP <- function(X_hat, missfrac_per_var, assumed_pattern, window = 0.5) {
 
   #MNAR
   for (i in MNAR_vars) {
-    window_start <- runif(1, min=0, max=1-window-missfrac_per_var[i])
+    window_start <- stats::runif(1, min=0, max=1-window-missfrac_per_var[i])
     window_end <- window_start+missfrac_per_var[i]+window
-    quants <- quantile(X_hat[,i],c(window_start, window_end))
+    quants <- stats::quantile(X_hat[,i],c(window_start, window_end))
     ind <- X_hat[,i] <= quants[2] & X_hat[,i] >= quants[1]
     to_NA <- sample(rownames(X_hat)[ind], missfrac_per_var[i]*nrow(X_hat))
     X_hat[,i][to_NA] <- NA
@@ -68,17 +68,17 @@ MAP <- function(X_hat, missfrac_per_var, assumed_pattern, window = 0.5) {
 
   #MAR
   for (i in 1:(length(MAR_vars)-1)) {
-    window_start <- runif(1, min=0, max=1-window-missfrac_per_var[MAR_vars[i]])
+    window_start <- stats::runif(1, min=0, max=1-window-missfrac_per_var[MAR_vars[i]])
     window_end <- window_start+missfrac_per_var[MAR_vars[i]]+window
-    quants <- quantile(X_hat[,MAR_vars[i+1]], c(window_start, window_end))
+    quants <- stats::quantile(X_hat[,MAR_vars[i+1]], c(window_start, window_end))
     ind <- X_hat[,MAR_vars[i+1]] <= quants[2] & X_hat[,MAR_vars[i+1]] >= quants[1]
     to_NA <- sample(rownames(X_hat)[ind], missfrac_per_var[MAR_vars[i]]*nrow(X_hat))
     X_hat[,MAR_vars[i]][to_NA] <- NA
   }
 
-  window_start <- runif(1, min=0, max=1-window-missfrac_per_var[MAR_vars[length(MAR_vars)]])
+  window_start <- stats::runif(1, min=0, max=1-window-missfrac_per_var[MAR_vars[length(MAR_vars)]])
   window_end <- window_start+missfrac_per_var[MAR_vars[length(MAR_vars)]]+window
-  quants <- quantile(X_hat[,MAR_vars[1]], c(window_start, window_end), na.rm = T)
+  quants <- stats::quantile(X_hat[,MAR_vars[1]], c(window_start, window_end), na.rm = T)
   ind <- X_hat[,MAR_vars[1]] <= quants[2] & X_hat[,MAR_vars[1]] >= quants[1]
   NAs <- is.na(X_hat[,MAR_vars[1]])
   to_NA <- sample(rownames(X_hat)[ind | NAs], missfrac_per_var[MAR_vars[length(MAR_vars)]]*nrow(X_hat))
