@@ -54,7 +54,7 @@
 #' \item{VIM_kNN_imputation}{Imputed dataset using the VIM kNN imputation algorithm replacement}
 #'
 #'
-#' @name impute_data
+#' @name impute_data_validate
 #'
 #' @examples
 #' \dontrun{
@@ -68,12 +68,19 @@
 
 
 ##FUNCTION
-impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
+impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel_method = c(1:16)) {
 
   #optional scaling
   if (scale == T) {
     X <- as.data.frame(scale(X))
   }
+
+  #spike in an additional small amount of missing values
+  X_orig <- X
+  X <- missForest::prodNA(X, spike.in)
+  index_orig <- sapply(X_orig, is.na)
+  index_extra <- sapply(X, is.na)
+  index_spikein <- (index_orig != index_extra)
 
   #creating empty lists for output
   random_imp_list <- list()
@@ -259,23 +266,66 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
     kNN_list[[1]] <- as.data.frame(imp_matrix)
   }
 
-  list(random_replacement = random_imp_list,
-       mean_imputation = mean_imp_list,
-       median_imputation = median_imp_list,
-       missMDA_reg_imputation = missMDA_reg_list,
-       missMDA_EM_imputation = missMDA_EM_list,
-       pcaMethods_PPCA_imputation = pcaMethods_PPCA_list,
-       pcaMethods_svdImpute_imputation = pcaMethods_svdImpute_list,
-       pcaMethods_BPCA_imputation = pcaMethods_BPCA_list,
-       pcaMethods_Nipals_imputation = pcaMethods_Nipals_list,
-       pcaMethods_NLPCA_imputation = pcaMethods_NLPCA_list,
-       mice_mixed_imputation = mice_mixed_list,
-       mi_Bayesian_imputation = mi_Bayesian_list,
-       ameliaII_imputation = amelia_list,
-       missForest_imputation = missForest_list,
-       Hmisc_aregImpute_imputation = aregImpute_list,
-       VIM_kNN_imputation = kNN_list)
+  all_imp_dfs <- list(random_replacement = random_imp_list,
+                      mean_imputation = mean_imp_list,
+                      median_imputation = median_imp_list,
+                      missMDA_reg_imputation = missMDA_reg_list,
+                      missMDA_EM_imputation = missMDA_EM_list,
+                      pcaMethods_PPCA_imputation = pcaMethods_PPCA_list,
+                      pcaMethods_svdImpute_imputation = pcaMethods_svdImpute_list,
+                      pcaMethods_BPCA_imputation = pcaMethods_BPCA_list,
+                      pcaMethods_Nipals_imputation = pcaMethods_Nipals_list,
+                      pcaMethods_NLPCA_imputation = pcaMethods_NLPCA_list,
+                      mice_mixed_imputation = mice_mixed_list,
+                      mi_Bayesian_imputation = mi_Bayesian_list,
+                      ameliaII_imputation = amelia_list,
+                      missForest_imputation = missForest_list,
+                      Hmisc_aregImpute_imputation = aregImpute_list,
+                      VIM_kNN_imputation = kNN_list)
+
+  imp_dat_res_unlisted <- unlist(all_imp_dfs, recursive = F)
+
+  #calculate RMSE values
+  RMSE <- data.frame(matrix(NA, nrow = length(imp_dat_res_unlisted), ncol = 2))
+  colnames(RMSE) <- c("Method", "RMSE")
+  RMSE[,1] <- names(imp_dat_res_unlisted)
+  RMSE[,1] <- gsub('[0-9]+', '', RMSE[,1])
+  for (i in 1:length(imp_dat_res_unlisted)) {
+    RMSE[i,2] <- sqrt(mean((X_orig[index_spikein]-imp_dat_res_unlisted[[i]][index_spikein])^2))
+  }
+
+  RMSE$Method <- factor(RMSE$Method)
+  RMSE$Method <- plyr::revalue(RMSE$Method,
+                               c("random_replacement"="Random replacement",
+                                 "median_imputation"="Median imputation",
+                                 "mean_imputation"="Mean imputation",
+                                 "missMDA_reg_imputation"="missMDA Regularized",
+                                 "missMDA_EM_imputation"="missMDA EM",
+                                 "pcaMethods_PPCA_imputation"="pcaMethods PPCA",
+                                 "pcaMethods_svdImpute_imputation"="pcaMethods svdImpute",
+                                 "pcaMethods_BPCA_imputation"="pcaMethods BPCA",
+                                 "pcaMethods_Nipals_imputation"="pcaMethods NIPALS",
+                                 "pcaMethods_NLPCA_imputation"="pcaMethods NLPCA",
+                                 "mice_mixed_imputation"="mice mixed",
+                                 "mi_Bayesian_imputation"="mi Bayesian",
+                                 "ameliaII_imputation"="Amelia II",
+                                 "missForest_imputation"="missForest",
+                                 "Hmisc_aregImpute_imputation"="Hmisc aregImpute",
+                                 "VIM_kNN_imputation"="VIM kNN"))
+  RMSE$Method <- factor(RMSE$Method, levels = c("Random replacement", "Median imputation", "Mean imputation", "missMDA Regularized",
+                                                "missMDA EM", "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA",
+                                                "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
+                                                "mi Bayesian", "Amelia II", "missForest", "Hmisc aregImpute", "VIM kNN"))
+
+
+  p <- ggplot(RMSE, aes(x=Method, y=RMSE, col=Method)) +
+    geom_boxplot() +
+    theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
+    ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
+    theme(plot.title = element_text(hjust = 0.5)) +
+    labs(x="")
+
+  list(RMSE = RMSE, Plot = p)
 
 }
-
 

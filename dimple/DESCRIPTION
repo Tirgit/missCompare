@@ -35,6 +35,7 @@ Imports:
   missForest,
   missMDA,
   pcaMethods,
+  plyr,
   pROC,
   ROCR,
   tidyr,

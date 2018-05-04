@@ -12,6 +12,7 @@
 #' @importFrom missForest missForest prodNA
 #' @importFrom missMDA estim_ncpPCA imputePCA
 #' @importFrom pcaMethods pca
+#' @importFrom plyr revalue
 #' @import pROC
 #' @import ROCR
 #' @importFrom stats quantile runif complete.cases cor dist hclust sd qt glm predict as.formula median
