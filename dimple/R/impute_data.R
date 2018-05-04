@@ -4,7 +4,7 @@
 
 
 ##FUNCTION
-impute_data <- function(X, n.iter = 10) {
+impute_data <- function(X, X_full = NA, scale = T, n.iter = 10, method = c("ALL")) {
 
 
 
