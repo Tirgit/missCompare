@@ -12,6 +12,8 @@ impute_data_validate(X, scale = T, spike.in = 0.01, n.iter = 10,
 
 \item{scale}{Boolean with default TRUE. Scaling will scale and center all variables to mean=0 and standard deviation=1. This is strongly suggested for all PCA-based methods, and for the sake of comparison (and in the case when all methods are run), for the other methods too. Please note, however, that some methods (e.g. pcaMethods NLPCA, missForest, etc.) are equipped to handle non-linear data. In these cases scaling is up to the user.}
 
+\item{spike.in}{Numeric value with 0.01 (or 1\%) as default. This parameter controls the additional missing data spike-in.}
+
 \item{n.iter}{Number of iterations to perform with default 10. This will only affect the probabilistic methods that allow for a multiple imputation framwork. The rest of the methods (if specified to run) will only generate 1 imputed dataframe.}
 
 \item{sel_method}{Numeric vector that specifies which methods to run. Default is all methods (1-16), but any combinations, including selecting a single method, are allowed. \tabular{ll}{
@@ -53,21 +55,25 @@ A nested list of imputed datasets. In case only a subset of methods was selected
 \item{VIM_kNN_imputation}{Imputed dataset using the VIM kNN imputation algorithm replacement}
 }
 \description{
-\code{\link{impute_data}} imputes a dataframe with missing values with selected algorithm(s)
+\code{\link{impute_data_vaidate}} imputes a dataframe with missing values with selected algorithm(s) using a validation framwork
 }
 \details{
 This function assumes that the user has performed simulations using the \code{\link{impute_simulated}} function and arrived to
 some conclusions regarding which functions would be the best performing on their datasets. This function offers a convenient
-way to impute datasets with a curated list of functions. Some of the functions allow for a multiple imputation framwork
-(they operate with probablistic models, hence there is uncertainty in the imputed values), so this function allows to generate
-multiple imputed datasets. The user can decide to impute their dataframe with a selected method or with multiple methods.
+way to validate this on the original dataset. This function differs from the \code{\link{impute_data}} function as here a very small
+amount of extra missing data is spike in and the imputation performance is tested on this small fraction, whereas the \code{\link{impute_data}}
+function does not allow for this validation step. Therefore, it is suggested that the \code{\link{impute_data_vaidate}} is used before undertaking
+the data imputation using \code{\link{impute_data}}. The additional missing values (1\% as default) will be indexed and RMSE will be calculated
+using the original datapoints and the indexed imputed values. The spike.in parameter spikes in additional missing values in a random fashion
+(the assumption here is that a very small amount of extra missing values will not distort the missingness pattern). The user can specify whether
+all methods or only a subset of methods will be included in this validation step.
 }
 \examples{
 \dontrun{
-#running 10 iterations of all algoritms (that allow for multiple imputation) and one copy of those that do not allow for multiple imputations
-impute_data(df, scale = T, n.iter = 10, sel_method = c(1:16))
-#running 20 iterations of missForest (e.g. this was the best performing algorithm in simulations) on a non-scaled dataframe
-impute_data(df, scale = F, n.iter = 20, sel_method = c(14))
+#running 10 iterations of all algoritms (that allow for multiple imputation) and one copy of those that do not allow for multiple imputations with 1\% spike-in for validation
+impute_data_validate(df, scale = T, spike.in = 0.01, n.iter = 10, sel_method = c(1:16))
+#running 5 iterations of pcaMethods NLPCA and missForest (e.g. these two were the best performing algorithms in simulations) on a non-scaled dataframe with 1\% spike-in for validation
+res <- impute_data_validate(df, scale = F, spike.in = 0.01, n.iter = 5, sel_method = c(10,16))
 }
 
 }
