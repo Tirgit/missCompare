@@ -55,14 +55,14 @@ A nested list of imputed datasets. In case only a subset of methods was selected
 \item{VIM_kNN_imputation}{Imputed dataset using the VIM kNN imputation algorithm replacement}
 }
 \description{
-\code{\link{impute_data_vaidate}} imputes a dataframe with missing values with selected algorithm(s) using a validation framwork
+\code{\link{impute_data_validate}} imputes a dataframe with missing values with selected algorithm(s) using a validation framwork
 }
 \details{
 This function assumes that the user has performed simulations using the \code{\link{impute_simulated}} function and arrived to
 some conclusions regarding which functions would be the best performing on their datasets. This function offers a convenient
 way to validate this on the original dataset. This function differs from the \code{\link{impute_data}} function as here a very small
 amount of extra missing data is spike in and the imputation performance is tested on this small fraction, whereas the \code{\link{impute_data}}
-function does not allow for this validation step. Therefore, it is suggested that the \code{\link{impute_data_vaidate}} is used before undertaking
+function does not allow for this validation step. Therefore, it is suggested that the \code{\link{impute_data_validate}} is used before undertaking
 the data imputation using \code{\link{impute_data}}. The additional missing values (1\% as default) will be indexed and RMSE will be calculated
 using the original datapoints and the indexed imputed values. The spike.in parameter spikes in additional missing values in a random fashion
 (the assumption here is that a very small amount of extra missing values will not distort the missingness pattern). The user can specify whether
@@ -71,9 +71,11 @@ all methods or only a subset of methods will be included in this validation step
 \examples{
 \dontrun{
 #running 10 iterations of all algoritms (that allow for multiple imputation) and one copy of those that do not allow for multiple imputations with 1\% spike-in for validation
-impute_data_validate(df, scale = T, spike.in = 0.01, n.iter = 10, sel_method = c(1:16))
+impute_data_validate(df, scale = T, spike.in = 0.01,
+                     n.iter = 10, sel_method = c(1:16))
 #running 5 iterations of pcaMethods NLPCA and missForest (e.g. these two were the best performing algorithms in simulations) on a non-scaled dataframe with 1\% spike-in for validation
-res <- impute_data_validate(df, scale = F, spike.in = 0.01, n.iter = 5, sel_method = c(10,16))
+res <- impute_data_validate(df, scale = F, spike.in = 0.01,
+                            n.iter = 5, sel_method = c(10,16))
 }
 
 }
