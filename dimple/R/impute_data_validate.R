@@ -62,10 +62,13 @@
 #'
 #' @examples
 #' \dontrun{
-#' #running 10 iterations of all algoritms (that allow for multiple imputation) and one copy of those that do not allow for multiple imputations with 1% spike-in for validation
+#' #running 10 iterations of all algoritms (that allow for multiple imputation) and
+#' #one copy of those that do not allow for multiple imputations with 1% spike-in for validation
 #' impute_data_validate(df, scale = T, spike.in = 0.01,
 #'                      n.iter = 10, sel_method = c(1:16))
-#' #running 5 iterations of pcaMethods NLPCA and missForest (e.g. these two were the best performing algorithms in simulations) on a non-scaled dataframe with 1% spike-in for validation
+#' #running 5 iterations of pcaMethods NLPCA and missForest (e.g. these two were
+#' #the best performing algorithms in simulations) on a non-scaled dataframe
+#' #with 1% spike-in for validation
 #' res <- impute_data_validate(df, scale = F, spike.in = 0.01,
 #'                             n.iter = 5, sel_method = c(10,16))
 #' }
