@@ -1,7 +1,7 @@
-#' @title Post imputation diagnostics
+#' @title Prediction of missing data based on available data
 #'
 #' @description
-#' \code{\link{post_imp_diag}} serves as post imputation diagnostics. The function compares the original dataset (with missing data) with the imputed dataset. The function outputs visualizations that will help the user compare the distributions of the original values and the imputed values.
+#' \code{\link{predict_missing}} predict missingness status (missing vs. non-missing) based on other variables.
 #'
 #' @details
 #' This function uses the original dataframe and extracts descriptive meta-data.
