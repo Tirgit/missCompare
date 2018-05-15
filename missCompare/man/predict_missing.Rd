@@ -7,27 +7,31 @@
 predict_missing(rownum, colnum, cormat, missfrac_per_var, bootstrap)
 }
 \arguments{
-\item{X_orig}{Dataframe - the original data that contains missing values.}
+\item{rownum}{Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)}
 
-\item{X_imp}{Dataframe - the imputed data with no missing values.}
+\item{colnum}{Number of rows (variables) in the original dataframe (Columns output from the \code{\link{get_data}} function)}
 
-\item{scale}{Boolean with default TRUE. Scaling will scale and center all variables to mean=0 and standard deviation=1 in the \strong{original dataframe with missingness}. The user should select TRUE or FALSE here depending on whether the imputed dataframe has scaled or unscaled values.}
+\item{cormat}{Correlation matrix of the original dataframe (Corr_matrix output from the \code{\link{get_data}} function)}
+
+\item{missfrac_per_var}{Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)}
+
+\item{bootstrap}{xxxx}
 }
 \value{
-\item{Densityplots}{List of density plots of all variables. The density plots show the original values and the imputed values overlaid for each variables in the dataframe}
-\item{Boxplot}{List of boxplots of all variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
+\item{MCAR_AUC}{xxxxx}
+\item{MAR_AUC}{xxxxx}
+\item{MNAR_AUC}{xxxxx}
+\item{Plot}{xxxxxx}
 }
 \description{
 \code{\link{predict_missing}} predict missingness status (missing vs. non-missing) based on other variables.
 }
 \details{
-This function uses the original dataframe and extracts descriptive meta-data.
+This function xxxx
 }
 \examples{
 \dontrun{
-plots <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=T)
-plots$Densityplots$variable_X
-plots$Boxplots$variable_Z
+xxxx
 }
 
 }
