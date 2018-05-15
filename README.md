@@ -1,7 +1,8 @@
-# missingdata
-Work related to missing data imputation / dimple package
+# missCompare
+Work related to missing data imputation / missCompare package
 
-This repository contains the dimple package, a collection of functions related to the topic 'missing data imputation'. In the dimple framework the following structure is implemented:
+This repository contains the missCompare package, a collection of functions related to the topic 'missing data imputation'. In the 
+le framework the following structure is implemented:
 
 1. Cleaning and visualization of data
 2. Extracting the characteristics of the data
