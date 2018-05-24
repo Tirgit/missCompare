@@ -8,14 +8,6 @@ predict_MAR()
 }
 \arguments{
 \item{rownum}{Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)}
-
-\item{colnum}{Number of rows (variables) in the original dataframe (Columns output from the \code{\link{get_data}} function)}
-
-\item{cormat}{Correlation matrix of the original dataframe (Corr_matrix output from the \code{\link{get_data}} function)}
-
-\item{missfrac_per_var}{Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)}
-
-\item{bootstrap}{xxxx}
 }
 \value{
 \item{MCAR_AUC}{xxxxx}

@@ -7,10 +7,6 @@
 #' This function xxxx
 #'
 #' @param rownum Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)
-#' @param colnum Number of rows (variables) in the original dataframe (Columns output from the \code{\link{get_data}} function)
-#' @param cormat Correlation matrix of the original dataframe (Corr_matrix output from the \code{\link{get_data}} function)
-#' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
-#' @param bootstrap xxxx
 #'
 #' @name predict_MAR
 #'
@@ -52,7 +48,7 @@ predict_MAR <- function() {
       #predict using logistic regression using the rest of the variables, obtain AUC ROC
       mylogit <- stats::glm(outcome ~ complete[,-i], family = "binomial")
       prob <- stats::predict(mylogit,type=c("response"))
-      AUC <- auc(roc(outcome ~ prob))
+      AUC <- pROC::auc(roc(outcome ~ prob))
       MCAR_AUC <- c(MCAR_AUC,AUC)
     }
 
@@ -68,7 +64,7 @@ predict_MAR <- function() {
       #predict using logistic regression using the rest of the variables, obtain AUC ROC
       mylogit <- stats::glm(outcome ~ complete[,-i], family = "binomial")
       prob <- stats::predict(mylogit,type=c("response"))
-      AUC <- auc(roc(outcome ~ prob))
+      AUC <- pROC::auc(roc(outcome ~ prob))
       MAR_AUC <- c(MAR_AUC,AUC)
     }
 
@@ -84,7 +80,7 @@ predict_MAR <- function() {
       #predict using logistic regression using the rest of the variables, obtain AUC ROC
       mylogit <- stats::glm(outcome ~ complete[,-i], family = "binomial")
       prob <- stats::predict(mylogit,type=c("response"))
-      AUC <- auc(roc(outcome ~ prob))
+      AUC <- pROC::auc(roc(outcome ~ prob))
       MNAR_AUC <- c(MNAR_AUC,AUC)
     }
 

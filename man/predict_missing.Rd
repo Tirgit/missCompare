@@ -15,7 +15,7 @@ predict_missing(rownum, colnum, cormat, missfrac_per_var, bootstrap)
 
 \item{missfrac_per_var}{Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)}
 
-\item{bootstrap}{xxxx}
+\item{bootstrap}{Number of bootstraps used to generate ROC AUC statistics.}
 }
 \value{
 \item{MCAR_AUC}{xxxxx}

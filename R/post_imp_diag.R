@@ -54,7 +54,7 @@ post_imp_diag <- function(X_orig, X_imp, scale=T) {
     orig_values <- X_orig[,i][!col_index]
     imp_values <- X_imp[,i][col_index]
 
-    tstats <- t.test(orig_values, imp_values, alternative = "two.sided", var.equal = FALSE)
+    tstats <- stats::t.test(orig_values, imp_values, alternative = "two.sided", var.equal = FALSE)
     statistics[[pltName]] <- c(Mean_original = mean(orig_values), SD_original = stats::sd(orig_values), Mean_imputed = mean(imp_values), SD_imputed = stats::sd(imp_values), Welch_ttest_P = tstats$p.value)
 
     origvec <- rep("Original values", length(orig_values))
