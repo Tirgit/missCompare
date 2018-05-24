@@ -28,12 +28,6 @@
 #' @export
 
 
-#given available data predicts missing data (diganostics for MAR)
-#first convert missing vs available data to 0/1
-#set up logistic regression model and random forest to predict 0/1 outcome
-
-
-#FUNCTION
 predict_missing <- function(rownum, colnum, cormat, missfrac_per_var, bootstrap) {
 
   MCAR_AUC <- vector('numeric')
