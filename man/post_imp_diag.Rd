@@ -16,18 +16,20 @@ post_imp_diag(X_orig, X_imp, scale = T)
 \value{
 \item{Densityplots}{List of density plots of all variables. The density plots show the original values and the imputed values overlaid for each variables in the dataframe}
 \item{Boxplot}{List of boxplots of all variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
+\item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values and a P value from Welch's t test}
 }
 \description{
-\code{\link{post_imp_diag}} serves as post imputation diagnostics. The function compares the original dataset (with missing data) with the imputed dataset. The function outputs visualizations that will help the user compare the distributions of the original values and the imputed values.
+\code{\link{post_imp_diag}} serves as post imputation diagnostics. The function compares the original dataset (with missing data) with the imputed dataset. The function outputs statistics and visualizations that will help the user compare the distributions of the original values and the imputed values.
 }
 \details{
-This function uses the original dataframe and extracts descriptive meta-data.
+This function uses the original dataframe and produces plots that allows the user to compare the distributions of the original values and the imputed values for each variables.
 }
 \examples{
 \dontrun{
-plots <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=T)
-plots$Densityplots$variable_X
-plots$Boxplots$variable_Z
+diagnostics <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=T)
+diagnostics$Densityplots$variable_X
+diagnostics$Boxplots$variable_Z
+diagnostics$Statistics$variable_Y
 }
 
 }

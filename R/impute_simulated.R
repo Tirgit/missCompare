@@ -90,16 +90,16 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
       RMSE_stats <- x %>%
         group_by(Method) %>%
         summarise_all(funs(mean(., na.rm = TRUE), stats::sd(., na.rm = TRUE), notmiss)) %>%
-        mutate(SE_RMSE_MCAR = MCAR_RMSE_sd / sqrt(MCAR_RMSE_notmiss),
+        mutate(SE_RMSE_MCAR = `MCAR_RMSE_stats::sd` / sqrt(MCAR_RMSE_notmiss),
                lower.ci_RMSE_MCAR = MCAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
                upper.ci_RMSE_MCAR = MCAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
-               SE_RMSE_MAR = MAR_RMSE_sd / sqrt(MAR_RMSE_notmiss),
+               SE_RMSE_MAR = `MAR_RMSE_stats::sd` / sqrt(MAR_RMSE_notmiss),
                lower.ci_RMSE_MAR = MAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
                upper.ci_RMSE_MAR = MAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
-               SE_RMSE_MNAR = MNAR_RMSE_sd / sqrt(MNAR_RMSE_notmiss),
+               SE_RMSE_MNAR = `MNAR_RMSE_stats::sd` / sqrt(MNAR_RMSE_notmiss),
                lower.ci_RMSE_MNAR = MNAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
                upper.ci_RMSE_MNAR = MNAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
-               SE_RMSE_MAP = MAP_RMSE_sd / sqrt(MAP_RMSE_notmiss),
+               SE_RMSE_MAP = `MAP_RMSE_stats::sd` / sqrt(MAP_RMSE_notmiss),
                lower.ci_RMSE_MAP = MAP_RMSE_mean - stats::qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP,
                upper.ci_RMSE_MAP = MAP_RMSE_mean + stats::qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP) %>%
         dplyr::select(Method, MCAR_RMSE_mean, MAR_RMSE_mean, MNAR_RMSE_mean, MAP_RMSE_mean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR,
@@ -107,13 +107,13 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
                         RMSE_stats <- x %>%
                           group_by(Method) %>%
                           summarise_all(funs(mean(., na.rm = TRUE), stats::sd(., na.rm = TRUE), notmiss)) %>%
-                          mutate(SE_RMSE_MCAR = MCAR_RMSE_sd / sqrt(MCAR_RMSE_notmiss),
+                          mutate(SE_RMSE_MCAR = `MCAR_RMSE_stats::sd` / sqrt(MCAR_RMSE_notmiss),
                                  lower.ci_RMSE_MCAR = MCAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
                                  upper.ci_RMSE_MCAR = MCAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
-                                 SE_RMSE_MAR = MAR_RMSE_sd / sqrt(MAR_RMSE_notmiss),
+                                 SE_RMSE_MAR = `MAR_RMSE_stats::sd` / sqrt(MAR_RMSE_notmiss),
                                  lower.ci_RMSE_MAR = MAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
                                  upper.ci_RMSE_MAR = MAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
-                                 SE_RMSE_MNAR = MNAR_RMSE_sd / sqrt(MNAR_RMSE_notmiss),
+                                 SE_RMSE_MNAR = `MNAR_RMSE_stats::sd` / sqrt(MNAR_RMSE_notmiss),
                                  lower.ci_RMSE_MNAR = MNAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
                                  upper.ci_RMSE_MNAR = MNAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR) %>%
                           dplyr::select(Method, MCAR_RMSE_mean, MAR_RMSE_mean, MNAR_RMSE_mean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR,
@@ -158,6 +158,19 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
     ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
     theme(plot.title = element_text(hjust = 0.5)) +
     labs(x="")
+
+  print(paste("In case you assume a missing completely at random (MCAR) missingness pattern, dimple suggests you to use the ",
+              Best_method_MCAR,
+              " algorithm for imputation", sep= ""))
+  print(paste("In case you assume a missing at random (MAR) missingness pattern, missCompare suggests you to use the ",
+              Best_method_MAR,
+              " algorithm for imputation", sep= ""))
+  print(paste("In case you assume a missing not at random (MNAR) missingness pattern, missCompare suggests you to use the ",
+              Best_method_MNAR,
+              " algorithm for imputation", sep= ""))
+  if (!is.na(assumed_pattern)) print(paste("For the defined assumed missingness pattern (MAP), missCompare suggests you to use the ",
+                                           Best_method_MAP,
+                                           " algorithm for imputation", sep= ""))
 
   #output list
   if (!is.na(assumed_pattern)) list(Imputation_RMSE = collect_res, Imputation_RMSE_means = summary$RMSE_stats, Best_method_MCAR = Best_method_MCAR,

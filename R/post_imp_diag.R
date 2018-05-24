@@ -1,10 +1,10 @@
 #' @title Post imputation diagnostics
 #'
 #' @description
-#' \code{\link{post_imp_diag}} serves as post imputation diagnostics. The function compares the original dataset (with missing data) with the imputed dataset. The function outputs visualizations that will help the user compare the distributions of the original values and the imputed values.
+#' \code{\link{post_imp_diag}} serves as post imputation diagnostics. The function compares the original dataset (with missing data) with the imputed dataset. The function outputs statistics and visualizations that will help the user compare the distributions of the original values and the imputed values.
 #'
 #' @details
-#' This function uses the original dataframe and extracts descriptive meta-data.
+#' This function uses the original dataframe and produces plots that allows the user to compare the distributions of the original values and the imputed values for each variables.
 #'
 #' @param X_orig Dataframe - the original data that contains missing values.
 #' @param X_imp Dataframe - the imputed data with no missing values.
@@ -15,12 +15,14 @@
 #' @return
 #' \item{Densityplots}{List of density plots of all variables. The density plots show the original values and the imputed values overlaid for each variables in the dataframe}
 #' \item{Boxplot}{List of boxplots of all variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
+#' \item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values and a P value from Welch's t test}
 #'
 #' @examples
 #' \dontrun{
-#' plots <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=T)
-#' plots$Densityplots$variable_X
-#' plots$Boxplots$variable_Z
+#' diagnostics <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=T)
+#' diagnostics$Densityplots$variable_X
+#' diagnostics$Boxplots$variable_Z
+#' diagnostics$Statistics$variable_Y
 #' }
 #'
 #' @export
@@ -41,13 +43,19 @@ post_imp_diag <- function(X_orig, X_imp, scale=T) {
 
   histograms <- list()
   boxplots <- list()
+  statistics <- list()
 
   for (i in 1:ncol(X_orig)) {
+
+    pltName <- colnames(X_orig)[i]
 
     col_index <- is.na(X_orig[,i])
 
     orig_values <- X_orig[,i][!col_index]
     imp_values <- X_imp[,i][col_index]
+
+    tstats <- t.test(orig_values, imp_values, alternative = "two.sided", var.equal = FALSE)
+    statistics[[pltName]] <- c(Mean_original = mean(orig_values), SD_original = stats::sd(orig_values), Mean_imputed = mean(imp_values), SD_imputed = stats::sd(imp_values), Welch_ttest_P = tstats$p.value)
 
     origvec <- rep("Original values", length(orig_values))
     impvec <- rep("Imputed values", length(imp_values))
@@ -69,14 +77,13 @@ post_imp_diag <- function(X_orig, X_imp, scale=T) {
       ggtitle("Boxplots of original values and imputed values") +
       labs(x=colnames(X_orig)[i], y="")
 
-    pltName <- colnames(X_orig)[i]
     histograms[[pltName]] <- p
     boxplots[[pltName]] <- q
 
   }
 
   #output
-  list(Densityplots = histograms, Boxplots = boxplots)
+  list(Densityplots = histograms, Boxplots = boxplots, Statistics = statistics)
 
 }
 
