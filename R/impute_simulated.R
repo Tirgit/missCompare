@@ -1,4 +1,4 @@
-#' @title Imputation algoritm tester on simulated data
+#' @title Imputation algorithm tester on simulated data
 #'
 #' @description
 #' \code{\link{impute_simulated}} tests the imputation accuracy of all missing data imputation algorithms on matrices with various missing data patterns
