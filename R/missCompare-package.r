@@ -1,4 +1,4 @@
-#' missCompare: Data Imputation Made Simple
+#' missCompare: Missing Data Imputation Comparison Framework
 #'
 #' The \strong{missCompare} package offers a convenient pipeline to test and compare various missing data
 #' imputation algoritms on simulated data. The central assumption behind missCompare is that structurally

@@ -4,7 +4,7 @@
 \name{missCompare}
 \alias{missCompare}
 \alias{missCompare-package}
-\title{missCompare: Data Imputation Made Simple}
+\title{missCompare: Missing Data Imputation Comparison Framework}
 \description{
 The \strong{missCompare} package offers a convenient pipeline to test and compare various missing data
 imputation algoritms on simulated data. The central assumption behind missCompare is that structurally
