@@ -11,10 +11,11 @@ imputation algoritms on simulated data. The central assumption behind missCompar
 different datasets (e.g. larger datasets with a large number of correlated variables vs. smaller datasets
 with non correlated variables) will benefit differently from different missing data imputation algorithms.
 missCompare takes measurements of your dataset and sets up a sandbox to try a curated list of standard and
-sophisticated missing data imputation algorithms and missCompare them assuming custom set missingess patterns.
-missCompare WILL NOT impute your dataset for you. However, missCompare WILL give a comparative analysis of algorithms
-and offer a report with the best performing algorithms assuming various missing data patterns and publication
-ready visualizations to help you better understand missing data in your dataset.
+sophisticated missing data imputation algorithms and compares them assuming custom set missingess patterns.
+missCompare will give you a comparative analysis of missing data imputation algorithms, offer a report with
+the best performing algorithms assuming various missing data patterns and publication ready visualizations,
+impute your dataset for you, assess imputation performance using a validation framwork and help you better
+understand missing data in your dataset.
 }
 \details{
 \tabular{ll}{

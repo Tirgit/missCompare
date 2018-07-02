@@ -41,7 +41,7 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   vars_non_num <- names(X)[!sapply(X, is.numeric)]
   if (length(vars_non_num) != 0) stop(paste("Warning! Variable(s) ",
                                                (paste(vars_non_num,collapse=", ") ),
-                                               " is/are not numeric. Convert this/these variables to numeric using dimple_clean() and repeat the dimple_get_data() function until no warnings are shown.", sep= ""))
+                                               " is/are not numeric. Convert this/these variables to numeric using missCompare::clean() and repeat the missCompare::get_data() function until no warnings are shown.", sep= ""))
 
   comp <- sum(stats::complete.cases(X))
   rows <- nrow(X)
@@ -62,7 +62,7 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   vars_above_half <- colnames(X_update)[missfrac_per_var>=0.5]
   if (length(vars_above_half) != 0) message(paste("Warning! Missingness exceeds 50% for variable(s) ",
                 (paste(vars_above_half,collapse=", ") ),
-                ". Although the pipeline will function with variables with high missingness, consider excluding these variables using dimple_clean() and repeating function until no warnings are shown.", sep= ""))
+                ". Although the pipeline will function with variables with high missingness, consider excluding these variables using missCompare::clean() and repeating function until no warnings are shown.", sep= ""))
 
   #matrix plot
   df_miss_id <- cbind(c(1:rows), arr_X)

@@ -2,7 +2,7 @@
 % Please edit documentation in R/impute_simulated.R
 \name{impute_simulated}
 \alias{impute_simulated}
-\title{Imputation algoritm tester on simulated data}
+\title{Imputation algorithm tester on simulated data}
 \usage{
 impute_simulated(rownum, colnum, cormat, missfrac_per_var, n.iter = 10,
   assumed_pattern = NA)

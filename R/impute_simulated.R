@@ -159,16 +159,16 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
     theme(plot.title = element_text(hjust = 0.5)) +
     labs(x="")
 
-  print(paste("In case you assume a missing completely at random (MCAR) missingness pattern, dimple suggests you to use the ",
+  print(paste("In case you assume a missing completely at random (MCAR) missingness pattern, missCompare suggests the ",
               Best_method_MCAR,
               " algorithm for imputation", sep= ""))
-  print(paste("In case you assume a missing at random (MAR) missingness pattern, missCompare suggests you to use the ",
+  print(paste("In case you assume a missing at random (MAR) missingness pattern, missCompare suggests the ",
               Best_method_MAR,
               " algorithm for imputation", sep= ""))
-  print(paste("In case you assume a missing not at random (MNAR) missingness pattern, missCompare suggests you to use the ",
+  print(paste("In case you assume a missing not at random (MNAR) missingness pattern, missCompare suggests the ",
               Best_method_MNAR,
               " algorithm for imputation", sep= ""))
-  if (!is.na(assumed_pattern)) print(paste("For the defined assumed missingness pattern (MAP), missCompare suggests you to use the ",
+  if (!is.na(assumed_pattern)) print(paste("For the defined assumed missingness pattern (MAP), missCompare suggests the ",
                                            Best_method_MAP,
                                            " algorithm for imputation", sep= ""))
 
