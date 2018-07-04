@@ -4,7 +4,7 @@
 \alias{post_imp_diag}
 \title{Post imputation diagnostics}
 \usage{
-post_imp_diag(X_orig, X_imp, scale = T)
+post_imp_diag(X_orig, X_imp, scale = T, n.boot = 1000)
 }
 \arguments{
 \item{X_orig}{Dataframe - the original data that contains missing values.}
@@ -12,14 +12,19 @@ post_imp_diag(X_orig, X_imp, scale = T)
 \item{X_imp}{Dataframe - the imputed data with no missing values.}
 
 \item{scale}{Boolean with default TRUE. Scaling will scale and center all variables to mean=0 and standard deviation=1 in the \strong{original dataframe with missingness}. The user should select TRUE or FALSE here depending on whether the imputed dataframe has scaled or unscaled values.}
+
+\item{n.boot}{Number of bootstrap iterations to generate mean pairwise Pearson correlation coefficients and 95\% confidence intervals for variable pairs from the original and the imputed dataframes.}
 }
 \value{
-\item{Densityplots}{List of density plots of all variables. The density plots show the original values and the imputed values overlaid for each variables in the dataframe}
-\item{Boxplot}{List of boxplots of all variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
+\item{Densityplots}{List of density plots of all numeric variables. The density plots show the original values and the imputed values overlaid for each variables in the dataframe}
+\item{Boxplots}{List of boxplots of all numeric variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
+\item{Barcharts}{List of bar charts of all categorical (factor) variables. The bar charts show the original categories and the imputed categories for each categorical variables in the dataframe}
 \item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values and a P value from Welch's t test}
+\item{Correlation_stats}{Mean pairwise Pearson's correlation coefficients and 95\% confidence intervals from the original dataframe (with missingness) and the imputed dataframe}
+\item{Correlation_plot}{Scatter plot of mean pairwise Pearson's correlation coefficients from the original dataframe (with missingness) and the imputed dataframe. The blue line represents a line with slope 1 and intercept 0. The red line is a fitted line of the correlation coefficient pairs. The error bars around the points represent the individual 95\% confidence intervals drawn from bootstrapping the correlation coefficients}
 }
 \description{
-\code{\link{post_imp_diag}} serves as post imputation diagnostics. The function compares the original dataset (with missing data) with the imputed dataset. The function outputs statistics and visualizations that will help the user compare the distributions of the original values and the imputed values.
+\code{\link{post_imp_diag}} serves as post imputation diagnostics. The function compares the original dataset (with missing data) with the imputed dataset. The function outputs statistics and visualizations that will help the user compare the distributions of the original values and the imputed values and potential differences between correlation statistics before and after imputation.
 }
 \details{
 This function uses the original dataframe and produces plots that allows the user to compare the distributions of the original values and the imputed values for each variables.
