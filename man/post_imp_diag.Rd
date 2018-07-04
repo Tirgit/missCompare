@@ -27,7 +27,14 @@ post_imp_diag(X_orig, X_imp, scale = T, n.boot = 1000)
 \code{\link{post_imp_diag}} serves as post imputation diagnostics. The function compares the original dataset (with missing data) with the imputed dataset. The function outputs statistics and visualizations that will help the user compare the distributions of the original values and the imputed values and potential differences between correlation statistics before and after imputation.
 }
 \details{
-This function uses the original dataframe and produces plots that allows the user to compare the distributions of the original values and the imputed values for each variables.
+This function uses the original dataframe and produces plots that allows the user
+to compare the distributions of the original values and the imputed values for each
+numeric variables. If there are factors present in the dataframes, the function will
+recognize this and create barcharts for these categorical variables. In addition, the
+function will calculate bootstrapped pairwise Pearson correlation coefficients between
+numeric variables in the original dataframe (with missingness) and the imputed dataframe
+and plot these for the user to assess whether the imputation distorted the original
+data structure or not.
 }
 \examples{
 \dontrun{
