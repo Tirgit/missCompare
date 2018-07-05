@@ -25,81 +25,43 @@
 
 
 #FUNCTION
-predict_MAR <- function() {
+predict_MAR <- function(X) {
 
-  MCAR_AUC <- vector('numeric')
-  MAR_AUC <- vector('numeric')
-  MNAR_AUC <- vector('numeric')
+  X <- as.data.frame(X)
 
-  for (number in 1:bootstrap) {
+  cols_with_miss <- which(colSums(is.na(X))>0)
+  MAR_AUC <- data.frame()
 
-    sim <- simulate(rownum, colnum, cormat)
-    res <- all_patterns(sim$Simulated_matrix, missfrac_per_var)
+  for (i in cols_with_miss) {
+    complete <- X[stats::complete.cases(X[,-i]),]
+    print(paste(nrow(complete), "complete sets of observations to predict MAR pattern in variable", colnames(X)[i], sep=" "))
 
-    MCAR_cols_with_miss <- which(colSums(is.na(res$MCAR_matrix))>0)
-
-    for (i in MCAR_cols_with_miss) {
-      complete <- res$MCAR_matrix[stats::complete.cases(res$MCAR_matrix[,-i]),]
-
-      # 0 if available data
-      outcome <- rep(0, nrow(complete))
-      # 1 if missing
-      outcome[is.na(complete[,i])] <- 1
-      #predict using logistic regression using the rest of the variables, obtain AUC ROC
-      mylogit <- stats::glm(outcome ~ complete[,-i], family = "binomial")
-      prob <- stats::predict(mylogit,type=c("response"))
-      AUC <- pROC::auc(roc(outcome ~ prob))
-      MCAR_AUC <- c(MCAR_AUC,AUC)
-    }
-
-    MAR_cols_with_miss <- which(colSums(is.na(res$MAR_matrix))>0)
-
-    for (i in MAR_cols_with_miss) {
-      complete <- res$MAR_matrix[stats::complete.cases(res$MAR_matrix[,-i]),]
-
-      # 0 if available data
-      outcome <- rep(0, nrow(complete))
-      # 1 if missing
-      outcome[is.na(complete[,i])] <- 1
-      #predict using logistic regression using the rest of the variables, obtain AUC ROC
-      mylogit <- stats::glm(outcome ~ complete[,-i], family = "binomial")
-      prob <- stats::predict(mylogit,type=c("response"))
-      AUC <- pROC::auc(roc(outcome ~ prob))
-      MAR_AUC <- c(MAR_AUC,AUC)
-    }
-
-    MNAR_cols_with_miss <- which(colSums(is.na(res$MNAR_matrix))>0)
-
-    for (i in MNAR_cols_with_miss) {
-      complete <- res$MNAR_matrix[stats::complete.cases(res$MNAR_matrix[,-i]),]
-
-      # 0 if available data
-      outcome <- rep(0, nrow(complete))
-      # 1 if missing
-      outcome[is.na(complete[,i])] <- 1
-      #predict using logistic regression using the rest of the variables, obtain AUC ROC
-      mylogit <- stats::glm(outcome ~ complete[,-i], family = "binomial")
-      prob <- stats::predict(mylogit,type=c("response"))
-      AUC <- pROC::auc(roc(outcome ~ prob))
-      MNAR_AUC <- c(MNAR_AUC,AUC)
-    }
+    # 0 if available data
+    outcome <- rep(0, nrow(complete))
+    # 1 if missing
+    outcome[is.na(complete[,i])] <- 1
+    complete[,i] <- as.factor(outcome)
+    #predict using logistic regression using the rest of the variables, obtain AUC ROC
+    formula <- as.formula(paste(colnames(X)[i], "~ .", sep=" "))
+    mylogit <- stats::glm(formula, data = complete, family = "binomial")
+    prob <- stats::predict(mylogit,type=c("response"))
+    AUC <- pROC::roc(outcome ~ prob, auc=TRUE, ci=TRUE)
+    MAR_AUC <- rbind(MAR_AUC, c(AUC$ci[2], AUC$ci[1], AUC$ci[3]))
 
   }
 
-  rocs <- as.data.frame(cbind(MCAR_AUC, MAR_AUC, MNAR_AUC))
-  names(rocs) <- c("MCAR", "MAR", "MNAR")
-  rocs_forgraph <- gather(rocs, Pattern, AUC, factor_key=TRUE)
-  levels(rocs_forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
+  MAR_AUC <- cbind(names(cols_with_miss),MAR_AUC)
+  colnames(MAR_AUC) <- c("Variable","AUC","AUC_loci","AUC_hici")
 
-  AUCplot <- ggplot(rocs_forgraph, aes(x=Pattern, y=AUC, fill=Pattern)) +
+  #plot of AUC values and 95% CIs per variable
+  AUCplot <- ggplot(data=MAR_AUC, aes(x=Variable, y=AUC)) +
     geom_boxplot() +
-    ggtitle("ROC AUC statistics for predicting whether data is available or missing") +
+    geom_errorbar(aes(ymin=AUC_loci, ymax=AUC_hici)) +
+    ggtitle("ROC AUC statistics for predicting MAR pattern") +
     theme(plot.title = element_text(hjust = 0.5)) +
-    labs(x="")
+    coord_cartesian(ylim = c(0, 1))
 
   #output list
-  list(MCAR_AUC = MCAR_AUC, MAR_AUC = MAR_AUC, MNAR_AUC = MNAR_AUC, Plot = AUCplot)
+  list(MAR_stats = MAR_AUC, Plot = AUCplot)
 
 }
-
-
