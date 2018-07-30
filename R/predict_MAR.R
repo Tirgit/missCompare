@@ -1,4 +1,4 @@
-#' @title Prediction of missing data based on available data
+#' @title Prediction of MAR missing data pattern based on available data
 #'
 #' @description
 #' \code{\link{predict_MAR}} predict missingness status (missing vs. non-missing) based on other variables.
@@ -6,28 +6,31 @@
 #' @details
 #' This function xxxx
 #'
-#' @param rownum Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)
+#' @param X Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)
 #'
 #' @name predict_MAR
 #'
 #' @return
-#' \item{MCAR_AUC}{xxxxx}
-#' \item{MAR_AUC}{xxxxx}
-#' \item{MNAR_AUC}{xxxxx}
+#' \item{MAR_stats}{xxxxx}
 #' \item{Plot}{xxxxxx}
 #'
 #' @examples
 #' \dontrun{
-#' xxxx
+#' predicted <- predict_MAR(X=df)
 #' }
 #'
 #' @export
 
 
 #FUNCTION
-predict_MAR <- function(X) {
+predict_MAR <- function(X, scale = T) {
 
-  X <- as.data.frame(X)
+  #optional scaling
+  if (scale == T) {
+    df_miss <- as.data.frame(scale(df_miss))
+  } else {
+    df_miss <- as.data.frame(df_miss)
+  }
 
   cols_with_miss <- which(colSums(is.na(X))>0)
   MAR_AUC <- data.frame()
@@ -45,6 +48,7 @@ predict_MAR <- function(X) {
     formula <- as.formula(paste(colnames(X)[i], "~ .", sep=" "))
     mylogit <- stats::glm(formula, data = complete, family = "binomial")
     prob <- stats::predict(mylogit,type=c("response"))
+    #default 2000 bootstraps
     AUC <- pROC::roc(outcome ~ prob, auc=TRUE, ci=TRUE)
     MAR_AUC <- rbind(MAR_AUC, c(AUC$ci[2], AUC$ci[1], AUC$ci[3]))
 

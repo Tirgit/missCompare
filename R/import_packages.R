@@ -13,7 +13,7 @@
 #' @importFrom missMDA estim_ncpPCA imputePCA
 #' @importFrom pcaMethods pca
 #' @importFrom plyr revalue
-#' @importFrom pROC auc
+#' @importFrom pROC auc roc
 #' @importFrom stats quantile runif complete.cases cor dist hclust sd qt glm predict as.formula median t.test
 #' @import tidyr
 #' @importFrom VIM kNN

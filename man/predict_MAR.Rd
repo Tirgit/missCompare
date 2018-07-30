@@ -2,17 +2,15 @@
 % Please edit documentation in R/predict_MAR.R
 \name{predict_MAR}
 \alias{predict_MAR}
-\title{Prediction of missing data based on available data}
+\title{Prediction of MAR missing data pattern based on available data}
 \usage{
-predict_MAR()
+predict_MAR(X)
 }
 \arguments{
-\item{rownum}{Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)}
+\item{X}{Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)}
 }
 \value{
-\item{MCAR_AUC}{xxxxx}
-\item{MAR_AUC}{xxxxx}
-\item{MNAR_AUC}{xxxxx}
+\item{MAR_stats}{xxxxx}
 \item{Plot}{xxxxxx}
 }
 \description{
@@ -23,7 +21,7 @@ This function xxxx
 }
 \examples{
 \dontrun{
-xxxx
+predicted <- predict_MAR(X=df)
 }
 
 }
