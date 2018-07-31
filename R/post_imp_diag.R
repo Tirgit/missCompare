@@ -11,7 +11,9 @@
 #' function will calculate bootstrapped pairwise Pearson correlation coefficients between
 #' numeric variables in the original dataframe (with missingness) and the imputed dataframe
 #' and plot these for the user to assess whether the imputation distorted the original
-#' data structure or not.
+#' data structure or not. The function will also visualize clusters of the variables from
+#' the original dataframe and the imputed one. Should the imputation algorithm perform well,
+#' the variable distributions and the variable clusters should be similar.
 #'
 #'
 #' @param X_orig Dataframe - the original data that contains missing values.
@@ -26,6 +28,8 @@
 #' \item{Boxplots}{List of boxplots of all numeric variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
 #' \item{Barcharts}{List of bar charts of all categorical (factor) variables. The bar charts show the original categories and the imputed categories for each categorical variables in the dataframe}
 #' \item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values and a P value from Welch's t test}
+#' \item{Variable_clusters_orig}{Variable clusters based on the original dataframe (with missingness). Argument scale should be TRUE to assess for correct implementation of this plot}
+#' \item{Variable_clusters_imp}{Variable clusters based on the imputed dataframe. Argument scale should be TRUE to assess for correct implementation of this plot}
 #' \item{Correlation_stats}{Mean pairwise Pearson's correlation coefficients and 95\% confidence intervals from the original dataframe (with missingness) and the imputed dataframe}
 #' \item{Correlation_plot}{Scatter plot of mean pairwise Pearson's correlation coefficients from the original dataframe (with missingness) and the imputed dataframe. The blue line represents a line with slope 1 and intercept 0. The red line is a fitted line of the correlation coefficient pairs. The error bars around the points represent the individual 95\% confidence intervals drawn from bootstrapping the correlation coefficients}
 #'
@@ -92,6 +96,22 @@ post_imp_diag <- function(X_orig, X_imp, scale=T, n.boot=1000) {
 
     }
   }
+
+  #cluster plot comparison
+  X_orig_mat <- as.matrix(X_orig_num)
+  X_imp_mat <- as.matrix(X_imp_num)
+  colnames(X_orig_mat) <- colnames(X_orig_num)
+  colnames(X_imp_mat) <- colnames(X_imp_num)
+  X_orig_dendro <- stats::as.dendrogram(stats::hclust(stats::dist(t(X_orig_mat))))
+  X_imp_dendro <- stats::as.dendrogram(stats::hclust(stats::dist(t(X_imp_mat))))
+
+  X_orig_dendro_plot <- ggdendro::ggdendrogram(data = X_orig_dendro, rotate = TRUE) +
+    labs(title="Original dataframe - variable clusters") +
+    theme(plot.title = element_text(hjust = 0.5))
+
+  X_imp_dendro_plot <- ggdendro::ggdendrogram(data = X_imp_dendro, rotate = TRUE) +
+    labs(title="Imputed dataframe - variable clusters") +
+    theme(plot.title = element_text(hjust = 0.5))
 
   #density plots and boxplots for numeric variables
   for (i in 1:ncol(X_orig_num)) {
@@ -235,8 +255,9 @@ post_imp_diag <- function(X_orig, X_imp, scale=T, n.boot=1000) {
 
   #output
   list(Densityplots = histograms, Boxplots = boxplots, Barcharts = barcharts,
-       Statistics = statistics,
-       Correlation_stats = correlation_results, Correlation_plot = p)
+       Statistics = statistics, Variable_clusters_orig = X_orig_dendro_plot,
+       Variable_clusters_imp = X_imp_dendro_plot, Correlation_stats = correlation_results,
+       Correlation_plot = p)
 
 }
 
