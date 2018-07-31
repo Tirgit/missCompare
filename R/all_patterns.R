@@ -4,9 +4,22 @@
 #' \code{\link{all_patterns}} spikes in missingness using MCAR, MAR, MNAR (default) and MAP (optional) patterns
 #'
 #' @details
-#' This function uses the generated simulated matrix and generates missing datapoints in an assumed pattern per variable.
-#' This is achieved by sorting each column and removing the top/bottom of the column (according to the original missingness).
-#' Selection from top or bottom is random.
+#' This function uses the generated simulated matrix and generates missing datapoints in MCAR, MAR and MNAR patterns.
+#' Optionally, in case the user defines an assumed pattern, the \code{\link{all_patterns}} function will also generate
+#' a MAP missingness pattern. The size of the window is the fraction of missingness + 0.5 by default. This means that e.g. given 10\% missingness, a window of
+#' 10\% + 50\% = 60\% of the data (60 percentiles) will be randomly selected from which 10\% of the variable data
+#' will be randomly removed. In case the user defines a narrower window, the density of missing data removal will be more extreme.
+#' E.g. in an extreme case where the window is defined as 0, 10\% of the variable data will be removed from 10 adjacent
+#' percentiles (for example, the 10\% lowest observations or data between the 72nd and 82nd percentiles). The default size
+#' of the window is 0.5, which means that with this setting the fuction will only run with maximum 50\% of missing data for
+#' any variable. Consequently, with a window setting of 0.25, the function will allow maximum 75\%  missing data a variable.
+#' The user should note that in case the fraction of missingness + the window gets closer to 100\% (e.g. a window of 0.4 and
+#' a variable missingess of 55\%), the more the algorithm will spike in missingness that will resemble a random pattern
+#' (as the random "window" will represent (almost) all the data in a variable). Hence, it is suggested that the user carefully
+#' examines the missing data fractions, excludes variables with high missingess using the \code{\link{clean}} function and
+#' sets a sensible window for the analysis. For more information on the functions that spike in missing data in MCAR, MAR,
+#' MNAR and MAP patterns, please see the functions \code{\link{MCAR}}, \code{\link{MAR}}, \code{\link{MNAR}} and \code{\link{MAP}}.
+#'
 #'
 #' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)
 #' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
