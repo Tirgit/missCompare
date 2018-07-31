@@ -4,15 +4,21 @@
 #' \code{\link{predict_MAR}} predict missingness status (missing vs. non-missing) based on other variables.
 #'
 #' @details
-#' This function xxxx
+#' This function aims to predict whether a feature approximates a missing-at-random (MAR)
+#' missingness pattern. The function iterates over all variables by converting it to a binary
+#' variable by missing/non-missing status. Following this transformation, all other variables
+#' are used to establish a prediction model (using GLM). ROC AUC statistics are extracted
+#' to establish the collective predictive accuracy of all remaining variables in relation to
+#' the transformed binary feature in question.
 #'
-#' @param X Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)
+#' @param X Dataframe - the original data that contains missing values.
+#' @param scale Boolean with default TRUE. Scaling will scale and center all variables to mean=0 and standard deviation=1
 #'
 #' @name predict_MAR
 #'
 #' @return
-#' \item{MAR_stats}{xxxxx}
-#' \item{Plot}{xxxxxx}
+#' \item{MAR_stats}{ROC AUC values and 95\% CIs for each variable in the dataset. The ROC AUC statistics are established using all other variables.}
+#' \item{Plot}{Plot visualizing ROC AUC values and 95\% CIs for each variable in the dataset.}
 #'
 #' @examples
 #' \dontrun{
