@@ -37,6 +37,7 @@ Imports:
   pcaMethods,
   plyr,
   pROC,
+  rlang,
   ROCR,
   tidyr,
   VIM

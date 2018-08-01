@@ -326,7 +326,7 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
                                                 "pcaMethods NIPALS", "pcaMethods NLPCA", "mice mixed",
                                                 "mi Bayesian", "Amelia II", "missForest", "Hmisc aregImpute", "VIM kNN"))
 
-
+  Method <- NULL
   p <- ggplot(RMSE, aes(x=Method, y=RMSE, col=Method)) +
     geom_boxplot() +
     theme(axis.text.x = element_text(angle = 90, hjust = 1)) +

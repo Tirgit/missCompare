@@ -86,10 +86,11 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
 
   notmiss <- function(x) { sum(!is.na(x)) }
   RMSE_statmaker <- function (x) {
+    Method <- MCAR_RMSE_stats <- MCAR_RMSE_notmiss <- MCAR_RMSE_mean <- SE_RMSE_MCAR <- MAR_RMSE_stats <- MAR_RMSE_notmiss <- MAR_RMSE_mean <- SE_RMSE_MAR <- MNAR_RMSE_stats <- MNAR_RMSE_notmiss <- MNAR_RMSE_mean <- SE_RMSE_MNAR <- MAP_RMSE_stats <- MAP_RMSE_notmiss <- MAP_RMSE_mean <- SE_RMSE_MAP <- lower.ci_RMSE_MCAR <- upper.ci_RMSE_MCAR <- NULL
     if (ncol(x) == 5) {
       RMSE_stats <- x %>%
         group_by(Method) %>%
-        summarise_all(funs(mean(., na.rm = TRUE), stats::sd(., na.rm = TRUE), notmiss)) %>%
+        summarise_all(funs(mean(.data, na.rm = TRUE), stats::sd(.data, na.rm = TRUE), notmiss)) %>%
         mutate(SE_RMSE_MCAR = `MCAR_RMSE_stats::sd` / sqrt(MCAR_RMSE_notmiss),
                lower.ci_RMSE_MCAR = MCAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
                upper.ci_RMSE_MCAR = MCAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
@@ -106,7 +107,7 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
                       lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR, lower.ci_RMSE_MAP, upper.ci_RMSE_MAP) } else {
                         RMSE_stats <- x %>%
                           group_by(Method) %>%
-                          summarise_all(funs(mean(., na.rm = TRUE), stats::sd(., na.rm = TRUE), notmiss)) %>%
+                          summarise_all(funs(mean(.data, na.rm = TRUE), stats::sd(.data, na.rm = TRUE), notmiss)) %>%
                           mutate(SE_RMSE_MCAR = `MCAR_RMSE_stats::sd` / sqrt(MCAR_RMSE_notmiss),
                                  lower.ci_RMSE_MCAR = MCAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
                                  upper.ci_RMSE_MCAR = MCAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,

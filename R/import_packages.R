@@ -14,6 +14,7 @@
 #' @importFrom pcaMethods pca
 #' @importFrom plyr revalue
 #' @importFrom pROC auc roc
+#' @importFrom rlang .data
 #' @importFrom stats quantile runif complete.cases cor dist hclust sd qt glm predict as.formula median t.test as.dendrogram
 #' @import tidyr
 #' @importFrom VIM kNN

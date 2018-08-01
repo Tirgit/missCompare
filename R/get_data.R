@@ -57,12 +57,14 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
 
   nm1 <- names(X_update)[colSums(is.na(X_update)) >0]
   arr_X <- X_update %>%
-    arrange_at(vars(nm1), funs(desc(is.na(.))))
+    arrange_at(vars(nm1), funs(desc(is.na(.data))))
 
   vars_above_half <- colnames(X_update)[missfrac_per_var>=0.5]
   if (length(vars_above_half) != 0) message(paste("Warning! Missingness exceeds 50% for variable(s) ",
                 (paste(vars_above_half,collapse=", ") ),
                 ". Although the pipeline will function with variables with high missingness, consider excluding these variables using missCompare::clean() and repeating function until no warnings are shown.", sep= ""))
+
+  variable <- Observations <- value <- NULL
 
   #matrix plot
   df_miss_id <- cbind(c(1:rows), arr_X)
