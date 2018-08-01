@@ -179,17 +179,3 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
 
 
 }
-
-
-
-
-
-
-#LAB
-#wrap <- impute_simulated(rownum = y$Rows,
-#                               colnum = y$Columns,
-#                               cormat = y$Corr_matrix,
-#                               missfrac_per_var =  y$Fraction_missingness_per_variable,
-#                               n.iter = 3, assumed_pattern = NA)
-
-
