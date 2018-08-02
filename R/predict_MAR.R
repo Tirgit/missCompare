@@ -64,7 +64,7 @@ predict_MAR <- function(X, scale = T) {
   colnames(MAR_AUC) <- c("Variable","AUC","AUC_loci","AUC_hici")
 
   #plot of AUC values and 95% CIs per variable
-  AUC_loci <- AUC_hici <- NULL
+  AUC_loci <- AUC_hici <- Variable <- NULL
   AUCplot <- ggplot(data=MAR_AUC, aes(x=Variable, y=AUC)) +
     geom_boxplot() +
     geom_errorbar(aes(ymin=AUC_loci, ymax=AUC_hici)) +
