@@ -85,39 +85,42 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
   }
 
   notmiss <- function(x) { sum(!is.na(x)) }
+  mymean <- function(x) { mean(x, na.rm = TRUE) }
+  mysd <- function(x) { stats::sd(x, na.rm = TRUE) }
+
   RMSE_statmaker <- function (x) {
-    Method <- MCAR_RMSE_stats <- MCAR_RMSE_notmiss <- MCAR_RMSE_mean <- SE_RMSE_MCAR <- MAR_RMSE_stats <- MAR_RMSE_notmiss <- MAR_RMSE_mean <- SE_RMSE_MAR <- MNAR_RMSE_stats <- MNAR_RMSE_notmiss <- MNAR_RMSE_mean <- SE_RMSE_MNAR <- MAP_RMSE_stats <- MAP_RMSE_notmiss <- MAP_RMSE_mean <- SE_RMSE_MAP <- lower.ci_RMSE_MCAR <- upper.ci_RMSE_MCAR <- lower.ci_RMSE_MAR <- upper.ci_RMSE_MAR <- lower.ci_RMSE_MNAR <- upper.ci_RMSE_MNAR <- lower.ci_RMSE_MAP <- upper.ci_RMSE_MAP <- NULL
+    Method <- MCAR_RMSE_stats <- MCAR_RMSE_notmiss <- MCAR_RMSE_mean <- MCAR_RMSE_mysd <- SE_RMSE_MCAR <- MAR_RMSE_stats <- MAR_RMSE_notmiss <- MAR_RMSE_mean <- MAR_RMSE_mysd <- SE_RMSE_MAR <- MNAR_RMSE_stats <- MNAR_RMSE_notmiss <- MNAR_RMSE_mean <- MNAR_RMSE_mysd <- SE_RMSE_MNAR <- MAP_RMSE_stats <- MAP_RMSE_notmiss <- MAP_RMSE_mean <- MAP_RMSE_mysd <- SE_RMSE_MAP <- lower.ci_RMSE_MCAR <- upper.ci_RMSE_MCAR <- lower.ci_RMSE_MAR <- upper.ci_RMSE_MAR <- lower.ci_RMSE_MNAR <- upper.ci_RMSE_MNAR <- lower.ci_RMSE_MAP <- upper.ci_RMSE_MAP <- NULL
     if (ncol(x) == 5) {
       RMSE_stats <- x %>%
         group_by(Method) %>%
-        summarise_all(funs(mean(.data, na.rm = TRUE), stats::sd(.data, na.rm = TRUE), notmiss)) %>%
-        mutate(SE_RMSE_MCAR = `MCAR_RMSE_stats::sd` / sqrt(MCAR_RMSE_notmiss),
-               lower.ci_RMSE_MCAR = MCAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
-               upper.ci_RMSE_MCAR = MCAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
-               SE_RMSE_MAR = `MAR_RMSE_stats::sd` / sqrt(MAR_RMSE_notmiss),
-               lower.ci_RMSE_MAR = MAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
-               upper.ci_RMSE_MAR = MAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
-               SE_RMSE_MNAR = `MNAR_RMSE_stats::sd` / sqrt(MNAR_RMSE_notmiss),
-               lower.ci_RMSE_MNAR = MNAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
-               upper.ci_RMSE_MNAR = MNAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
-               SE_RMSE_MAP = `MAP_RMSE_stats::sd` / sqrt(MAP_RMSE_notmiss),
-               lower.ci_RMSE_MAP = MAP_RMSE_mean - stats::qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP,
-               upper.ci_RMSE_MAP = MAP_RMSE_mean + stats::qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP) %>%
-        dplyr::select(Method, MCAR_RMSE_mean, MAR_RMSE_mean, MNAR_RMSE_mean, MAP_RMSE_mean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR,
+        summarise_all(funs(mymean, mysd, notmiss)) %>%
+        mutate(SE_RMSE_MCAR = MCAR_RMSE_mysd / sqrt(MCAR_RMSE_notmiss),
+               lower.ci_RMSE_MCAR = MCAR_RMSE_mymean - stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+               upper.ci_RMSE_MCAR = MCAR_RMSE_mymean + stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+               SE_RMSE_MAR = MAR_RMSE_mysd / sqrt(MAR_RMSE_notmiss),
+               lower.ci_RMSE_MAR = MAR_RMSE_mymean - stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+               upper.ci_RMSE_MAR = MAR_RMSE_mymean + stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+               SE_RMSE_MNAR = MNAR_RMSE_mysd / sqrt(MNAR_RMSE_notmiss),
+               lower.ci_RMSE_MNAR = MNAR_RMSE_mymean - stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
+               upper.ci_RMSE_MNAR = MNAR_RMSE_mymean + stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
+               SE_RMSE_MAP = MAP_RMSE_mysd / sqrt(MAP_RMSE_notmiss),
+               lower.ci_RMSE_MAP = MAP_RMSE_mymean - stats::qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP,
+               upper.ci_RMSE_MAP = MAP_RMSE_mymean + stats::qt(1 - (0.05 / 2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP) %>%
+        dplyr::select(Method, MCAR_RMSE_mymean, MAR_RMSE_mymean, MNAR_RMSE_mymean, MAP_RMSE_mymean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR,
                       lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR, lower.ci_RMSE_MAP, upper.ci_RMSE_MAP) } else {
                         RMSE_stats <- x %>%
                           group_by(Method) %>%
-                          summarise_all(funs(mean(.data, na.rm = TRUE), stats::sd(.data, na.rm = TRUE), notmiss)) %>%
-                          mutate(SE_RMSE_MCAR = `MCAR_RMSE_stats::sd` / sqrt(MCAR_RMSE_notmiss),
-                                 lower.ci_RMSE_MCAR = MCAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
-                                 upper.ci_RMSE_MCAR = MCAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
-                                 SE_RMSE_MAR = `MAR_RMSE_stats::sd` / sqrt(MAR_RMSE_notmiss),
-                                 lower.ci_RMSE_MAR = MAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
-                                 upper.ci_RMSE_MAR = MAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
-                                 SE_RMSE_MNAR = `MNAR_RMSE_stats::sd` / sqrt(MNAR_RMSE_notmiss),
-                                 lower.ci_RMSE_MNAR = MNAR_RMSE_mean - stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
-                                 upper.ci_RMSE_MNAR = MNAR_RMSE_mean + stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR) %>%
-                          dplyr::select(Method, MCAR_RMSE_mean, MAR_RMSE_mean, MNAR_RMSE_mean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR,
+                          summarise_all(funs(mymean, mysd, notmiss)) %>%
+                          mutate(SE_RMSE_MCAR = MCAR_RMSE_mysd / sqrt(MCAR_RMSE_notmiss),
+                                 lower.ci_RMSE_MCAR = MCAR_RMSE_mymean - stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+                                 upper.ci_RMSE_MCAR = MCAR_RMSE_mymean + stats::qt(1 - (0.05 / 2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR,
+                                 SE_RMSE_MAR = MAR_RMSE_mysd / sqrt(MAR_RMSE_notmiss),
+                                 lower.ci_RMSE_MAR = MAR_RMSE_mymean - stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+                                 upper.ci_RMSE_MAR = MAR_RMSE_mymean + stats::qt(1 - (0.05 / 2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR,
+                                 SE_RMSE_MNAR = MNAR_RMSE_mysd / sqrt(MNAR_RMSE_notmiss),
+                                 lower.ci_RMSE_MNAR = MNAR_RMSE_mymean - stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR,
+                                 upper.ci_RMSE_MNAR = MNAR_RMSE_mymean + stats::qt(1 - (0.05 / 2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR) %>%
+                          dplyr::select(Method, MCAR_RMSE_mymean, MAR_RMSE_mymean, MNAR_RMSE_mymean, lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR,
                                         lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR)
                       }
     list(RMSE_stats = RMSE_stats)
@@ -125,25 +128,25 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
 
   summary <- RMSE_statmaker(collect_res)
 
-  MCAR_RMSE_mean <- MAR_RMSE_mean <- MNAR_RMSE_mean <- MAP_RMSE_mean <- Method <-  NULL
+  MCAR_RMSE_mymean <- MAR_RMSE_mymean <- MNAR_RMSE_mymean <- MAP_RMSE_mymean <- Method <-  NULL
   #Best methods for the three missingness types
   Best_method_MCAR <- summary$RMSE_stats %>%
-    filter(MCAR_RMSE_mean == min(MCAR_RMSE_mean)) %>%
+    filter(MCAR_RMSE_mymean == min(MCAR_RMSE_mymean)) %>%
     dplyr::select(Method) %>%
     as.character()
 
   Best_method_MAR <- summary$RMSE_stats %>%
-    filter(MAR_RMSE_mean == min(MAR_RMSE_mean)) %>%
+    filter(MAR_RMSE_mymean == min(MAR_RMSE_mymean)) %>%
     dplyr::select(Method) %>%
     as.character()
 
   Best_method_MNAR <- summary$RMSE_stats %>%
-    filter(MNAR_RMSE_mean == min(MNAR_RMSE_mean)) %>%
+    filter(MNAR_RMSE_mymean == min(MNAR_RMSE_mymean)) %>%
     dplyr::select(Method) %>%
     as.character()
 
   if (!is.na(assumed_pattern)) Best_method_MAP <- summary$RMSE_stats %>%
-    filter(MAP_RMSE_mean == min(MAP_RMSE_mean)) %>%
+    filter(MAP_RMSE_mymean == min(MAP_RMSE_mymean)) %>%
     dplyr::select(Method) %>%
     as.character()
 

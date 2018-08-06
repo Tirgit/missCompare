@@ -56,8 +56,11 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   if (plot_transform == T) X_update <- as.data.frame(scale(X)) else X_update <- X
 
   nm1 <- names(X_update)[colSums(is.na(X_update)) >0]
+  mydescend <- function(x) {
+    dplyr::desc(is.na(x))
+  }
   arr_X <- X_update %>%
-    arrange_at(vars(nm1), funs(desc(is.na(.data))))
+    dplyr::arrange_at(dplyr::vars(nm1), funs(mydescend))
 
   vars_above_half <- colnames(X_update)[missfrac_per_var>=0.5]
   if (length(vars_above_half) != 0) message(paste("Warning! Missingness exceeds 50% for variable(s) ",
