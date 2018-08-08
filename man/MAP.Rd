@@ -13,7 +13,7 @@ MAP(X_hat, missfrac_per_var, assumed_pattern, window = 0.5)
 
 \item{assumed_pattern}{Vector of missingess types (must be same length as missingness fraction per variable)}
 
-\item{window}{Window (with default 0.5). This regulates the "extremity" of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)}
+\item{window}{Window (with default 0.5). This regulates the 'extremity' of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)}
 }
 \value{
 \item{MAP_matrix}{Matrix with MAP pred-defined missingess pattern}
@@ -29,16 +29,16 @@ imbalances between variables in the original data will be retained. Here the use
 (of length the same as the fraction of missingness per variable vector) that specifies which missingness pattern corresponds
 to the variables. In case the first four columns are assumed missing at random, the next one missing completely at random and
 the last two column not at random, the input vector will be:
-\code{c(rep("MAR", 4), "MCAR", rep("MNAR",2))}
+\code{c(rep('MAR', 4), 'MCAR', rep('MNAR',2))}
 The algorithm will spike in missing values according to the specified pattern. For more information, please see documentation for fuctions
 \code{\link{MCAR}}, \code{\link{MAR}} and \code{\link{MNAR}}.
 }
 \examples{
 \dontrun{
 MAP(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
-assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
+assumed_pattern = c('MAR', 'MCAR', 'MCAR', 'MAR', 'MNAR', 'MCAR'))
 MAP(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
-assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"), window = 0.2)
+assumed_pattern = c('MAR', 'MCAR', 'MCAR', 'MAR', 'MNAR', 'MCAR'), window = 0.2)
 }
 
 }

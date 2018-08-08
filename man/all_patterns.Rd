@@ -14,7 +14,7 @@ all_patterns(X_hat, missfrac_per_var, assumed_pattern = NA,
 
 \item{assumed_pattern}{Vector of missingess types (must be same length as missingness fraction per variable). If this input is specified, the function will spike in missing datapoints in a MAP pattern as well.}
 
-\item{window}{Window (with default 0.5). This regulates the "extremity" of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)}
+\item{window}{Window (with default 0.5). This regulates the 'extremity' of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)}
 }
 \value{
 \item{MCAR_matrix}{Matrix with MCAR pred-defined missingess pattern (default output)}
@@ -37,7 +37,7 @@ of the window is 0.5, which means that with this setting the fuction will only r
 any variable. Consequently, with a window setting of 0.25, the function will allow maximum 75\%  missing data a variable.
 The user should note that in case the fraction of missingness + the window gets closer to 100\% (e.g. a window of 0.4 and
 a variable missingess of 55\%), the more the algorithm will spike in missingness that will resemble a random pattern
-(as the random "window" will represent (almost) all the data in a variable). Hence, it is suggested that the user carefully
+(as the random 'window' will represent (almost) all the data in a variable). Hence, it is suggested that the user carefully
 examines the missing data fractions, excludes variables with high missingess using the \code{\link{clean}} function and
 sets a sensible window for the analysis. For more information on the functions that spike in missing data in MCAR, MAR,
 MNAR and MAP patterns, please see the functions \code{\link{MCAR}}, \code{\link{MAR}}, \code{\link{MNAR}} and \code{\link{MAP}}.
@@ -45,7 +45,7 @@ MNAR and MAP patterns, please see the functions \code{\link{MCAR}}, \code{\link{
 \examples{
 \dontrun{
 miss_list <- all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
-assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
+assumed_pattern = c('MAR', 'MCAR', 'MCAR', 'MAR', 'MNAR', 'MCAR'))
 miss_list <- all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
 window = 0.2)
 }

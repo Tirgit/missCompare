@@ -54,7 +54,7 @@ wrap <- impute_simulated(rownum = y$Rows,
                     cormat = y$Corr_matrix,
                     missfrac_per_var =  y$Fraction_missingness_per_variable,
                     n.iter = 15,
-                    assumed_pattern = c(rep("MAR", 4), "MCAR", rep("MNAR",2)))
+                    assumed_pattern = c(rep('MAR', 4), 'MCAR', rep('MNAR',2)))
 }
 
 }
