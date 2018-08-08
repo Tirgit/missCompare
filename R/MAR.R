@@ -18,13 +18,13 @@
 #' any variable. Consequently, with a window setting of 0.25, the function will allow maximum 75\%  missing data a variable.
 #' The user should note that in case the fraction of missingness + the window gets closer to 100\% (e.g. a window of 0.4 and
 #' a variable missingess of 55\%), the more the algorithm will spike in missingness that will resemble a random pattern
-#' (as the random "window" will represent (almost) all the data in a variable). Hence, it is suggested that the user carefully
+#' (as the random 'window' will represent (almost) all the data in a variable). Hence, it is suggested that the user carefully
 #' examines the missing data fractions, excludes variables with high missingess using the \code{\link{clean}} function and
 #' sets a sensible window for the analysis.
 #'
 #' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)
 #' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
-#' @param window Window (with default 0.5). This regulates the "extremity" of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)
+#' @param window Window (with default 0.5). This regulates the 'extremity' of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)
 #'
 #' @name MAR
 #'
@@ -41,46 +41,46 @@
 #' @export
 
 
-###FUNCTION
+### FUNCTION
 MAR <- function(X_hat, missfrac_per_var, window = 0.5) {
-
-  rownames(X_hat) <- 1:nrow(X_hat)
-
-  for (i in 1:(length(missfrac_per_var)-1)) {
-    window_start <- stats::runif(1, min=0, max=1-window-missfrac_per_var[i])
-    window_end <- window_start+missfrac_per_var[i]+window
-    quants <- stats::quantile(X_hat[,i+1], c(window_start, window_end))
-    ind <- X_hat[,i+1] <= quants[2] & X_hat[,i+1] >= quants[1]
-    to_NA <- sample(rownames(X_hat)[ind], missfrac_per_var[i]*nrow(X_hat))
-    X_hat[,i][to_NA] <- NA
-  }
-
-  window_start <- stats::runif(1, min=0, max=1-window-missfrac_per_var[length(missfrac_per_var)])
-  window_end <- window_start+missfrac_per_var[length(missfrac_per_var)]+window
-  quants <- stats::quantile(X_hat[,1], c(window_start, window_end), na.rm = T)
-  ind <- X_hat[,1] <= quants[2] & X_hat[,1] >= quants[1]
-  NAs <- is.na(X_hat[,1])
-  to_NA <- sample(rownames(X_hat)[ind | NAs], missfrac_per_var[length(missfrac_per_var)]*nrow(X_hat))
-  X_hat[,length(missfrac_per_var)][to_NA] <- NA
-
-  #reorder and remove rows with full missingness
-  X_hat <- X_hat[ order(as.numeric(row.names(X_hat))),]
-
-  missfrac_per_ind <- rowMeans(is.na(X_hat))
-  inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
-  if (length(inds_above_thres) != 0) X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
-
-  matrix_summary <- summary(X_hat)
-
-  list(MAR_matrix = X_hat, Summary = matrix_summary)
-
+    
+    rownames(X_hat) <- 1:nrow(X_hat)
+    
+    for (i in 1:(length(missfrac_per_var) - 1)) {
+        window_start <- stats::runif(1, min = 0, max = 1 - window - missfrac_per_var[i])
+        window_end <- window_start + missfrac_per_var[i] + window
+        quants <- stats::quantile(X_hat[, i + 1], c(window_start, window_end))
+        ind <- X_hat[, i + 1] <= quants[2] & X_hat[, i + 1] >= quants[1]
+        to_NA <- sample(rownames(X_hat)[ind], missfrac_per_var[i] * nrow(X_hat))
+        X_hat[, i][to_NA] <- NA
+    }
+    
+    window_start <- stats::runif(1, min = 0, max = 1 - window - missfrac_per_var[length(missfrac_per_var)])
+    window_end <- window_start + missfrac_per_var[length(missfrac_per_var)] + window
+    quants <- stats::quantile(X_hat[, 1], c(window_start, window_end), na.rm = T)
+    ind <- X_hat[, 1] <= quants[2] & X_hat[, 1] >= quants[1]
+    NAs <- is.na(X_hat[, 1])
+    to_NA <- sample(rownames(X_hat)[ind | NAs], missfrac_per_var[length(missfrac_per_var)] * nrow(X_hat))
+    X_hat[, length(missfrac_per_var)][to_NA] <- NA
+    
+    # reorder and remove rows with full missingness
+    X_hat <- X_hat[order(as.numeric(row.names(X_hat))), ]
+    
+    missfrac_per_ind <- rowMeans(is.na(X_hat))
+    inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
+    if (length(inds_above_thres) != 0) 
+        X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
+    
+    matrix_summary <- summary(X_hat)
+    
+    list(MAR_matrix = X_hat, Summary = matrix_summary)
+    
 }
 
 
 
-###LAB
-#res <- MAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-#matrixplot(res$MAR_matrix, interactive = F, col= "red")
+### LAB res <- MAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
+### matrixplot(res$MAR_matrix, interactive = F, col= 'red')
 
 
 

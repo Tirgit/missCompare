@@ -15,7 +15,7 @@
 #' any variable. Consequently, with a window setting of 0.25, the function will allow maximum 75\%  missing data a variable.
 #' The user should note that in case the fraction of missingness + the window gets closer to 100\% (e.g. a window of 0.4 and
 #' a variable missingess of 55\%), the more the algorithm will spike in missingness that will resemble a random pattern
-#' (as the random "window" will represent (almost) all the data in a variable). Hence, it is suggested that the user carefully
+#' (as the random 'window' will represent (almost) all the data in a variable). Hence, it is suggested that the user carefully
 #' examines the missing data fractions, excludes variables with high missingess using the \code{\link{clean}} function and
 #' sets a sensible window for the analysis. For more information on the functions that spike in missing data in MCAR, MAR,
 #' MNAR and MAP patterns, please see the functions \code{\link{MCAR}}, \code{\link{MAR}}, \code{\link{MNAR}} and \code{\link{MAP}}.
@@ -24,7 +24,7 @@
 #' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)
 #' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
 #' @param assumed_pattern Vector of missingess types (must be same length as missingness fraction per variable). If this input is specified, the function will spike in missing datapoints in a MAP pattern as well.
-#' @param window Window (with default 0.5). This regulates the "extremity" of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)
+#' @param window Window (with default 0.5). This regulates the 'extremity' of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)
 #'
 #' @name all_patterns
 #'
@@ -37,7 +37,7 @@
 #' @examples
 #' \dontrun{
 #' miss_list <- all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
-#' assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR"))
+#' assumed_pattern = c('MAR', 'MCAR', 'MCAR', 'MAR', 'MNAR', 'MCAR'))
 #' miss_list <- all_patterns(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable,
 #' window = 0.2)
 #' }
@@ -45,31 +45,33 @@
 #' @export
 
 
-###FUNCTION
+### FUNCTION
 all_patterns <- function(X_hat, missfrac_per_var, assumed_pattern = NA, window = 0.5) {
-
-  MCAR <- MCAR(X_hat, missfrac_per_var)
-  MAR <- MAR(X_hat, missfrac_per_var, window = window)
-  MNAR <- MNAR(X_hat, missfrac_per_var, window = window)
-
-  if (!is.na(assumed_pattern[1]) & (length(assumed_pattern) != length(missfrac_per_var))) stop(paste("The length of argument missfrac_per_var (",
-                                                                      length(missfrac_per_var),
-                                                                      ") and argument assumed_pattern (",
-                                                                      length(assumed_pattern),
-                                                                      ") do not match. Please double-check the arguments of the function.", sep= ""))
-
-
-  if (!is.na(assumed_pattern[1])) MAP <- MAP(X_hat, missfrac_per_var, assumed_pattern, window = window)
-
-  if (!is.na(assumed_pattern[1])) list(MCAR_matrix = MCAR$MCAR_matrix , MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix, MAP_matrix = MAP$MAP_matrix) else list(MCAR_matrix = MCAR$MCAR_matrix , MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix)
-
+    
+    MCAR <- MCAR(X_hat, missfrac_per_var)
+    MAR <- MAR(X_hat, missfrac_per_var, window = window)
+    MNAR <- MNAR(X_hat, missfrac_per_var, window = window)
+    
+    if (!is.na(assumed_pattern[1]) & (length(assumed_pattern) != length(missfrac_per_var))) 
+        stop(paste("The length of argument missfrac_per_var (", length(missfrac_per_var), ") and argument assumed_pattern (", 
+            length(assumed_pattern), ") do not match. Please double-check the arguments of the function.", 
+            sep = ""))
+    
+    
+    if (!is.na(assumed_pattern[1])) 
+        MAP <- MAP(X_hat, missfrac_per_var, assumed_pattern, window = window)
+    
+    if (!is.na(assumed_pattern[1])) 
+        list(MCAR_matrix = MCAR$MCAR_matrix, MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix, 
+            MAP_matrix = MAP$MAP_matrix) else list(MCAR_matrix = MCAR$MCAR_matrix, MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix)
+    
 }
 
 
-###LAB
-#res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable, window=0.1)
+### LAB res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable,
+### window=0.1)
 
-#res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable,
-#                           assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MAR", "MAR", "MNAR", "MNAR",
-#                                               "MAR", "MAR", "MNAR", "MNAR"))
+# res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable,
+# assumed_pattern = c('MAR', 'MCAR', 'MCAR', 'MAR', 'MNAR', 'MCAR', 'MAR', 'MAR', 'MNAR',
+# 'MNAR', 'MAR', 'MAR', 'MNAR', 'MNAR'))
 
