@@ -7,7 +7,7 @@ data("BostonHousing")
 df_miss <- prodNA(BostonHousing, 0.1)
 
 # expecting error if non numeric variables are in the dataframe
-test_that("no errors in get_data()", {
+test_that("numeric errors in get_data()", {
   expect_error(missCompare::get_data(df_miss))
 })
 

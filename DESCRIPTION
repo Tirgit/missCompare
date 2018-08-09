@@ -39,6 +39,7 @@ Imports:
   pROC,
   rlang,
   ROCR,
+  utils,
   tidyr,
   VIM
 Suggests: 
