@@ -111,6 +111,7 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 1 = random replacement (run if selected)
     if (1 %in% sel_method) {
+        print("Random replacement imputation - in progress")
         for (n in 1:n.iter) {
             Y <- X
             for (i in 1:ncol(Y)) {
@@ -123,6 +124,7 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 2 = median imputation (run if selected)
     if (2 %in% sel_method) {
+        print("Median imputation - in progress")
         Y <- X
         for (i in 1:ncol(Y)) {
             Y[is.na(Y[, i]), i] <- stats::median(Y[, i], na.rm = TRUE)
@@ -132,6 +134,7 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 3 = mean imputation (run if selected)
     if (3 %in% sel_method) {
+        print("Mean imputation - in progress")
         Y <- X
         for (i in 1:ncol(Y)) {
             Y[is.na(Y[, i]), i] <- mean(Y[, i], na.rm = TRUE)
@@ -141,28 +144,33 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 4 = missMDA Regularized (run if selected)
     if (4 %in% sel_method) {
+        print("missMDA regularized imputation - in progress")
         ncomp <- missMDA::estim_ncpPCA(X)
-        res <- missMDA::imputePCA(X, ncp = ncomp$ncp, method = "Regularized")
+        log_output <- utils::capture.output(res <- missMDA::imputePCA(X, ncp = ncomp$ncp, method = "Regularized"))
         imp_matrix <- res$completeObs
         missMDA_reg_list[[1]] <- as.data.frame(imp_matrix)
     }
     
     # 5 = missMDA EM (run if selected)
     if (5 %in% sel_method) {
+        print("missMDA EM imputation - in progress")
         ncomp <- missMDA::estim_ncpPCA(X)
-        res <- missMDA::imputePCA(X, ncp = ncomp$ncp, method = "EM")
+        log_output <- utils::capture.output(res <- missMDA::imputePCA(X, ncp = ncomp$ncp, method = "EM"))
         imp_matrix <- res$completeObs
         missMDA_EM_list[[1]] <- as.data.frame(imp_matrix)
     }
     
     # 6 = pcaMethods PPCA (run if selected)
     if (6 %in% sel_method) {
+        print("pcaMethods PPCA imputation - in progress")
         for (n in 1:n.iter) {
             ncomp <- missMDA::estim_ncpPCA(X)
             if (ncomp$ncp > 0) {
-                res <- pcaMethods::pca(X, method = "ppca", center = FALSE, nPcs = ncomp$ncp)
+                log_output <- utils::capture.output(res <- pcaMethods::pca(X, method = "ppca", 
+                  center = FALSE, nPcs = ncomp$ncp))
             } else {
-                res <- pca(X, method = "ppca", center = FALSE, nPcs = 2)
+                log_output <- utils::capture.output(res <- pca(X, method = "ppca", center = FALSE, 
+                  nPcs = 2))
             }
             imp_matrix <- res@completeObs
             pcaMethods_PPCA_list[[n]] <- as.data.frame(imp_matrix)
@@ -171,11 +179,14 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 7 = pcaMethods svdImpute (run if selected)
     if (7 %in% sel_method) {
+        print("pcaMethods svdImpute imputation - in progress")
         ncomp <- missMDA::estim_ncpPCA(X)
         if (ncomp$ncp > 0) {
-            res <- pcaMethods::pca(X, method = "svdImpute", center = FALSE, nPcs = ncomp$ncp)
+            log_output <- utils::capture.output(res <- pcaMethods::pca(X, method = "svdImpute", 
+                center = FALSE, nPcs = ncomp$ncp))
         } else {
-            res <- pca(X, method = "svdImpute", center = FALSE, nPcs = 2)
+            log_output <- utils::capture.output(res <- pca(X, method = "svdImpute", center = FALSE, 
+                nPcs = 2))
         }
         imp_matrix <- res@completeObs
         pcaMethods_svdImpute_list[[1]] <- as.data.frame(imp_matrix)
@@ -183,11 +194,14 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 8 = pcaMethods BPCA (run if selected)
     if (8 %in% sel_method) {
+        print("pcaMethods BPCA imputation - in progress")
         ncomp <- missMDA::estim_ncpPCA(X)
         if (ncomp$ncp > 0) {
-            res <- pcaMethods::pca(X, method = "bpca", center = FALSE, nPcs = ncomp$ncp)
+            log_output <- utils::capture.output(res <- pcaMethods::pca(X, method = "bpca", center = FALSE, 
+                nPcs = ncomp$ncp))
         } else {
-            res <- pca(X, method = "bpca", center = FALSE, nPcs = 2)
+            log_output <- utils::capture.output(res <- pca(X, method = "bpca", center = FALSE, 
+                nPcs = 2))
         }
         imp_matrix <- res@completeObs
         pcaMethods_BPCA_list[[1]] <- as.data.frame(imp_matrix)
@@ -195,11 +209,14 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 9 = pcaMethods NIPALS (run if selected)
     if (9 %in% sel_method) {
+        print("pcaMethods Nipals imputation - in progress")
         ncomp <- missMDA::estim_ncpPCA(X)
         if (ncomp$ncp > 0) {
-            res <- pcaMethods::pca(X, method = "nipals", center = FALSE, nPcs = ncomp$ncp)
+            log_output <- utils::capture.output(res <- pcaMethods::pca(X, method = "nipals", center = FALSE, 
+                nPcs = ncomp$ncp))
         } else {
-            res <- pca(X, method = "nipals", center = FALSE, nPcs = 2)
+            log_output <- utils::capture.output(res <- pca(X, method = "nipals", center = FALSE, 
+                nPcs = 2))
         }
         imp_matrix <- res@completeObs
         pcaMethods_Nipals_list[[1]] <- as.data.frame(imp_matrix)
@@ -207,12 +224,15 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 10 = pcaMethods NLPCA (run if selected)
     if (10 %in% sel_method) {
+        print("pcaMethods NLPCA imputation - in progress")
         for (n in 1:n.iter) {
             ncomp <- missMDA::estim_ncpPCA(X)
             if (ncomp$ncp > 0) {
-                res <- pcaMethods::pca(X, method = "nlpca", center = FALSE, nPcs = ncomp$ncp, maxSteps = 100)
+                log_output <- utils::capture.output(res <- pcaMethods::pca(X, method = "nlpca", 
+                  center = FALSE, nPcs = ncomp$ncp, maxSteps = 100))
             } else {
-                res <- pca(X, method = "nlpca", center = FALSE, nPcs = 2, maxSteps = 100)
+                log_output <- utils::capture.output(res <- pca(X, method = "nlpca", center = FALSE, 
+                  nPcs = 2, maxSteps = 100))
             }
             imp_matrix <- res@completeObs
             pcaMethods_NLPCA_list[[n]] <- as.data.frame(imp_matrix)
@@ -221,8 +241,9 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 11 = mice mixed (run if selected)
     if (11 %in% sel_method) {
+        print("mice mixed imputation - in progress")
         for (n in 1:n.iter) {
-            imputed_Data <- mice::mice(X, m = 1, maxit = 100)
+            log_output <- utils::capture.output(imputed_Data <- mice::mice(X, m = 1, maxit = 100))
             imp_matrix <- as.matrix(mice::complete(imputed_Data, 1))
             mice_mixed_list[[n]] <- as.data.frame(imp_matrix)
         }
@@ -230,8 +251,10 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 12 = mi Bayesian (run if selected)
     if (12 %in% sel_method) {
+        print("mi imputation - in progress")
         for (n in 1:n.iter) {
-            mi_data <- mi::mi(as.data.frame(X), n.chain = 1, n.iter = 100)
+            log_output <- utils::capture.output(mi_data <- mi::mi(as.data.frame(X), n.chain = 1, 
+                n.iter = 100, verbose = FALSE))
             imputed <- mi::complete(mi_data, 1)
             imp_matrix <- as.matrix(imputed[, 1:ncol(X)])
             mi_Bayesian_list[[n]] <- as.data.frame(imp_matrix)
@@ -240,8 +263,9 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 13 = Amelia II (run if selected)
     if (13 %in% sel_method) {
+        print("Amelia II imputation - in progress")
         for (n in 1:n.iter) {
-            amelia_fit <- Amelia::amelia(X, m = 1)
+            log_output <- utils::capture.output(amelia_fit <- Amelia::amelia(X, m = 1))
             imp_matrix <- amelia_fit$imputations[[1]]
             amelia_list[[n]] <- as.data.frame(imp_matrix)
         }
@@ -249,8 +273,10 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 14 = missForest (run if selected)
     if (14 %in% sel_method) {
+        print("missForest imputation - in progress")
         for (n in 1:n.iter) {
-            results <- missForest::missForest(X, maxiter = 10, ntree = 100, replace = T)
+            log_output <- utils::capture.output(results <- missForest::missForest(X, maxiter = 10, 
+                ntree = 100, replace = T))
             imp_matrix <- results$ximp
             missForest_list[[n]] <- as.data.frame(imp_matrix)
         }
@@ -258,11 +284,12 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 15 = Hmisc aregImpute (run if selected)
     if (15 %in% sel_method) {
+        print("Hmisc aregImpute imputation - in progress")
         for (n in 1:n.iter) {
             Xcolnames <- colnames(X)
             Xformula <- stats::as.formula(paste("~", paste(Xcolnames, collapse = "+")))
-            hmisc_algo <- Hmisc::aregImpute(formula = Xformula, data = X, n.impute = 1, burnin = 5, 
-                nk = 0, type = "pmm", pmmtype = 2)
+            log_output <- utils::capture.output(hmisc_algo <- Hmisc::aregImpute(formula = Xformula, 
+                data = X, n.impute = 1, burnin = 5, nk = 0, type = "pmm", pmmtype = 2))
             completeData <- as.data.frame(Hmisc::impute.transcan(hmisc_algo, imputation = 1, data = X, 
                 list.out = TRUE, pr = FALSE, check = FALSE))
             imp_matrix <- as.matrix(completeData)
@@ -272,8 +299,10 @@ impute_data_validate <- function(X, scale = T, spike.in = 0.01, n.iter = 10, sel
     
     # 16 = VIM kNN (run if selected)
     if (16 %in% sel_method) {
+        print("VIM kNN imputation - in progress")
         Xcolnames <- colnames(X)
-        completeData <- VIM::kNN(data = X, variable = Xcolnames, k = 10, trace = F, imp_var = F)
+        log_output <- utils::capture.output(completeData <- VIM::kNN(data = X, variable = Xcolnames, 
+            k = 10, trace = F, imp_var = F))
         imp_matrix <- as.matrix(completeData)
         kNN_list[[1]] <- as.data.frame(imp_matrix)
     }
