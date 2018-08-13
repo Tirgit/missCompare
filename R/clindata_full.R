@@ -1,0 +1,26 @@
+#' Clinical dataset with no missingness
+#'
+#' @description
+#' \code{\link{clindata_fill}} is a custom made clinical dataset that aimed to resemble a real-life clinical dataset.
+#' The correlations between variables, the data means, SDs and ranges are realistic, but
+#' the dataset is constructed by simulations and manual data input. The dataset contains
+#' no missingess.
+#'
+#' @format A data frame with 2500 rows and 12 variables:
+#' \describe{
+#'   \item{age}{numeric, age, in years}
+#'   \item{sex}{factor, male=1 and female=2}
+#'   \item{waist}{numeric, waist circumference, in cm}
+#'   \item{BMI}{numeric, body mass index, in kg/m2}
+#'   \item{SBP}{numeric, systolic blood pressure, in Hgmm}
+#'   \item{DBP}{numeric, diastolic blood pressure, in Hgmm}
+#'   \item{FG}{numeric, blood fasting glucose concentration, in mmol/dl}
+#'   \item{PPG}{numeric, blood postprandial glucose concentration, in mmol/dl}
+#'   \item{TC}{numeric, blood total cholesterol concentration, in mmol/dl}
+#'   \item{TG}{numeric, blood triglyerides concentration, in mmol/dl}
+#'   \item{HDL}{numeric, blood high density lipoprotein cholesterol concentration, in mmol/dl}
+#'   \item{education}{factor, primary school=1, secondary school=2, bsc degree=3, msc degree=4, phd degree=5}
+#' }
+#'
+#' @source The dataset is simulated and undergone manual configuration.
+"clindata_full"
