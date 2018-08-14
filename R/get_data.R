@@ -28,7 +28,10 @@
 #'
 #' @examples
 #' \dontrun{
-#' metadata <- get_data(df)
+#' # extract cleaned dataframe
+#' df_miss <- cleaned$Dataframe_clean
+#'
+#' metadata <- get_data(df_miss)
 #' metadata <- get_data(cleaned$Dataframe_clean, matrixplot_sort = F)
 #' }
 #'
@@ -37,12 +40,12 @@
 
 ### FUNCTION
 get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
-    
+
     vars_non_num <- names(X)[!sapply(X, is.numeric)]
-    if (length(vars_non_num) != 0) 
-        stop(paste("Warning! Variable(s) ", (paste(vars_non_num, collapse = ", ")), " is/are not numeric. Convert this/these variables to numeric using missCompare::clean() and repeat the missCompare::get_data() function until no warnings are shown.", 
+    if (length(vars_non_num) != 0)
+        stop(paste("Warning! Variable(s) ", (paste(vars_non_num, collapse = ", ")), " is/are not numeric. Convert this/these variables to numeric using missCompare::clean() and repeat the missCompare::get_data() function until no warnings are shown.",
             sep = ""))
-    
+
     comp <- sum(stats::complete.cases(X))
     rows <- nrow(X)
     cols <- ncol(X)
@@ -52,57 +55,57 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
     na_per_df <- sum(is.na(X))
     na_per_var <- sapply(X, function(x) sum(length(which(is.na(x)))))
     mdpat <- mice::md.pattern(X)
-    
-    if (plot_transform == T) 
+
+    if (plot_transform == T)
         X_update <- as.data.frame(scale(X)) else X_update <- X
-    
+
     nm1 <- names(X_update)[colSums(is.na(X_update)) > 0]
     mydescend <- function(x) {
         dplyr::desc(is.na(x))
     }
     arr_X <- X_update %>% dplyr::arrange_at(dplyr::vars(nm1), funs(mydescend))
-    
+
     vars_above_half <- colnames(X_update)[missfrac_per_var >= 0.5]
-    if (length(vars_above_half) != 0) 
-        message(paste("Warning! Missingness exceeds 50% for variable(s) ", (paste(vars_above_half, 
-            collapse = ", ")), ". Although the pipeline will function with variables with high missingness, consider excluding these variables using missCompare::clean() and repeating function until no warnings are shown.", 
+    if (length(vars_above_half) != 0)
+        message(paste("Warning! Missingness exceeds 50% for variable(s) ", (paste(vars_above_half,
+            collapse = ", ")), ". Although the pipeline will function with variables with high missingness, consider excluding these variables using missCompare::clean() and repeating function until no warnings are shown.",
             sep = ""))
-    
+
     variable <- Observations <- value <- NULL
-    
+
     # matrix plot
     df_miss_id <- cbind(c(1:rows), arr_X)
     colnames(df_miss_id) <- c("Observations", colnames(arr_X))
     df_melt <- data.table::melt(df_miss_id, id = c("Observations"))
-    matrixplot_sorted <- ggplot(df_melt, aes(x = variable, y = Observations)) + geom_tile(aes(fill = value)) + 
-        scale_fill_gradient(low = "white", high = "lightblue") + theme(panel.background = element_blank()) + 
+    matrixplot_sorted <- ggplot(df_melt, aes(x = variable, y = Observations)) + geom_tile(aes(fill = value)) +
+        scale_fill_gradient(low = "white", high = "lightblue") + theme(panel.background = element_blank()) +
         ggtitle("Matrix plot of missing data") + theme(plot.title = element_text(hjust = 0.5))
-    
+
     df_miss_id <- cbind(c(1:rows), X_update)
     colnames(df_miss_id) <- c("Observations", colnames(X_update))
     df_melt <- data.table::melt(df_miss_id, id = c("Observations"))
-    matrixplot_unsorted <- ggplot(df_melt, aes(x = variable, y = Observations)) + geom_tile(aes(fill = value)) + 
-        scale_fill_gradient(low = "white", high = "lightblue") + theme(panel.background = element_blank()) + 
+    matrixplot_unsorted <- ggplot(df_melt, aes(x = variable, y = Observations)) + geom_tile(aes(fill = value)) +
+        scale_fill_gradient(low = "white", high = "lightblue") + theme(panel.background = element_blank()) +
         ggtitle("Matrix plot of missing data") + theme(plot.title = element_text(hjust = 0.5))
-    
-    if (matrixplot_sort == F) 
+
+    if (matrixplot_sort == F)
         matrix_plot <- matrixplot_unsorted else matrix_plot <- matrixplot_sorted
-    
+
     # cluster plot
     any_miss <- X_update[, which(!colSums(is.na(X_update)) == 0)]
-    
+
     yesno <- any_miss %>% is.na
     d <- stats::dist(t(yesno), method = "binary")
     hc <- stats::hclust(d, method = "ward.D")
     hcdata <- ggdendro::dendro_data(hc)
-    cluster_plot <- ggdendro::ggdendrogram(hcdata, theme_dendro = FALSE) + ggtitle("Cluster plot of missing data") + 
+    cluster_plot <- ggdendro::ggdendrogram(hcdata, theme_dendro = FALSE) + ggtitle("Cluster plot of missing data") +
         theme(plot.title = element_text(hjust = 0.5)) + labs(x = "variable", y = "Height")
-    
+
     # output
-    list(Complete_cases = comp, Rows = rows, Columns = cols, Corr_matrix = mat, Fraction_missingness = missfrac_per_df, 
-        Fraction_missingness_per_variable = missfrac_per_var, Total_NA = na_per_df, NA_per_variable = na_per_var, 
+    list(Complete_cases = comp, Rows = rows, Columns = cols, Corr_matrix = mat, Fraction_missingness = missfrac_per_df,
+        Fraction_missingness_per_variable = missfrac_per_var, Total_NA = na_per_df, NA_per_variable = na_per_var,
         MD_Pattern = mdpat, Vars_above_half = vars_above_half, Matrix_plot = matrix_plot, Cluster_plot = cluster_plot)
-    
+
 }
 
 
