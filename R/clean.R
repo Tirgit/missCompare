@@ -27,7 +27,10 @@
 #' # variables exceeding the pre-defined removal threshold (PPG) removed
 #'
 #' # setting very conservative removal thresholds
-#' cleaned <- clean(clindata_miss, var_removal_threshold = 0.10, ind_removal_threshold = 0.9, missingness_coding = -9)
+#' cleaned <- clean(clindata_miss,
+#'                  var_removal_threshold = 0.10,
+#'                  ind_removal_threshold = 0.9,
+#'                  missingness_coding = -9)
 #' # factors (sex, education) converted to numeric
 #' # variables exceeding the custom set conservative removal threshold (PPG, HDL) removed
 #' }

@@ -35,7 +35,10 @@ This function uses the original dataframe and extracts descriptive meta-data.
 }
 \examples{
 \dontrun{
-metadata <- get_data(df)
+# extract cleaned dataframe
+df_miss <- cleaned$Dataframe_clean
+
+metadata <- get_data(df_miss)
 metadata <- get_data(cleaned$Dataframe_clean, matrixplot_sort = F)
 }
 

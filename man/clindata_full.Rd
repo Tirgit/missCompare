@@ -26,7 +26,7 @@ The dataset is simulated and undergone manual configuration.
 clindata_full
 }
 \description{
-\code{\link{clindata_fill}} is a custom made clinical dataset that aimed to resemble a real-life clinical dataset.
+\code{\link{clindata_full}} is a custom made clinical dataset that aimed to resemble a real-life clinical dataset.
 The correlations between variables, the data means, SDs and ranges are realistic, but
 the dataset is constructed by simulations and manual data input. The dataset contains
 no missingess.

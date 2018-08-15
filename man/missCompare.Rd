@@ -19,8 +19,9 @@ framwork and help you better understand missing data in your dataset.
 }
 \details{
 \tabular{ll}{
-Package \tab missCompare\cr
-Type \tab Package\cr
+Package: \tab missCompare\cr
+Depends: \tab R (>= 3.5.0)\cr
+Type: \tab Package\cr
 Version:  \tab 0.1.0\cr
 Date:  \tab 2018-05-03\cr
 License:  \tab CC0\cr
