@@ -69,7 +69,7 @@ clean <- function(X, var_removal_threshold = 0.5, ind_removal_threshold = 1, mis
         clean_df <- new_df[-which(missfrac_per_ind >= ind_removal_threshold), ] else clean_df <- new_df
 
     if (length(inds_above_thres) != 0)
-        message(paste(length(inds_above_thres), "individual(s) removed due to exceeding the pre-defined removal threshold (>",
+        message(paste(length(inds_above_thres), " individual(s) removed due to exceeding the pre-defined removal threshold (>",
             ind_removal_threshold * 100, "%) for missingness.", sep = ""))
 
     list(Dataframe_clean = clean_df)

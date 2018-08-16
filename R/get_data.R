@@ -54,7 +54,7 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
     missfrac_per_var <- colMeans(is.na(X))
     na_per_df <- sum(is.na(X))
     na_per_var <- sapply(X, function(x) sum(length(which(is.na(x)))))
-    mdpat <- mice::md.pattern(X)
+    mdpat <- mice::md.pattern(X, plot = F)
 
     if (plot_transform == T)
         X_update <- as.data.frame(scale(X)) else X_update <- X
