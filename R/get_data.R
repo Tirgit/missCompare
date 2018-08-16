@@ -108,9 +108,3 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
 
 }
 
-
-
-
-
-
-

@@ -43,9 +43,9 @@
 
 ### FUNCTION
 MNAR <- function(X_hat, missfrac_per_var, window = 0.5) {
-    
+
     rownames(X_hat) <- 1:nrow(X_hat)
-    
+
     for (i in 1:length(missfrac_per_var)) {
         window_start <- stats::runif(1, min = 0, max = 1 - window - missfrac_per_var[i])
         window_end <- window_start + missfrac_per_var[i] + window
@@ -54,23 +54,18 @@ MNAR <- function(X_hat, missfrac_per_var, window = 0.5) {
         to_NA <- sample(rownames(X_hat)[ind], missfrac_per_var[i] * nrow(X_hat))
         X_hat[, i][to_NA] <- NA
     }
-    
+
     # reorder and remove rows with full missingness
     X_hat <- X_hat[order(as.numeric(row.names(X_hat))), ]
-    
+
     missfrac_per_ind <- rowMeans(is.na(X_hat))
     inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
-    if (length(inds_above_thres) != 0) 
+    if (length(inds_above_thres) != 0)
         X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
-    
+
     matrix_summary <- summary(X_hat)
-    
+
     list(MNAR_matrix = X_hat, Summary = matrix_summary)
-    
+
 }
-
-
-
-### LAB res <- MNAR(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-### matrixplot(res$MNAR_matrix, interactive = F, col= 'red') hist(res$MNAR_matrix[,4])
 

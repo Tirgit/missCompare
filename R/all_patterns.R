@@ -47,31 +47,23 @@
 
 ### FUNCTION
 all_patterns <- function(X_hat, missfrac_per_var, assumed_pattern = NA, window = 0.5) {
-    
+
     MCAR <- MCAR(X_hat, missfrac_per_var)
     MAR <- MAR(X_hat, missfrac_per_var, window = window)
     MNAR <- MNAR(X_hat, missfrac_per_var, window = window)
-    
-    if (!is.na(assumed_pattern[1]) & (length(assumed_pattern) != length(missfrac_per_var))) 
-        stop(paste("The length of argument missfrac_per_var (", length(missfrac_per_var), ") and argument assumed_pattern (", 
-            length(assumed_pattern), ") do not match. Please double-check the arguments of the function.", 
+
+    if (!is.na(assumed_pattern[1]) & (length(assumed_pattern) != length(missfrac_per_var)))
+        stop(paste("The length of argument missfrac_per_var (", length(missfrac_per_var), ") and argument assumed_pattern (",
+            length(assumed_pattern), ") do not match. Please double-check the arguments of the function.",
             sep = ""))
-    
-    
-    if (!is.na(assumed_pattern[1])) 
+
+
+    if (!is.na(assumed_pattern[1]))
         MAP <- MAP(X_hat, missfrac_per_var, assumed_pattern, window = window)
-    
-    if (!is.na(assumed_pattern[1])) 
-        list(MCAR_matrix = MCAR$MCAR_matrix, MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix, 
+
+    if (!is.na(assumed_pattern[1]))
+        list(MCAR_matrix = MCAR$MCAR_matrix, MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix,
             MAP_matrix = MAP$MAP_matrix) else list(MCAR_matrix = MCAR$MCAR_matrix, MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix)
-    
+
 }
-
-
-### LAB res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable,
-### window=0.1)
-
-# res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable,
-# assumed_pattern = c('MAR', 'MCAR', 'MCAR', 'MAR', 'MNAR', 'MCAR', 'MAR', 'MAR', 'MNAR',
-# 'MNAR', 'MAR', 'MAR', 'MNAR', 'MNAR'))
 
