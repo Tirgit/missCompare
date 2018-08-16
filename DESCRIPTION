@@ -44,4 +44,7 @@ Imports:
   tidyr,
   VIM
 Suggests: 
-  testthat
+    testthat,
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

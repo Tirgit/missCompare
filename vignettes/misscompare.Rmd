@@ -1,0 +1,63 @@
+---
+title: "Introduction to missCompare"
+author: "Tibor V. Varga"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r setup, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+
+Section of missing data imputation in general.
+
+
+- xxxx
+- yyyy
+
+## Description of data: clindata_full and clindata_miss
+
+To walk you through the missCompare missing data imputation comparison pipeline, the authors created
+the `missCompare::clindata_full` and `missCompare::clindata_miss` dataframes. As the names suggest, while clindata_miss contains missing data, clindata_full does not. You can load them into your workspace by:
+
+```
+data("clindata_full")
+data("clindata_miss")
+```
+
+The data is created by the authors with the purpose of generating a dataset that resembles a real-life
+dataset with variables generally available in realistic clinicial epidemiology datasets. The datasets
+have "believable" variable means, distributions, correlations and in clindata_miss, realistic
+missing data patterns. You can find further information on these datasets and the variables within
+using `?clindata_full` and `?clindata_miss`.
+
+
+
+## The missCompare pipeline
+
+Note the various macros 
+
+## Cleaning and getting to know the data
+
+XXX
+
+## Simulating a complete dataset assessing algorithms
+
+## Validating best performing algorithms
+
+## Imputing your dataset
+
+## Post imputation diagnostics
+
+
+
+
+
