@@ -16,7 +16,8 @@
 #' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
 #' @param n.iter Number of iterations to perform with default 10.
 #' @param assumed_pattern Vector of missingess types (must be same length as missingness fraction per variable) (optional parameter)
-
+#' @param window Window (with default 0.5). This regulates the 'extremity' of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)
+#'
 #' @name impute_simulated
 #'
 #' @return
@@ -50,7 +51,7 @@
 
 
 # FUNCTION
-impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10, assumed_pattern = NA) {
+impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10, assumed_pattern = NA, window = 0.5) {
 
     if (!is.na(assumed_pattern))
         collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 5)) else collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 4))
@@ -67,7 +68,7 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
             "Amelia II", "missForest", "Hmisc aregImpute", "VIM kNN")
 
         sim <- simulate(rownum, colnum, cormat)
-        res <- all_patterns(sim$Simulated_matrix, missfrac_per_var, assumed_pattern)
+        res <- all_patterns(sim$Simulated_matrix, missfrac_per_var, assumed_pattern, window)
 
         collect_res[((16 * (i - 1)) + 1), 2:ncol(collect_res)] <- as.data.frame(test_random_imp(sim$Simulated_matrix,
             list = res))

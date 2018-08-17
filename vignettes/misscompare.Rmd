@@ -112,9 +112,56 @@ metadata$Cluster_plot
 ```
 
 
-
-
 ## Simulating a complete dataset and assessing algorithms
+
+Having learned the characteristics of your data, the next step is to assemble a framework in which you can test the performance of various missing data algorithms on simulated data. This can be achieved in one step using `missCompare::impute_simulated()`, but let's look under the hood and see what this function does.
+
+First, `missCompare::simulate()` will create a dataset that resembles your original dataframe, but with no missing data. The dimensions of the simulated dataframe, the variable names and all correlations between variables will match the original data - essentially, the only major difference between the simulated dataset and your original data is that here, all variables are normally distributed with a custom set mean and standard deviation. Let's observe:
+
+```{r eval = FALSE} 
+simulated <- missCompare::simulate(rownum = metadata$Rows,
+                                  colnum = metadata$Columns,
+                                  cormat = metadata$Corr_matrix,
+                                  meanval = 0,
+                                  sdval = 1)
+```
+
+Note how the first three arguments are elements of the output list (`metadata`) from the previous function `missCompare::get_data()`.
+
+The output `simulated` is a list, where the first item is the simulated matrix and the next two objects are samples from the correlation matrix of the original and the simulated data.
+
+With this done, missing data can be spiked in in the simulated data using various patterns (MCAR, MAR, MNAR and MAP). This will be done with respect to the missing data fraction for each variable in the original dataframe.
+
+MCAR missingness is simple, NAs are spiked in randomly:
+```{r eval = FALSE} 
+missCompare::MCAR(X_hat = simulated$Simulated_matrix,
+                  missfrac_per_var = metadata$Fraction_missingness_per_variable)
+```
+
+MAR and MNAR missingness follow similar logic. With MNAR, NAs are spiked in based on the variable's own values, while with MAR, NAs are spiked in based on another variable's values (univariate). In both cases, a window defines how extreme the missing data pattern will be. With smaller windows, data will be set to missing from values closer to each other - for more information, there is a detailed description at `?MAR` and `?MNAR`.
+```{r eval = FALSE} 
+missCompare::MAR(X_hat = simulated$Simulated_matrix,
+                  missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                  window = 0.5)
+
+missCompare::MNAR(X_hat = simulated$Simulated_matrix,
+                  missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                  window = 0.5)
+```
+
+MAP missingness is a possible combination of any of the previous three missing data pattern. You can define what pattern you assume per variable. In our case, let's say that all variables are missing randomly, except for education (the last variable), which is missing not at random. This can be defined as:
+```{r eval = FALSE} 
+missCompare::MAP(X_hat = simulated$Simulated_matrix,
+                  missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                  assumed_pattern = c(rep("MCAR", 10), "MNAR")
+                  window = 0.5)
+```
+
+What `missCompare::impute_simulated()` does in one step, is to: 
+1. simulate the dataset with no missing values
+2. spike in NAs in MCAR, MAR, MNAR and - if you define a custom pattern - MAP patterns
+3. impute missing data using a curated list of 16 algorithms
+4. evaluate imputation accuracy by calculating RMSE values between the imputed and the original datapoints
 
 ## Validating best performing algorithms
 
