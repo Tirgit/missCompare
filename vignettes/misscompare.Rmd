@@ -18,12 +18,16 @@ devtools::load_all()
 ```
 
 
-Section of missing data imputation in general.
+If you work with data, you have almost certainly encountered issues regarding missing data. The most commonly used statistical methods often only work with complete sets of observations and it can be a huge pain if you can only utilize a fraction of your data because of missing datapoints here and there. Indeed, just 5\% random missing data in a huge dataset can dramatically reduce the number of complete observations to as low as 25\% of the original number of observations! Scary! Thankfully, there are numerous algorithms that can help you tackle this issue, but often, the most commonly used "algorithms", such as mean and median imputation, offer really bad solutions and sophisticated algorithms often need a lot of consideration. The authors wrote the missCompare package to help you through your missing data problem. The initial hypothesis of the authors was that for datasets with different parameters (size, distributions, correlations, etc.) will benefit differently from various missing data imputation algorithms.
 
-* xxxx
-* yyyy
+This tutorial will navigate you through the missCompare package and its functions. So... let's start.
 
-Now, let's begin by installing and loading the missCompare package!
+First, let's begin by installing and loading the missCompare package!
+
+```{r eval = FALSE}
+install.packages("missCompare")
+library(missCompare)
+```
 
 
 ## Description of data: *clindata_full* and *clindata_miss*
@@ -234,9 +238,9 @@ The 10 imputed dataframes will be available under `imputed$missForest_imputation
 
 Let's see what happens when you similarly define 10 copies, but choose a non-probabilistic method - **Mean imputation** in this case.
 
-```{r eval = FALSE} 
+```{r eval = TRUE, message = FALSE} 
 imputed <- missCompare::impute_data(cleaned$Dataframe_clean, 
-                         scale = F, 
+                         scale = T, 
                          n.iter = 10, 
                          sel_method = c(3)) # 3 is the code for mean imputation
 ```
@@ -247,7 +251,40 @@ Well done! You have imputed your data. Almost there, only one step remains - to 
 
 ## Post imputation diagnostics
 
+The function `missCompare::post_imp_diag()` will help you assess how the imputation affected important parameters of your data.
 
+Let's run this with the results of the **Mean imputation algorithmv (`imputed$mean_imputation[[1]]`):
 
+```{r eval = TRUE} 
+diag <- missCompare::post_imp_diag(cleaned$Dataframe_clean,
+                                   imputed$mean_imputation[[1]], 
+                                   scale=F, 
+                                   n.boot = 5)
+```
 
+The `diag` list contains several interesting assessments. The `Densityplots` and `Boxplots` lists should give an idea on the distributions of the original and the imputed values. Perhaps the limitations of mean imputation are the most apparent on these plots. For example, let's inspect HDL levels on this boxplot:
 
+```{r echo = FALSE, fig.width=6, fig.height=3} 
+diag$Boxplots$HDL
+```
+
+The `Barcharts` list only contains elements if there were factors in the original data. The `Statistics` list shows the mean and SD values for the original and imputed values per variables and calculates Welch's t test on the two groups of values.
+
+The `Variable_clusters_orig` and `Variable_clusters_imp` plots visualize the clusters of variables before and after the imputation. The clusters should not change too much!
+
+```{r echo = FALSE, fig.width=6, fig.height=3} 
+diag$Variable_clusters_imp
+```
+
+Finally, the `Correlation_plot` shows bootstrapped correlation coefficients from the original data and the imputed data. You can specify how many iterations you would like to run to obtain bootstrapped correlation coefficients and 95\% confidence intervals using the `n.boot` argument in the function. In this vignette this is set to 5, which is far too low. The blue line has intercept 0 and slope 1 and  correlation coefficients (represented by the dots and the red line) should align this line as much as possible. With mean and median imputations, the line is often "turned clockwise", with a lower slope than 1 (regression to the mean).
+
+```{r echo = FALSE, fig.width=6, fig.height=3} 
+diag$Correlation_plot
+```
+
+## Closing words
+
+Well done!
+You completed the tutorial and by now, you should ideally have one or more imputed datasets of your data. Awesome job! We hope that you achieved what you were set out to do and you are ready for the next stes in your statistical analysis! Please let us know if you have any issues here -  [missCompare GitHub](https://github.com/Tirgit/missCompare/issues) - or contact the authors if you have any feedback!
+
+ -- authors of missCompare
