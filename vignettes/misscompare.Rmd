@@ -70,10 +70,10 @@ The first step before starting anything imputation related is getting to know yo
 Let's take clindata_miss and run `missCompare::clean()`. In one step, you can achieve multiple cleaning steps:
 
 ```{r eval = TRUE} 
-cleaned <- missCompare::clean(clindata_miss, 
-                  var_removal_threshold = 0.5, 
-                  ind_removal_threshold = 0.8, 
-                  missingness_coding = -9)
+cleaned <- missCompare::clean(clindata_miss,
+                              var_removal_threshold = 0.5, 
+                              ind_removal_threshold = 0.8,
+                              missingness_coding = -9)
 ```
 
 * You can convert all factor variables (sex and education, in this case) to numeric. The function will alert you with a message: **"Variable(s) sex, education converted to numeric."**
@@ -86,9 +86,9 @@ The cleaning function output the results to an R object called `cleaned`. This i
 You will get to know important details of your cleaned dataframe using the following line:
 
 ```{r eval = TRUE} 
-metadata <- missCompare::get_data(cleaned$Dataframe_clean, 
-                                matrixplot_sort = T,
-                                plot_transform = T)
+metadata <- missCompare::get_data(cleaned$Dataframe_clean,
+                                  matrixplot_sort = T,
+                                  plot_transform = T)
 ```
 
 If there are factor variables in the data, a warning will appear: **Warning! Variable(s) sex, education is/are not numeric. Convert this/these variables to numeric using missCompare::clean() and repeat the missCompare::get_data() function until no warnings are shown.**
@@ -120,10 +120,10 @@ First, `missCompare::simulate()` will create a dataset that resembles your origi
 
 ```{r eval = FALSE} 
 simulated <- missCompare::simulate(rownum = metadata$Rows,
-                                  colnum = metadata$Columns,
-                                  cormat = metadata$Corr_matrix,
-                                  meanval = 0,
-                                  sdval = 1)
+                                   colnum = metadata$Columns,
+                                   cormat = metadata$Corr_matrix,
+                                   meanval = 0,
+                                   sdval = 1)
 ```
 
 Note how the first three arguments are elements of the output list (`metadata`) from the previous function `missCompare::get_data()`.
@@ -134,38 +134,116 @@ With this done, missing data can be spiked in in the simulated data using variou
 
 MCAR missingness is simple, NAs are spiked in randomly:
 ```{r eval = FALSE} 
-missCompare::MCAR(X_hat = simulated$Simulated_matrix,
+missCompare::MCAR(simulated$Simulated_matrix,
                   missfrac_per_var = metadata$Fraction_missingness_per_variable)
 ```
 
 MAR and MNAR missingness follow similar logic. With MNAR, NAs are spiked in based on the variable's own values, while with MAR, NAs are spiked in based on another variable's values (univariate). In both cases, a window defines how extreme the missing data pattern will be. With smaller windows, data will be set to missing from values closer to each other - for more information, there is a detailed description at `?MAR` and `?MNAR`.
 ```{r eval = FALSE} 
-missCompare::MAR(X_hat = simulated$Simulated_matrix,
-                  missfrac_per_var = metadata$Fraction_missingness_per_variable,
-                  window = 0.5)
+missCompare::MAR(simulated$Simulated_matrix,
+                 missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                 window = 0.5)
 
-missCompare::MNAR(X_hat = simulated$Simulated_matrix,
+missCompare::MNAR(simulated$Simulated_matrix,
                   missfrac_per_var = metadata$Fraction_missingness_per_variable,
                   window = 0.5)
 ```
 
 MAP missingness is a possible combination of any of the previous three missing data pattern. You can define what pattern you assume per variable. In our case, let's say that all variables are missing randomly, except for education (the last variable), which is missing not at random. This can be defined as:
 ```{r eval = FALSE} 
-missCompare::MAP(X_hat = simulated$Simulated_matrix,
-                  missfrac_per_var = metadata$Fraction_missingness_per_variable,
-                  assumed_pattern = c(rep("MCAR", 10), "MNAR")
-                  window = 0.5)
+missCompare::MAP(simulated$Simulated_matrix,
+                 missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                 assumed_pattern = c(rep("MCAR", 10), "MNAR"),
+                 window = 0.5)
 ```
 
+All patterns can be run with a single line using `missCompare::all_patterns()`.
+
 What `missCompare::impute_simulated()` does in one step, is to: 
-1. simulate the dataset with no missing values
-2. spike in NAs in MCAR, MAR, MNAR and - if you define a custom pattern - MAP patterns
-3. impute missing data using a curated list of 16 algorithms
-4. evaluate imputation accuracy by calculating RMSE values between the imputed and the original datapoints
+1. simulate the dataset with no missing values;
+2. spike in NAs in MCAR, MAR, MNAR and - if you define a custom pattern - MAP patterns;
+3. impute missing data using a curated list of 16 algorithms;
+4. evaluate imputation accuracy by calculating RMSE values between the imputed and the original datapoints.
+
+This can be achieved by a single command! This means you DON'T have to run `missCompare::simulate()`, `missCompare::MCAR()`, `missCompare::MAR()`, `missCompare::MNAR()`, `missCompare::MAP()` or `missCompare::all_patterns()`. The command goes as (note that we defined `assumed_pattern = NA` - the defeault - so MAP pattern will be skipped):
+
+```{r eval = FALSE} 
+missCompare::impute_simulated(rownum = metadata$Rows,
+                              colnum = metadata$Columns, 
+                              cormat = metadata$Corr_matrix, 
+                              missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                              n.iter = 50, 
+                              assumed_pattern = NA, 
+                              window = 0.5)
+```
+
+The `n.iter` argument controls how many times the process will repeat itself (spiking in missing data, imputation and assessment of imputation accuracy, that is).
+
+When this is completed (it can take some time!), you should get some messages stating what are the best performing algorithms for each missingness patterns and a graph that gives you a visual aid on which algorithms perform with the smallest imputation errors. The less the error, the better the imputation accuracy!
+
+```{r echo=FALSE, fig.cap=" ", out.width = '80%'}
+knitr::include_graphics("/Users/med-tv_/Documents/GitHub/missCompare/vignettes/RMSE_plot.pdf")
+```
 
 ## Validating best performing algorithms
 
+From the previous analysis, we learned that **missForest** performs the best with MCAR and MAR patterns, while the **pcaMethods BPCA** method is best performing with MNAR pattern. It is also obvious from the graph and the output statistics that **Random replacement** performs with large errors.
+
+In the next step, you can revert to using your own data and validate these results using `missCompare::impute_data_validate()`. For this, you will need to spike in a very tiny fraction of random missing data in your data. You don't want to over-do the missing data spike-in, as your data already contains missing datapoints, so around 1\%-2\% will do (define this using `spike.in`). 
+
+When defining the validation code, you will have the opportunity to scale and center your data or leave it in its native distribution (define this using `scale`) - while scaling is a must for distance-based methods (such as pcaMethods BPCA or the rest of the PCA methods), such transformation might not be necessary for missForest, for example.
+
+Also, while some of the methods allow factor variables (e.g. missForest or mice), some will not (e.g. PCA based methods) - it is your task here to make sure that the data that you input the validation algorithm is clean. 
+
+When defining the codes here, you can select which algorithms you would like to validate (by defining the argument `sel_method`, you can select all of them, only one of them, or any combinations - see `?impute_data_validate` for numeric coding of methods) and how many interations you would like to run (by defining `n.iter`).
+
+You can also do this validation step in two separate blocks - one for methods that require scaling, one for those without this, etc..
+
+Now, back to our data - as we observed previously, **missForest** and **pcaMethods BPCA** performed the best, while **Random replacement** performed the worst. Let's use all algorithms in the validation step and see whether the results here parallel what we obtained using the simulated data in the previous step:
+
+```{r eval = FALSE} 
+missCompare::impute_data_validate(cleaned$Dataframe_clean,
+                                  scale = T,
+                                  spike.in = 0.01,
+                                  n.iter = 5,
+                                  sel_method = c(1:16))
+```
+
+The plot we obtain looks like this:
+
+```{r echo=FALSE, fig.cap=" ", out.width = '80%'}
+knitr::include_graphics("/Users/med-tv_/Documents/GitHub/missCompare/vignettes/VALID_plot.pdf")
+```
+
+Looks like **missForest** and **pcaMethods BPCA** are indeed one of the best performing algorithms for this data.
+
+There will be situations where the results from the simulated dataset and your own data from the validations step do not perfectly align - this can be due to a number of reasons, e.g. the variables in the simulated data are all numeric and normally distributed, whereas this is not the case in your own data, etc.
+
 ## Imputing your dataset
+
+Hopefully, by now you have a clear(er) idea on which method you would like to use to impute missing data for your dataset - you will be able to do this using `missCompare::impute_data()`. If you completed the validation step, this will be very easy for you, as the codes are very similar here. If you skipped validation, don't worry, it won't be too hard. Let's consider a scenario where you choose **missForest** to impute your data. You do not want to scale your data and you would like to create 10 imputed dataframes in order to set up a multiple imputation framework. Note that setting up a multiple imputation framework is only a viable option with probabilistic models (e.g. you can impute you data with **Mean imputation** a billion times, but the NAs will always be replaced with exacty the same mean values!).
+
+```{r eval = FALSE} 
+imputed <- missCompare::impute_data(cleaned$Dataframe_clean, 
+                         scale = F, 
+                         n.iter = 10, 
+                         sel_method = c(14)) # 14 is the code for missForest
+```
+
+The 10 imputed dataframes will be available under `imputed$missForest_imputation[[1]]`, `imputed$missForest_imputation[[2]]`, `imputed$missForest_imputation[[3]]`, etc..., while all the other elements in the list will be empty (e.g. nothing in `imputed$median_imputation`).
+
+Let's see what happens when you similarly define 10 copies, but choose a non-probabilistic method - **Mean imputation** in this case.
+
+```{r eval = FALSE} 
+imputed <- missCompare::impute_data(cleaned$Dataframe_clean, 
+                         scale = F, 
+                         n.iter = 10, 
+                         sel_method = c(3)) # 3 is the code for mean imputation
+```
+
+You will see that the algorithm runs only 1 iteration for **Mean imputation**, and there is only one object, under `imputed$mean_imputation[[1]]`. There are no `imputed$mean_imputation[[2]]`, `imputed$mean_imputation[[3]]`, etc... created at all.
+
+Well done! You have imputed your data. Almost there, only one step remains - to assess how the imputation affected your dataset.
 
 ## Post imputation diagnostics
 

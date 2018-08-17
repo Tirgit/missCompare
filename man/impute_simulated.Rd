@@ -5,7 +5,7 @@
 \title{Imputation algorithm tester on simulated data}
 \usage{
 impute_simulated(rownum, colnum, cormat, missfrac_per_var, n.iter = 10,
-  assumed_pattern = NA)
+  assumed_pattern = NA, window = 0.5)
 }
 \arguments{
 \item{rownum}{Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)}
@@ -19,6 +19,8 @@ impute_simulated(rownum, colnum, cormat, missfrac_per_var, n.iter = 10,
 \item{n.iter}{Number of iterations to perform with default 10.}
 
 \item{assumed_pattern}{Vector of missingess types (must be same length as missingness fraction per variable) (optional parameter)}
+
+\item{window}{Window (with default 0.5). This regulates the 'extremity' of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)}
 }
 \value{
 \item{Imputation_RMSE}{Raw RMSE values per method, per missingness pattern, per iteration)}
