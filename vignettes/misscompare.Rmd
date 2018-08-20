@@ -198,11 +198,11 @@ In the next step, you can revert to using your own data and validate these resul
 
 When defining the validation code, you will have the opportunity to scale and center your data or leave it in its native distribution (define this using `scale`) - while scaling is a must for distance-based methods (such as pcaMethods BPCA or the rest of the PCA methods), such transformation might not be necessary for missForest, for example.
 
-Also, while some of the methods allow factor variables (e.g. missForest or mice), some will not (e.g. PCA based methods) - it is your task here to make sure that the data that you input the validation algorithm is clean. 
+Also, while some of the methods allow factor variables (e.g. missForest or mice), some will not (e.g. PCA based methods) - it is your task here to make sure that the data that you input the validation algorithm is appropriate and clean. 
 
 When defining the codes here, you can select which algorithms you would like to validate (by defining the argument `sel_method`, you can select all of them, only one of them, or any combinations - see `?impute_data_validate` for numeric coding of methods) and how many interations you would like to run (by defining `n.iter`).
 
-You can also do this validation step in two separate blocks - one for methods that require scaling, one for those without this, etc..
+If you want, you can also do this validation step in two separate blocks - one for methods that require scaling, one for those without this, etc..
 
 Now, back to our data - as we observed previously, **missForest** and **pcaMethods BPCA** performed the best, while **Random replacement** performed the worst. Let's use all algorithms in the validation step and see whether the results here parallel what we obtained using the simulated data in the previous step:
 
@@ -226,7 +226,7 @@ There will be situations where the results from the simulated dataset and your o
 
 ## Imputing your dataset
 
-Hopefully, by now you have a clear(er) idea on which method you would like to use to impute missing data for your dataset - you will be able to do this using `missCompare::impute_data()`. If you completed the validation step, this will be very easy for you, as the codes are very similar here. If you skipped validation, don't worry, it won't be too hard. Let's consider a scenario where you choose **missForest** to impute your data. You do not want to scale your data and you would like to create 10 imputed dataframes in order to set up a multiple imputation framework. Note that setting up a multiple imputation framework is only a viable option with probabilistic models (e.g. you can impute you data with **Mean imputation** a billion times, but the NAs will always be replaced with exacty the same mean values!).
+Hopefully, by now you have a clear(er) idea on which method you would like to use to impute missing data for your dataset - you will be able to do this using `missCompare::impute_data()`. If you completed the validation step, this will be very easy for you, as the codes are very similar here. If you skipped validation, don't worry, it won't be too hard. Let's consider a scenario where you choose **missForest** to impute your data. You do not want to scale your data and you would like to create 10 imputed dataframes in order to set up a multiple imputation framework. Note, that setting up a multiple imputation framework is only a viable option with probabilistic models (e.g. you can impute you data with **Mean imputation** a billion times, but the NAs will always be replaced with exacty the same mean values!).
 
 ```{r eval = FALSE} 
 imputed <- missCompare::impute_data(cleaned$Dataframe_clean, 
@@ -254,7 +254,7 @@ Well done! You have imputed your data. Almost there, only one step remains - to 
 
 The function `missCompare::post_imp_diag()` will help you assess how the imputation affected important parameters of your data.
 
-Let's run this with the results of the **Mean imputation algorithmv (`imputed$mean_imputation[[1]]`):
+Let's run this with the results of the **Mean imputation** algorithm (`imputed$mean_imputation[[1]]`):
 
 ```{r eval = TRUE} 
 diag <- missCompare::post_imp_diag(cleaned$Dataframe_clean,
@@ -269,7 +269,9 @@ The `diag` list contains several interesting assessments. The `Densityplots` and
 diag$Boxplots$HDL
 ```
 
-The `Barcharts` list only contains elements if there were factors in the original data. The `Statistics` list shows the mean and SD values for the original and imputed values per variables and calculates Welch's t test on the two groups of values.
+The `Barcharts` list only contains elements if there were factors in the original data. 
+
+The `Statistics` list shows the mean and SD values for the original and imputed values per variables and calculates Welch's t test on the two groups of values.
 
 The `Variable_clusters_orig` and `Variable_clusters_imp` plots visualize the clusters of variables before and after the imputation. The clusters should not change too much!
 
