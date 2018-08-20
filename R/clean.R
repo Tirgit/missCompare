@@ -12,7 +12,7 @@
 #' @param X Original dataframe with samples in rows and variables as columns
 #' @param var_removal_threshold Variable removal threshold with default 0.5 (range between 0 and 1). Variables (columns) above this missingness fraction will be removed during the cleaning process
 #' @param ind_removal_threshold Individual removal threshold with default 1 (range between 0 and 1). Individuals (rows) above this missingness fraction will be removed during the cleaning process
-#' @param missingness_coding Non NA coding in original dataframe that should be changed to NA (e.g. -9).
+#' @param missingness_coding Non NA coding in original dataframe that should be changed to NA (e.g. -9). Can take a single value (define by: missingness_coding = -9) or multiple values (define by: missingness_coding = c(-9, -99, -999))
 #'
 #' @name clean
 #'
@@ -50,7 +50,7 @@ clean <- function(X, var_removal_threshold = 0.5, ind_removal_threshold = 1, mis
             sep = ""))
 
     # convert to NA
-    X[X == missingness_coding] <- NA
+    X <- as.data.frame(lapply(X, function(x) replace(x,x %in% missingness_coding, NA)))
 
     # remove variables above missingness threshold
     missfrac_per_var <- colMeans(is.na(X))

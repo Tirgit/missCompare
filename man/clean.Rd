@@ -14,7 +14,7 @@ clean(X, var_removal_threshold = 0.5, ind_removal_threshold = 1,
 
 \item{ind_removal_threshold}{Individual removal threshold with default 1 (range between 0 and 1). Individuals (rows) above this missingness fraction will be removed during the cleaning process}
 
-\item{missingness_coding}{Non NA coding in original dataframe that should be changed to NA (e.g. -9).}
+\item{missingness_coding}{Non NA coding in original dataframe that should be changed to NA (e.g. -9). Can take a single value (define by: missingness_coding = -9) or multiple values (define by: missingness_coding = c(-9, -99, -999))}
 }
 \value{
 \item{Dataframe_clean}{Clean dataset with NAs as missing values and rows/columns above the pre-specified missingness thresholds removed}
