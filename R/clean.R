@@ -7,9 +7,13 @@
 #' @details
 #' For better imputation performance, a good quality dataframe is needed. Variables and samples with very high
 #' missingness rates might negatively impact missing data imputation algorithms. This function cleans the original
-#' dataframe by removing rows (samples) and columns (variables) above pre-specified thresholds.
+#' dataframe by removing rows (samples) and columns (variables) above pre-specified thresholds. The function
+#' will also convert any strangely coded missing data to NAs. Note that all non numeric variables will
+#' be converted or coerced to numeric variables - you will receive a message when factors are converted,
+#' but a warning when character variables are coerced to numeric.
 #'
 #' @param X Original dataframe with samples in rows and variables as columns
+#' @param var_remove Variables to remove (e.g. ID). Define by character vector, e.g. c("ID", "character_variable")
 #' @param var_removal_threshold Variable removal threshold with default 0.5 (range between 0 and 1). Variables (columns) above this missingness fraction will be removed during the cleaning process
 #' @param ind_removal_threshold Individual removal threshold with default 1 (range between 0 and 1). Individuals (rows) above this missingness fraction will be removed during the cleaning process
 #' @param missingness_coding Non NA coding in original dataframe that should be changed to NA (e.g. -9). Can take a single value (define by: missingness_coding = -9) or multiple values (define by: missingness_coding = c(-9, -99, -999))
@@ -39,7 +43,10 @@
 
 
 # FUNCTION
-clean <- function(X, var_removal_threshold = 0.5, ind_removal_threshold = 1, missingness_coding = NA) {
+clean <- function(X, var_remove = NULL, var_removal_threshold = 0.5, ind_removal_threshold = 1, missingness_coding = NA) {
+
+    # remove undesired variables
+    X[var_remove] <- NULL
 
     # convert all variables to numeric
     vars_non_num <- names(X)[!sapply(X, is.numeric)]

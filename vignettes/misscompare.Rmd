@@ -7,6 +7,7 @@ vignette: >
   %\VignetteIndexEntry{missCompare}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteDepends{devtools}
 ---
 
 ```{r setup, include = FALSE}
