@@ -3,8 +3,8 @@ Type: Package
 Title: missCompare - Missing Data Imputation Made Simple
 Version: 0.1.0
 Authors@R: c(
-            person("Tibor", "V. Varga", email = "tirgit@hotmail.com",role = c("aut", "cre")),
-            person("David", "Westergaard", email = "david.westergaard@cpr.ku.dk",role = c("aut")))
+            person("Tibor", "V. Varga", email = "tirgit@hotmail.com",role = c("aut", "cre"),comment = c(ORCID = "0000-0002-2383-699X")),
+            person("David", "Westergaard", email = "david.westergaard@cpr.ku.dk",role = c("aut"),comment = c(ORCID = "0000-0003-0128-8432")))
 Maintainer: Tibor V. Varga <tibor.varga@cpr.ku.dk>
 Description: The missCompare package offers a convenient pipeline to test and compare various missing data
   imputation algoritms on simulated and real data. The central assumption behind missCompare is that structurally
