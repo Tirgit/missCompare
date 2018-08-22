@@ -1,5 +1,14 @@
 #  .travis.yml file
 
 language: r
-use_bioc: true
+sudo: false
+dist: trusty
 cache: packages
+use_bioc: true
+bioc_required: true
+
+jobs:
+  include:
+  - r: 3.5
+
+

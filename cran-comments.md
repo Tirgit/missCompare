@@ -1,6 +1,6 @@
 ## Test environments
 * local OS X install, R 3.5.1        
-* ubuntu 12.04 (on travis-ci), R 3.5.1    
+* ubuntu 14.04 (on travis-ci), R 3.5.1    
 * win-builder (devel and release)   
 
 ## R CMD check results
@@ -11,7 +11,7 @@ If, for instance, NOTEs were generated in a function for **x**, **y** and **z**,
 these were defined inside a ggplot() function as column names, these issues were eliminated by adding lines:     
 x <- y <- y <- NULL    
 To the functions before calling ggplot().   
-The authors are aware that these lines do not have functional relevance in the functions,   but they strived to eliminate all NOTEs during the process, as suggested by various sources.
+The authors are aware that these lines do not have functional relevance in the functions, but they strived to eliminate all NOTEs during the process, as suggested by various sources.
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.    
