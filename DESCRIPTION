@@ -15,7 +15,7 @@ Description: The missCompare package offers a convenient pipeline to test and co
   missCompare will also impute your real-life dataset for you after the selection of the best performing algorithm
   in the simulations. The package also provides various post-imputation diagnostics and visualizations to help you 
   assess imputation performance.    
-License: CC0
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 RoxygenNote: 6.1.0
