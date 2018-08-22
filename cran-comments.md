@@ -1,5 +1,6 @@
 ## Test environments
-* local OS X install, R 3.3.2    
+* local OS X install, R 3.5.1        
+* ubuntu 12.04 (on travis-ci), R 3.5.1    
 * win-builder (devel and release)   
 
 ## R CMD check results
@@ -13,4 +14,4 @@ To the functions before calling ggplot().
 The authors are aware that these lines do not have functional relevance in the functions,   but they strived to eliminate all NOTEs during the process, as suggested by various sources.
 
 ## Downstream dependencies
-There are currently no downstream dependencies for this package.
+There are currently no downstream dependencies for this package.    

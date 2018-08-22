@@ -1,4 +1,5 @@
 #  .travis.yml file
 
 language: r
+use_bioc: true
 cache: packages
