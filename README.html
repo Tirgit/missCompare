@@ -205,36 +205,101 @@ hljs.initHighlightingOnLoad();
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
-<h1>missCompare</h1>
+<h1>Overview of missCompare</h1>
 
-<p>This repository contains the missCompare R package, a pipeline for missing data imputation.</p>
+<p><strong>missCompare</strong> is a missing data imputation pipeline that will guide you through your missing data problem. A range of functions will help you select what could be the most ideal algorithm for your data and provide an easy way to impute missing datapoints in your dataset.    </p>
+
+<h2>The missCompare pipeline</h2>
+
+<ol>
+<li><strong>Cleaning your data</strong> using <code>missCompare::clean()</code></li>
+<li><strong>Extracting information</strong> on dimensions, missingness, correlations and variables, plotting
+missing data using <code>missCompare::get_data()</code></li>
+<li><strong>Imputation - simulated data</strong>:
+
+<ul>
+<li>simulating full data with no missingness using metadata from the previous step (resembling your original data) using <code>missCompare::simulated()</code></li>
+<li>spiking in missing data in distinct missing data patterns using <code>missCompare::all_patterns()</code>. These patterns are:</li>
+<li>missing completely at random (MCAR) - <code>missCompare::MCAR()</code> - missing data occurence random</li>
+<li>missing at random (MAR) - <code>missCompare::MAR()</code> - missing data occurence correlates with other variables&#39; values (univariate solution in missCompare)</li>
+<li>missing not at random (MNAR) - <code>missCompare::MNAR()</code> - missing data occurence correlates with variables&#39; own values</li>
+<li>missing in assumed pattern (MAP) - <code>missCompare::MAP()</code> - a combination of the previous three, where the user can define a pattern per variable</li>
+<li>imputing missing data, obtaining imputation accuracy (root mean squared errors - RMSE) per method and plotting results using <code>missCompare::impute_simulated()</code></li>
+</ul></li>
+<li><strong>Imputation - validation</strong> - After the previous step, you will have a general idea on what are the best performing algorithms for your data structure (size, degree of correlation between variables). With <code>missCompare::impute_data_validate()</code> you can use your original data and spike in a tiny fraction of missing data, impute and check imputation accuracy on that tiny fraction and validate that the best performing algorithms from the previous step are indeed good to work with.</li>
+<li><strong>Imputating your data</strong> - Here you can impute your original data with your chosen algorithm(s) using <code>missCompare::impute_data()</code>.</li>
+<li><strong>Post imputation diagnostics</strong> will give an informative assessment on how the imputation changed your data structure (e.g. variable means, distributions, correlations). The function here is <code>missCompare::post_imp_diag()</code>.</li>
+</ol>
 
 <h2>Installation</h2>
 
 <p>You can install the released version of missCompare from <a href="https://CRAN.R-project.org">CRAN</a> with:</p>
 
 <pre><code class="r">install.packages(&quot;missCompare&quot;)
-library(missCompare)
 </code></pre>
 
-<h2>Framework</h2>
+<h2>Usage</h2>
 
-<p>In the framework the following structure is implemented:</p>
+<h4>Loading library and data</h4>
 
-<ol>
-<li>Cleaning and visualization of data</li>
-<li>Extracting the characteristics of the data</li>
-<li>Simulating random data with no missingness based on the original data characteristics</li>
-<li>Spiking in missingness (based on original missingness structure) in four patterns (missing completely at random [MCAR], missing at random [MAR], missing not at random [MNAR] and optionally, missing in an assumed pattern [MAP])</li>
-<li>Utilizing a curated list of missing data imputation methods (n=16)</li>
-<li>Calculating RMSE between the indexed original values and imputed values for each missingness patterns and imputation methods</li>
-<li>Repeating 4.-5.-6. iteratively <em>n</em> times</li>
-<li>Calculating mean RMSE and 95% CIs for each missingness patterns and imputation methods, visualizing and interpreting results and informing the user on best performing methods.</li>
-<li>Offering a validation framework in which the user may spike in a small number of missing
-data in their original data and perform a similar pipeline of selected missing data imputation algorithms and validate best performing methods.<br/></li>
-<li>Imputation of the original dataset using a selected method/selected methods</li>
-<li>Performing post-imputation diagnostics</li>
-</ol>
+<pre><code class="r">library(missCompare)
+data(&quot;clindata_miss&quot;)
+</code></pre>
+
+<h4>Cleaning</h4>
+
+<pre><code class="r">cleaned &lt;- missCompare::clean(clindata_miss,
+                              var_removal_threshold = 0.5, 
+                              ind_removal_threshold = 1,
+                              missingness_coding = -9)
+</code></pre>
+
+<h4>Extracting data</h4>
+
+<pre><code class="r">metadata &lt;- missCompare::get_data(cleaned$Dataframe_clean,
+                                  matrixplot_sort = T,
+                                  plot_transform = T)
+</code></pre>
+
+<h4>Imputation - simulation framework</h4>
+
+<pre><code class="r">missCompare::impute_simulated(rownum = metadata$Rows,
+                              colnum = metadata$Columns, 
+                              cormat = metadata$Corr_matrix, 
+                              missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                              n.iter = 50, 
+                              assumed_pattern = NA, 
+                              window = 0.5)
+</code></pre>
+
+<h4>Imputation - validation</h4>
+
+<pre><code class="r">missCompare::impute_data_validate(cleaned$Dataframe_clean,
+                                  scale = T,
+                                  spike.in = 0.01,
+                                  n.iter = 50,
+                                  sel_method = c(1:16))
+</code></pre>
+
+<h4>Imputation of data</h4>
+
+<pre><code class="r">imputed &lt;- missCompare::impute_data(cleaned$Dataframe_clean, 
+                         scale = T, 
+                         n.iter = 10, 
+                         sel_method = c(1:16))
+</code></pre>
+
+<h4>Post imputation diagnostics</h4>
+
+<pre><code class="r">diag &lt;- missCompare::post_imp_diag(cleaned$Dataframe_clean,
+                                   imputed$mean_imputation[[1]], 
+                                   scale=T, 
+                                   n.boot = 100)
+</code></pre>
+
+<h2>Issues, questions</h2>
+
+<p>In case you need help or advice on your missing data problem or you need help with the missCompare package, please e-mail the authors. If you would like to report an issue, please do so in a reproducible example at the <a href="https://github.com/Tirgit/missCompare/issues">missCompare GitHub</a> page.</p>
 
 </body>
 

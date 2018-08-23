@@ -33,9 +33,26 @@ knitr::opts_chunk$set(
 )
 ```
 
-# missCompare
+# Overview of missCompare
 
-This repository contains the missCompare R package, a pipeline for missing data imputation.
+**missCompare** is a missing data imputation pipeline that will guide you through your missing data problem. A range of functions will help you select what could be the most ideal algorithm for your data and provide an easy way to impute missing datapoints in your dataset.    
+
+## The missCompare pipeline
+
+1. **Cleaning your data** using `missCompare::clean()`
+2. **Extracting information** on dimensions, missingness, correlations and variables, plotting
+missing data using `missCompare::get_data()`
+3. **Imputation - simulated data**:
+  + simulating full data with no missingness using metadata from the previous step (resembling your original data) using `missCompare::simulated()`
+  + spiking in missing data in distinct missing data patterns using `missCompare::all_patterns()`. These patterns are:
+    + missing completely at random (MCAR) - `missCompare::MCAR()` - missing data occurence random
+    + missing at random (MAR) - `missCompare::MAR()` - missing data occurence correlates with other variables' values (univariate solution in missCompare)
+    + missing not at random (MNAR) - `missCompare::MNAR()` - missing data occurence correlates with variables' own values
+    + missing in assumed pattern (MAP) - `missCompare::MAP()` - a combination of the previous three, where the user can define a pattern per variable
+  + imputing missing data, obtaining imputation accuracy (root mean squared errors - RMSE) per method and plotting results using `missCompare::impute_simulated()`
+4. **Imputation - validation** - After the previous step, you will have a general idea on what are the best performing algorithms for your data structure (size, degree of correlation between variables). With `missCompare::impute_data_validate()` you can use your original data and spike in a tiny fraction of missing data, impute and check imputation accuracy on that tiny fraction and validate that the best performing algorithms from the previous step are indeed good to work with.
+5. **Imputating your data** - Here you can impute your original data with your chosen algorithm(s) using `missCompare::impute_data()`.
+6. **Post imputation diagnostics** will give an informative assessment on how the imputation changed your data structure (e.g. variable means, distributions, correlations). The function here is `missCompare::post_imp_diag()`.
 
 ## Installation
 
@@ -43,22 +60,68 @@ You can install the released version of missCompare from [CRAN](https://CRAN.R-p
 
 ``` r
 install.packages("missCompare")
-library(missCompare)
 ```
 
-## Framework
+## Usage
 
-In the framework the following structure is implemented:
+#### Loading library and data
+```{r eval = FALSE} 
+library(missCompare)
+data("clindata_miss")
+```
 
-1. Cleaning and visualization of data
-2. Extracting the characteristics of the data
-3. Simulating random data with no missingness based on the original data characteristics
-4. Spiking in missingness (based on original missingness structure) in four patterns (missing completely at random [MCAR], missing at random [MAR], missing not at random [MNAR] and optionally, missing in an assumed pattern [MAP])
-5. Utilizing a curated list of missing data imputation methods (n=16)
-6. Calculating RMSE between the indexed original values and imputed values for each missingness patterns and imputation methods
-7. Repeating 4.-5.-6. iteratively *n* times
-8. Calculating mean RMSE and 95% CIs for each missingness patterns and imputation methods, visualizing and interpreting results and informing the user on best performing methods.
-9. Offering a validation framework in which the user may spike in a small number of missing
-data in their original data and perform a similar pipeline of selected missing data imputation algorithms and validate best performing methods.   
-10. Imputation of the original dataset using a selected method/selected methods
-11. Performing post-imputation diagnostics
+#### Cleaning
+```{r eval = FALSE} 
+cleaned <- missCompare::clean(clindata_miss,
+                              var_removal_threshold = 0.5, 
+                              ind_removal_threshold = 1,
+                              missingness_coding = -9)
+```
+
+#### Extracting data
+```{r eval = FALSE} 
+metadata <- missCompare::get_data(cleaned$Dataframe_clean,
+                                  matrixplot_sort = T,
+                                  plot_transform = T)
+```
+
+#### Imputation - simulation framework
+```{r eval = FALSE} 
+missCompare::impute_simulated(rownum = metadata$Rows,
+                              colnum = metadata$Columns, 
+                              cormat = metadata$Corr_matrix, 
+                              missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                              n.iter = 50, 
+                              assumed_pattern = NA, 
+                              window = 0.5)
+```
+
+#### Imputation - validation
+```{r eval = FALSE} 
+missCompare::impute_data_validate(cleaned$Dataframe_clean,
+                                  scale = T,
+                                  spike.in = 0.01,
+                                  n.iter = 50,
+                                  sel_method = c(1:16))
+```
+                                  
+#### Imputation of data
+```{r eval = FALSE} 
+imputed <- missCompare::impute_data(cleaned$Dataframe_clean, 
+                         scale = T, 
+                         n.iter = 10, 
+                         sel_method = c(1:16))
+```
+                         
+#### Post imputation diagnostics
+```{r eval = FALSE} 
+diag <- missCompare::post_imp_diag(cleaned$Dataframe_clean,
+                                   imputed$mean_imputation[[1]], 
+                                   scale=T, 
+                                   n.boot = 100)
+```
+
+## Issues, questions
+
+In case you need help or advice on your missing data problem or you need help with the missCompare package, please e-mail the authors. If you would like to report an issue, please do so in a reproducible example at the [missCompare GitHub](https://github.com/Tirgit/missCompare/issues) page.
+
