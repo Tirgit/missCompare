@@ -131,7 +131,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
     # 4 = missMDA Regularized (run if selected)
     if (4 %in% sel_method) {
         print("missMDA regularized imputation - in progress")
-        ncomp <- missMDA::estim_ncpPCA(X)
+        ncomp <- missMDA::estim_ncpPCA(X, ncp.max = ncol(X)-1)
         log_output <- utils::capture.output(res <- missMDA::imputePCA(X, ncp = ncomp$ncp, method = "Regularized"))
         imp_matrix <- res$completeObs
         missMDA_reg_list[[1]] <- as.data.frame(imp_matrix)
@@ -140,7 +140,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
     # 5 = missMDA EM (run if selected)
     if (5 %in% sel_method) {
         print("missMDA EM imputation - in progress")
-        ncomp <- missMDA::estim_ncpPCA(X)
+        ncomp <- missMDA::estim_ncpPCA(X, ncp.max = ncol(X)-1)
         log_output <- utils::capture.output(res <- missMDA::imputePCA(X, ncp = ncomp$ncp, method = "EM"))
         imp_matrix <- res$completeObs
         missMDA_EM_list[[1]] <- as.data.frame(imp_matrix)
@@ -150,7 +150,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
     if (6 %in% sel_method) {
         print("pcaMethods PPCA imputation - in progress")
         for (n in 1:n.iter) {
-            ncomp <- missMDA::estim_ncpPCA(X)
+            ncomp <- missMDA::estim_ncpPCA(X, ncp.max = ncol(X)-1)
             if (ncomp$ncp > 0) {
                 log_output <- utils::capture.output(res <- pcaMethods::pca(X, method = "ppca",
                   center = FALSE, nPcs = ncomp$ncp))
@@ -166,7 +166,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
     # 7 = pcaMethods svdImpute (run if selected)
     if (7 %in% sel_method) {
         print("pcaMethods svdImpute imputation - in progress")
-        ncomp <- missMDA::estim_ncpPCA(X)
+        ncomp <- missMDA::estim_ncpPCA(X, ncp.max = ncol(X)-1)
         if (ncomp$ncp > 0) {
             log_output <- utils::capture.output(res <- pcaMethods::pca(X, method = "svdImpute",
                 center = FALSE, nPcs = ncomp$ncp))
@@ -181,7 +181,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
     # 8 = pcaMethods BPCA (run if selected)
     if (8 %in% sel_method) {
         print("pcaMethods BPCA imputation - in progress")
-        ncomp <- missMDA::estim_ncpPCA(X)
+        ncomp <- missMDA::estim_ncpPCA(X, ncp.max = ncol(X)-1)
         if (ncomp$ncp > 0) {
             log_output <- utils::capture.output(res <- pcaMethods::pca(X, method = "bpca", center = FALSE,
                 nPcs = ncomp$ncp))
@@ -196,7 +196,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
     # 9 = pcaMethods NIPALS (run if selected)
     if (9 %in% sel_method) {
         print("pcaMethods Nipals imputation - in progress")
-        ncomp <- missMDA::estim_ncpPCA(X)
+        ncomp <- missMDA::estim_ncpPCA(X, ncp.max = ncol(X)-1)
         if (ncomp$ncp > 0) {
             log_output <- utils::capture.output(res <- pcaMethods::pca(X, method = "nipals", center = FALSE,
                 nPcs = ncomp$ncp))
@@ -212,7 +212,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
     if (10 %in% sel_method) {
         print("pcaMethods NLPCA imputation - in progress")
         for (n in 1:n.iter) {
-            ncomp <- missMDA::estim_ncpPCA(X)
+            ncomp <- missMDA::estim_ncpPCA(X, ncp.max = ncol(X)-1)
             if (ncomp$ncp > 0) {
                 log_output <- utils::capture.output(res <- pcaMethods::pca(X, method = "nlpca",
                   center = FALSE, nPcs = ncomp$ncp, maxSteps = 100))

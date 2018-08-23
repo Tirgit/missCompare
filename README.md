@@ -2,9 +2,15 @@
 ---
 output: github_document
 ---
+ 
+---
+ 
+ 
+---
+ 
 [![Project Status: WIP – Initial development is in progress, but there has not yet been a stable, usable release suitable for the public.](https://www.repostatus.org/badges/latest/wip.svg)](https://www.repostatus.org/#wip)
-[![Licence](https://img.shields.io/badge/licence-CC0-blue.svg)](http://choosealicense.com/licenses/cc0-1.0/)
-[![Build Status](https://travis-ci.org/Tirgit/missCompare.svg?branch=master)](https://travis-ci.org/Tirgit/missCompare)
+[![Licence](https://img.shields.io/badge/licence-MIT +-lightgrey.svg)](http://choosealicense.com/)
+[![Build Status](https://travis-ci.com/Tirgit/missCompare.svg?branch=master)](https://travis-ci.com/Tirgit/missCompare)
  
 ---
  
@@ -14,7 +20,7 @@ output: github_document
  
 ---
  
-[![Last-changedate](https://img.shields.io/badge/last%20change-2018--08--22-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2018--08--23-yellowgreen.svg)](/commits/master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
