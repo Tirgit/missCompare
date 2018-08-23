@@ -32,6 +32,14 @@ output: github_document
 
 ## The missCompare pipeline
 
+You will find a detailed manual in the missCompare vignette:
+
+```r
+install.packages("missCompare")
+library(missCompare)
+vignette("missCompare")
+```
+
 1. **Cleaning your data** using `missCompare::clean()`
 2. **Extracting information** on dimensions, missingness, correlations and variables, plotting
 missing data using `missCompare::get_data()`
