@@ -5,13 +5,13 @@ Version: 0.1.0
 Authors@R: c(
             person("Tibor", "V. Varga", email = "tirgit@hotmail.com",role = c("aut", "cre"),comment = c(ORCID = "0000-0002-2383-699X")),
             person("David", "Westergaard", email = "david.westergaard@cpr.ku.dk",role = c("aut"),comment = c(ORCID = "0000-0003-0128-8432")))
-Maintainer: Tibor V. Varga <tibor.varga@cpr.ku.dk>
+Maintainer: Tibor V. Varga <tirgit@hotmail.com>
 Description: The missCompare package offers a convenient pipeline to test and compare various missing data
-  imputation algoritms on simulated and real data. The central assumption behind missCompare is that structurally
+  imputation algorithms on simulated and real data. The central assumption behind missCompare is that structurally
   different datasets (e.g. larger datasets with a large number of correlated variables vs. smaller datasets
   with non correlated variables) will benefit differently from different missing data imputation algorithms.
   missCompare takes measurements of your dataset and sets up a sandbox to try a curated list of standard and 
-  sophisticated missing data imputation algorithms and compare them assuming custom missingess patterns.
+  sophisticated missing data imputation algorithms and compare them assuming custom missingness patterns.
   missCompare will also impute your real-life dataset for you after the selection of the best performing algorithm
   in the simulations. The package also provides various post-imputation diagnostics and visualizations to help you 
   assess imputation performance.    
