@@ -189,9 +189,6 @@ When this is completed (it can take some time!), you should get messages stating
 
 [Graph 1 here](https://github.com/Tirgit/missCompare/blob/master/vignettes/RMSE_plot.pdf)    
 
-![Graph 1 here](https://github.com/Tirgit/missCompare/blob/master/vignettes/RMSE_plot.pdf)     
-
-
 ## Validating best performing algorithms
 
 From the previous analysis, we learned that **missForest** performs the best with MCAR and MAR patterns, while the **pcaMethods BPCA** method is best performing with MNAR pattern. It is also obvious from the graph and the output statistics that **Random replacement** performs with large errors.
