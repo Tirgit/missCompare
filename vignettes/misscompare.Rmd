@@ -187,7 +187,10 @@ The `n.iter` argument controls how many times the process will repeat itself (sp
 
 When this is completed (it can take some time!), you should get messages stating what are the best performing algorithms for each missingness patterns and a graph that gives you a visual aid on which algorithms perform with the smallest imputation errors. The less the error, the better the imputation accuracy!
 
-[Graph 1 here](https://github.com/Tirgit/missCompare/blob/master/vignettes/RMSE_plot.pdf)     
+[Graph 1 here](https://github.com/Tirgit/missCompare/blob/master/vignettes/RMSE_plot.pdf)    
+
+![Graph 1 here](https://github.com/Tirgit/missCompare/blob/master/vignettes/RMSE_plot.pdf)     
+
 
 ## Validating best performing algorithms
 
