@@ -31,7 +31,7 @@
 
 
 ### FUNCTION
-MAR <- function(X_hat, MD_pattern, NA_fraction, min_PDM = 10) {
+MCAR <- function(X_hat, MD_pattern, NA_fraction, min_PDM = 10) {
 
   rownames(X_hat) <- 1:nrow(X_hat)
   data_names <- colnames(MD_pattern)
