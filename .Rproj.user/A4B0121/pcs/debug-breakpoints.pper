@@ -782,51 +782,6 @@
                 "type" : 1
             },
             {
-                "editor_line_number" : 12,
-                "editor_state" : 1,
-                "function_name" : "toplevel",
-                "function_steps" : "",
-                "id" : 434,
-                "is_package_breakpoint" : false,
-                "is_pending_debug_completion" : false,
-                "line_number" : 12,
-                "needs_updated_steps" : true,
-                "package_name" : "",
-                "path" : "~/Documents/GitHub/missCompare/tests/testthat/test.get_data.R",
-                "state" : 1,
-                "type" : 1
-            },
-            {
-                "editor_line_number" : 19,
-                "editor_state" : 1,
-                "function_name" : "toplevel",
-                "function_steps" : "",
-                "id" : 435,
-                "is_package_breakpoint" : false,
-                "is_pending_debug_completion" : false,
-                "line_number" : 19,
-                "needs_updated_steps" : true,
-                "package_name" : "",
-                "path" : "~/Documents/GitHub/missCompare/tests/testthat/test.get_data.R",
-                "state" : 1,
-                "type" : 1
-            },
-            {
-                "editor_line_number" : 35,
-                "editor_state" : 1,
-                "function_name" : "toplevel",
-                "function_steps" : "",
-                "id" : 436,
-                "is_package_breakpoint" : false,
-                "is_pending_debug_completion" : false,
-                "line_number" : 35,
-                "needs_updated_steps" : true,
-                "package_name" : "",
-                "path" : "~/Documents/GitHub/missCompare/tests/testthat/test.get_data.R",
-                "state" : 1,
-                "type" : 1
-            },
-            {
                 "editor_line_number" : 16,
                 "editor_state" : 1,
                 "function_name" : "toplevel",
@@ -947,21 +902,6 @@
                 "type" : 1
             },
             {
-                "editor_line_number" : 22,
-                "editor_state" : 1,
-                "function_name" : "toplevel",
-                "function_steps" : "",
-                "id" : 539,
-                "is_package_breakpoint" : false,
-                "is_pending_debug_completion" : false,
-                "line_number" : 22,
-                "needs_updated_steps" : false,
-                "package_name" : "",
-                "path" : "~/Documents/GitHub/missCompare/tests/testthat/test.get_data.R",
-                "state" : 1,
-                "type" : 1
-            },
-            {
                 "editor_line_number" : 24,
                 "editor_state" : 1,
                 "function_name" : "toplevel",
@@ -977,33 +917,18 @@
                 "type" : 1
             },
             {
-                "editor_line_number" : 37,
-                "editor_state" : 2,
-                "function_name" : "MAR",
-                "function_steps" : "",
-                "id" : 559,
-                "is_package_breakpoint" : true,
-                "is_pending_debug_completion" : false,
-                "line_number" : 37,
-                "needs_updated_steps" : false,
-                "package_name" : "missCompare",
-                "path" : "~/Documents/GitHub/missCompare/R/MAR.R",
-                "state" : 2,
-                "type" : 0
-            },
-            {
-                "editor_line_number" : 43,
-                "editor_state" : 2,
+                "editor_line_number" : 45,
+                "editor_state" : 1,
                 "function_name" : "MAP",
-                "function_steps" : "",
+                "function_steps" : "2",
                 "id" : 563,
                 "is_package_breakpoint" : true,
                 "is_pending_debug_completion" : false,
-                "line_number" : 43,
-                "needs_updated_steps" : true,
+                "line_number" : 45,
+                "needs_updated_steps" : false,
                 "package_name" : "missCompare",
                 "path" : "~/Documents/GitHub/missCompare/R/MAP.R",
-                "state" : 2,
+                "state" : 1,
                 "type" : 0
             }
         ]

@@ -13,7 +13,10 @@ cleaned <- clean(clindata_miss)
 df_miss <- cleaned$Dataframe_clean
 y <- get_data(df_miss, matrixplot_sort = T)
 simulated <- simulate(rownum = y$Rows, colnum =y$Columns, cormat=y$Corr_matrix)
-res <- all_patterns(X_hat = simulated$Simulated_matrix, missfrac_per_var = y$Fraction_missingness_per_variable, window = 0.2)
+res <- all_patterns(X_hat = simulated$Simulated_matrix,
+                    MD_pattern = y$MD_Pattern,
+                    NA_fraction = y$Fraction_missingness,
+                    min_PDM = 10)
 
 # checking no errors in functions
 test_that("no errors in get_data()", {
@@ -24,8 +27,9 @@ test_that("no errors in simulate()", {
 })
 test_that("no errors in all_patterns(), MCAR(), MNAR(), MAR() and MAP()", {
   expect_error(missCompare::all_patterns(X_hat = simulated$Simulated_matrix,
-                                         missfrac_per_var = y$Fraction_missingness_per_variable,
-                                         window = 0.2,
+                                         MD_pattern = y$MD_Pattern,
+                                         NA_fraction = y$Fraction_missingness,
+                                         min_PDM = 10,
                                          assumed_pattern = c('MAR', 'MCAR', 'MCAR', 'MAR', 'MNAR', 'MCAR',
                                                              'MAR', 'MCAR', 'MCAR', 'MAR', 'MNAR')), NA)
 })

@@ -16,7 +16,10 @@ cleaned <- clean(clindata_miss)
 df_miss <- cleaned$Dataframe_clean
 y <- get_data(df_miss, matrixplot_sort = T)
 simulated <- simulate(rownum = y$Rows, colnum =y$Columns, cormat=y$Corr_matrix)
-res <- all_patterns(X_hat = simulated$Simulated_matrix, missfrac_per_var = y$Fraction_missingness_per_variable, window = 0.2)
+res <- all_patterns(X_hat = simulated$Simulated_matrix,
+                    MD_pattern = y$MD_Pattern,
+                    NA_fraction = y$Fraction_missingness,
+                    min_PDM = 10)
 
 # no error if multiple iterations are defined with algorithm that are not suitable for multiple imputation
 
