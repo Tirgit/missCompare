@@ -20,7 +20,7 @@ output: github_document
  
 ---
  
-[![Last-changedate](https://img.shields.io/badge/last%20change-2018--08--23-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2018--08--28-yellowgreen.svg)](/commits/master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -94,11 +94,12 @@ metadata <- missCompare::get_data(cleaned$Dataframe_clean,
 ```r
 missCompare::impute_simulated(rownum = metadata$Rows,
                               colnum = metadata$Columns, 
-                              cormat = metadata$Corr_matrix, 
-                              missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                              cormat = metadata$Corr_matrix,
+                              MD_pattern = metadata$MD_Pattern,
+                              NA_fraction = metadata$Fraction_missingness,
+                              min_PDM = 10,
                               n.iter = 50, 
-                              assumed_pattern = NA, 
-                              window = 0.5)
+                              assumed_pattern = NA)
 ```
 
 #### Imputation - validation

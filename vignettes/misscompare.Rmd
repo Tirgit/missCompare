@@ -59,7 +59,7 @@ missing data using `missCompare::get_data()`
   + simulating full data with no missingness using metadata from the previous step (resembling your original data) using `missCompare::simulated()`
   + spiking in missing data in distinct missing data patterns using `missCompare::all_patterns()`. These patterns are:
     + missing completely at random (MCAR) - `missCompare::MCAR()` - missing data occurence random
-    + missing at random (MAR) - `missCompare::MAR()` - missing data occurence correlates with other variables' values (univariate solution in missCompare)
+    + missing at random (MAR) - `missCompare::MAR()` - missing data occurence correlates with other variables' values
     + missing not at random (MNAR) - `missCompare::MNAR()` - missing data occurence correlates with variables' own values
     + missing in assumed pattern (MAP) - `missCompare::MAP()` - a combination of the previous three, where the user can define a pattern per variable
   + imputing missing data, obtaining imputation accuracy (root mean squared errors - RMSE) per method and plotting results using `missCompare::impute_simulated()`
@@ -141,26 +141,31 @@ With this done, missing data can be spiked in in the simulated data using variou
 MCAR missingness is simple, NAs are spiked in randomly:
 ```{r eval = FALSE} 
 missCompare::MCAR(simulated$Simulated_matrix,
-                  missfrac_per_var = metadata$Fraction_missingness_per_variable)
+             MD_pattern = metadata$MD_Pattern,
+             NA_fraction = metadata$Fraction_missingness,
+             min_PDM = 10)
 ```
 
-MAR and MNAR missingness follow similar logic. With MNAR, NAs are spiked in based on the variable's own values, while with MAR, NAs are spiked in based on another variable's values (univariate). In both cases, a window defines how extreme the missing data pattern will be. With smaller windows, data will be set to missing from values closer to each other - for more information, there is a detailed description at `?MAR` and `?MNAR`.
+MAR and MNAR missingness follow similar logic. With MNAR, NAs are spiked in based on the variable's own values, while with MAR, NAs are spiked in based on all other variables' values.
 ```{r eval = FALSE} 
 missCompare::MAR(simulated$Simulated_matrix,
-                 missfrac_per_var = metadata$Fraction_missingness_per_variable,
-                 window = 0.5)
+             MD_pattern = metadata$MD_Pattern,
+             NA_fraction = metadata$Fraction_missingness,
+             min_PDM = 10)
 
 missCompare::MNAR(simulated$Simulated_matrix,
-                  missfrac_per_var = metadata$Fraction_missingness_per_variable,
-                  window = 0.5)
+             MD_pattern = metadata$MD_Pattern,
+             NA_fraction = metadata$Fraction_missingness,
+             min_PDM = 10)
 ```
 
 MAP missingness is a possible combination of any of the previous three missing data pattern. You can define what pattern you assume per variable. In our case, let's say that all variables are missing randomly, except for education (the last variable), which is missing not at random. This can be defined as:
 ```{r eval = FALSE} 
 missCompare::MAP(simulated$Simulated_matrix,
-                 missfrac_per_var = metadata$Fraction_missingness_per_variable,
-                 assumed_pattern = c(rep("MCAR", 10), "MNAR"),
-                 window = 0.5)
+             MD_pattern = metadata$MD_Pattern,
+             NA_fraction = metadata$Fraction_missingness,
+             min_PDM = 10,
+             assumed_pattern = c(rep("MCAR", 10), "MNAR"))
 ```
 
 All patterns can be run with a single line using `missCompare::all_patterns()`.
@@ -176,11 +181,12 @@ This can be achieved by a single command! This means you DON'T have to run `miss
 ```{r eval = FALSE} 
 missCompare::impute_simulated(rownum = metadata$Rows,
                               colnum = metadata$Columns, 
-                              cormat = metadata$Corr_matrix, 
-                              missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                              cormat = metadata$Corr_matrix,
+                              MD_pattern = metadata$MD_Pattern,
+                              NA_fraction = metadata$Fraction_missingness,
+                              min_PDM = 10,
                               n.iter = 50, 
-                              assumed_pattern = NA, 
-                              window = 0.5)
+                              assumed_pattern = NA)
 ```
 
 The `n.iter` argument controls how many times the process will repeat itself (spiking in missing data, imputation and assessment of imputation accuracy, that is).

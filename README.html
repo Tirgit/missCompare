@@ -201,7 +201,7 @@ hljs.initHighlightingOnLoad();
 
 <hr/>
 
-<p><a href="/commits/master"><img src="https://img.shields.io/badge/last change-2018--08--23-yellowgreen.svg" alt="Last-changedate"/></a></p>
+<p><a href="/commits/master"><img src="https://img.shields.io/badge/last change-2018--08--28-yellowgreen.svg" alt="Last-changedate"/></a></p>
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -272,11 +272,12 @@ data(&quot;clindata_miss&quot;)
 
 <pre><code class="r">missCompare::impute_simulated(rownum = metadata$Rows,
                               colnum = metadata$Columns, 
-                              cormat = metadata$Corr_matrix, 
-                              missfrac_per_var = metadata$Fraction_missingness_per_variable,
+                              cormat = metadata$Corr_matrix,
+                              MD_pattern = metadata$MD_Pattern,
+                              NA_fraction = metadata$Fraction_missingness,
+                              min_PDM = 10,
                               n.iter = 50, 
-                              assumed_pattern = NA, 
-                              window = 0.5)
+                              assumed_pattern = NA)
 </code></pre>
 
 <h4>Imputation - validation</h4>
