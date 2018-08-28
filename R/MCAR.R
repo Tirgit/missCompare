@@ -9,7 +9,9 @@
 #' imbalances between variables in the original data will be retained. The missing data spike-in is completely at random.
 #'
 #' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)
-#' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
+#' @param MD_pattern Missing data pattern in the original dataset (MD_Pattern output from the \code{\link{get_data}} function)
+#' @param NA_fraction Fraction of missingness in the original dataset (Fraction_missingness output from the \code{\link{get_data}} function)
+#' @param min_PDM All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors.
 #'
 #' @name MCAR
 #'
@@ -19,31 +21,59 @@
 #'
 #' @examples
 #' \dontrun{
-#' MCAR(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable)
-#' MCAR(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, window = 0.2)
+#' MCAR(simulated$Simulated_matrix,
+#'     MD_pattern = metadata$MD_Pattern,
+#'     NA_fraction = metadata$Fraction_missingness,
+#'     min_PDM = 10)
 #' }
 #'
 #' @export
 
 
 ### FUNCTION
-MCAR <- function(X_hat, missfrac_per_var) {
+MAR <- function(X_hat, MD_pattern, NA_fraction, min_PDM = 10) {
 
-    rownames(X_hat) <- 1:nrow(X_hat)
+  rownames(X_hat) <- 1:nrow(X_hat)
+  data_names <- colnames(MD_pattern)
+  colnames(X_hat) <- data_names
 
-    for (i in 1:length(missfrac_per_var)) {
-        X_hat[, i] <- prodNA(as.matrix(X_hat[, i]), noNA = missfrac_per_var[i])
-    }
+  # removing row 1 - the row representing complete cases from MD_pattern
+  # removing last row - the row with summary stats from MD_pattern
+  MD_pattern <- MD_pattern[-c(1, nrow(MD_pattern)),]
 
-    # remove rows with full missingness
-    missfrac_per_ind <- rowMeans(is.na(X_hat))
-    inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
-    if (length(inds_above_thres) != 0)
-        X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
+  # trying to remove all patterns with less than min_PDM obs
+  index <- as.numeric(rownames(MD_pattern)) >= min_PDM
+  MD_pattern_simple <- MD_pattern[index,]
+  message(paste(sum(as.numeric(rownames(MD_pattern_simple))) / sum(as.numeric(rownames(MD_pattern))),
+                "of observations covered by setting min_PDM to",
+                min_PDM), sep=" ")
 
-    matrix_summary <- summary(X_hat)
+  # creating frequency vector
+  totrows <- as.numeric(rownames(MD_pattern_simple))
+  myfreq <- totrows/sum(totrows)
 
-    list(MCAR_matrix = X_hat, Summary = matrix_summary)
+  # removing row names, but keeping column names
+  rownames(MD_pattern_simple) <- NULL
+
+  # amputation
+  amputed <- mice::ampute(X_hat,
+                          prop=NA_fraction,
+                          patterns = MD_pattern_simple,
+                          freq = myfreq,
+                          bycases = F,
+                          mech = "MCAR")
+
+  X_hat <- amputed$amp
+
+  # remove rows with full missingness
+  missfrac_per_ind <- rowMeans(is.na(X_hat))
+  inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
+  if (length(inds_above_thres) != 0)
+    X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
+
+  matrix_summary <- summary(X_hat)
+
+  list(MCAR_matrix = X_hat, Summary = matrix_summary)
 
 }
 
