@@ -977,18 +977,33 @@
                 "type" : 1
             },
             {
-                "editor_line_number" : 47,
-                "editor_state" : 1,
+                "editor_line_number" : 37,
+                "editor_state" : 2,
                 "function_name" : "MAR",
-                "function_steps" : "2",
-                "id" : 551,
+                "function_steps" : "",
+                "id" : 559,
                 "is_package_breakpoint" : true,
                 "is_pending_debug_completion" : false,
-                "line_number" : 47,
+                "line_number" : 37,
                 "needs_updated_steps" : false,
                 "package_name" : "missCompare",
                 "path" : "~/Documents/GitHub/missCompare/R/MAR.R",
-                "state" : 1,
+                "state" : 2,
+                "type" : 0
+            },
+            {
+                "editor_line_number" : 43,
+                "editor_state" : 2,
+                "function_name" : "MAP",
+                "function_steps" : "",
+                "id" : 563,
+                "is_package_breakpoint" : true,
+                "is_pending_debug_completion" : false,
+                "line_number" : 43,
+                "needs_updated_steps" : true,
+                "package_name" : "missCompare",
+                "path" : "~/Documents/GitHub/missCompare/R/MAP.R",
+                "state" : 2,
                 "type" : 0
             }
         ]

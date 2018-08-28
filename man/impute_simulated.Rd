@@ -4,8 +4,8 @@
 \alias{impute_simulated}
 \title{Imputation algorithm tester on simulated data}
 \usage{
-impute_simulated(rownum, colnum, cormat, missfrac_per_var, n.iter = 10,
-  assumed_pattern = NA, window = 0.5)
+impute_simulated(rownum, colnum, cormat, n.iter = 10, MD_pattern,
+  NA_fraction, min_PDM = 10, assumed_pattern = NA)
 }
 \arguments{
 \item{rownum}{Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)}
@@ -14,13 +14,15 @@ impute_simulated(rownum, colnum, cormat, missfrac_per_var, n.iter = 10,
 
 \item{cormat}{Correlation matrix of the original dataframe (Corr_matrix output from the \code{\link{get_data}} function)}
 
-\item{missfrac_per_var}{Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)}
-
 \item{n.iter}{Number of iterations to perform with default 10.}
 
-\item{assumed_pattern}{Vector of missingess types (must be same length as missingness fraction per variable) (optional parameter)}
+\item{MD_pattern}{Missing data pattern in the original dataset (MD_Pattern output from the \code{\link{get_data}} function)}
 
-\item{window}{Window (with default 0.5). This regulates the 'extremity' of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)}
+\item{NA_fraction}{Fraction of missingness in the original dataset (Fraction_missingness output from the \code{\link{get_data}} function)}
+
+\item{min_PDM}{All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors.}
+
+\item{assumed_pattern}{Vector of missingess types (must be same length as missingness fraction per variable). If this input is specified, the function will spike in missing datapoints in a MAP pattern as well.}
 }
 \value{
 \item{Imputation_RMSE}{Raw RMSE values per method, per missingness pattern, per iteration)}
@@ -44,19 +46,25 @@ automatically detect whether there is a MAP matrix in the list and calculate RMS
 \examples{
 \dontrun{
 #in case there is no assumed missingness pattern per variable
-wrap <- impute_simulated(rownum = y$Rows,
-                    colnum = y$Columns,
-                    cormat = y$Corr_matrix,
-                    missfrac_per_var =  y$Fraction_missingness_per_variable,
-                    n.iter = 15, assumed_pattern = NA)
+wrap <- impute_simulated(rownum = metadata$Rows,
+        colnum = metadata$Columns,
+        cormat = metadata$Corr_matrix,
+        MD_pattern = metadata$MD_Pattern,
+        NA_fraction = metadata$Fraction_missingness,
+        min_PDM = 10,
+        n.iter = 50)
 
 #in case there is a pre-defined assumed pattern
-wrap <- impute_simulated(rownum = y$Rows,
-                    colnum = y$Columns,
-                    cormat = y$Corr_matrix,
-                    missfrac_per_var =  y$Fraction_missingness_per_variable,
-                    n.iter = 15,
-                    assumed_pattern = c(rep('MAR', 4), 'MCAR', rep('MNAR',2)))
+wrap <- impute_simulated(rownum = metadata$Rows,
+        colnum = metadata$Columns,
+        cormat = metadata$Corr_matrix,
+        MD_pattern = metadata$MD_Pattern,
+        NA_fraction = metadata$Fraction_missingness,
+        min_PDM = 10,
+        assumed_pattern = c("MAR","MAR","MCAR","MCAR",
+                          "MNAR","MCAR","MAR","MNAR",
+                          "MCAR","MNAR","MCAR"),
+        n.iter = 50)
 }
 
 }

@@ -44,9 +44,9 @@ MCAR <- function(X_hat, MD_pattern, NA_fraction, min_PDM = 10) {
   # trying to remove all patterns with less than min_PDM obs
   index <- as.numeric(rownames(MD_pattern)) >= min_PDM
   MD_pattern_simple <- MD_pattern[index,]
-  message(paste(sum(as.numeric(rownames(MD_pattern_simple))) / sum(as.numeric(rownames(MD_pattern))),
-                "of observations covered by setting min_PDM to",
-                min_PDM), sep=" ")
+  message(paste0(round(sum(100*as.numeric(rownames(MD_pattern_simple))) / sum(as.numeric(rownames(MD_pattern))),2),
+                 "% of observations covered by setting min_PDM to ",
+                 min_PDM), sep="")
 
   # creating frequency vector
   totrows <- as.numeric(rownames(MD_pattern_simple))

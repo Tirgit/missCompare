@@ -4,12 +4,16 @@
 \alias{MCAR}
 \title{Missing data spike-in in MCAR pattern}
 \usage{
-MCAR(X_hat, missfrac_per_var)
+MCAR(X_hat, MD_pattern, NA_fraction, min_PDM = 10)
 }
 \arguments{
 \item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)}
 
-\item{missfrac_per_var}{Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)}
+\item{MD_pattern}{Missing data pattern in the original dataset (MD_Pattern output from the \code{\link{get_data}} function)}
+
+\item{NA_fraction}{Fraction of missingness in the original dataset (Fraction_missingness output from the \code{\link{get_data}} function)}
+
+\item{min_PDM}{All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors.}
 }
 \value{
 \item{MCAR_matrix}{Matrix with MCAR pred-defined missingess pattern}
@@ -25,8 +29,10 @@ imbalances between variables in the original data will be retained. The missing 
 }
 \examples{
 \dontrun{
-MCAR(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable)
-MCAR(simulated$Simulated_matrix, metadata$Fraction_missingness_per_variable, window = 0.2)
+MCAR(simulated$Simulated_matrix,
+    MD_pattern = metadata$MD_Pattern,
+    NA_fraction = metadata$Fraction_missingness,
+    min_PDM = 10)
 }
 
 }

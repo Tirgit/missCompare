@@ -13,10 +13,11 @@
 #' @param rownum Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)
 #' @param colnum Number of rows (variables) in the original dataframe (Columns output from the \code{\link{get_data}} function)
 #' @param cormat Correlation matrix of the original dataframe (Corr_matrix output from the \code{\link{get_data}} function)
-#' @param missfrac_per_var Fraction of missingness per variable (Fraction_missingness_per_variable output from the \code{\link{get_data}} function)
 #' @param n.iter Number of iterations to perform with default 10.
-#' @param assumed_pattern Vector of missingess types (must be same length as missingness fraction per variable) (optional parameter)
-#' @param window Window (with default 0.5). This regulates the 'extremity' of missingness spike in (larger windows result in more sparse missing data placement whereas smaller windows result in more dense missing data per value - stronger patterns of missingness)
+#' @param MD_pattern Missing data pattern in the original dataset (MD_Pattern output from the \code{\link{get_data}} function)
+#' @param NA_fraction Fraction of missingness in the original dataset (Fraction_missingness output from the \code{\link{get_data}} function)
+#' @param min_PDM All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors.
+#' @param assumed_pattern Vector of missingess types (must be same length as missingness fraction per variable). If this input is specified, the function will spike in missing datapoints in a MAP pattern as well.
 #'
 #' @name impute_simulated
 #'
@@ -32,26 +33,32 @@
 #' @examples
 #' \dontrun{
 #' #in case there is no assumed missingness pattern per variable
-#' wrap <- impute_simulated(rownum = y$Rows,
-#'                     colnum = y$Columns,
-#'                     cormat = y$Corr_matrix,
-#'                     missfrac_per_var =  y$Fraction_missingness_per_variable,
-#'                     n.iter = 15, assumed_pattern = NA)
+#' wrap <- impute_simulated(rownum = metadata$Rows,
+#'         colnum = metadata$Columns,
+#'         cormat = metadata$Corr_matrix,
+#'         MD_pattern = metadata$MD_Pattern,
+#'         NA_fraction = metadata$Fraction_missingness,
+#'         min_PDM = 10,
+#'         n.iter = 50)
 #'
 #' #in case there is a pre-defined assumed pattern
-#' wrap <- impute_simulated(rownum = y$Rows,
-#'                     colnum = y$Columns,
-#'                     cormat = y$Corr_matrix,
-#'                     missfrac_per_var =  y$Fraction_missingness_per_variable,
-#'                     n.iter = 15,
-#'                     assumed_pattern = c(rep('MAR', 4), 'MCAR', rep('MNAR',2)))
+#' wrap <- impute_simulated(rownum = metadata$Rows,
+#'         colnum = metadata$Columns,
+#'         cormat = metadata$Corr_matrix,
+#'         MD_pattern = metadata$MD_Pattern,
+#'         NA_fraction = metadata$Fraction_missingness,
+#'         min_PDM = 10,
+#'         assumed_pattern = c("MAR","MAR","MCAR","MCAR",
+#'                           "MNAR","MCAR","MAR","MNAR",
+#'                           "MCAR","MNAR","MCAR"),
+#'         n.iter = 50)
 #' }
 #'
 #' @export
 
 
 # FUNCTION
-impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 10, assumed_pattern = NA, window = 0.5) {
+impute_simulated <- function(rownum, colnum, cormat, n.iter = 10, MD_pattern, NA_fraction, min_PDM = 10, assumed_pattern = NA) {
 
     if (!is.na(assumed_pattern))
         collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 5)) else collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 4))
@@ -68,7 +75,11 @@ impute_simulated <- function(rownum, colnum, cormat, missfrac_per_var, n.iter = 
             "Amelia II", "missForest", "Hmisc aregImpute", "VIM kNN")
 
         sim <- simulate(rownum, colnum, cormat)
-        res <- all_patterns(sim$Simulated_matrix, missfrac_per_var, assumed_pattern, window)
+        res <- all_patterns(sim$Simulated_matrix,
+                            MD_pattern = MD_pattern,
+                            NA_fraction = NA_fraction,
+                            min_PDM = min_PDM,
+                            assumed_pattern = assumed_pattern)
 
         collect_res[((16 * (i - 1)) + 1), 2:ncol(collect_res)] <- as.data.frame(test_random_imp(sim$Simulated_matrix,
             list = res))
