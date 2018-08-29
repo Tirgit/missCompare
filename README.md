@@ -20,7 +20,7 @@ output: github_document
  
 ---
  
-[![Last-changedate](https://img.shields.io/badge/last%20change-2018--08--28-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2018--08--29-yellowgreen.svg)](/commits/master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -125,7 +125,7 @@ imputed <- missCompare::impute_data(cleaned$Dataframe_clean,
 
 ```r
 diag <- missCompare::post_imp_diag(cleaned$Dataframe_clean,
-                                   imputed$mean_imputation[[1]], 
+                                   imputed$mean_imputation[[1]],
                                    scale=T, 
                                    n.boot = 100)
 ```

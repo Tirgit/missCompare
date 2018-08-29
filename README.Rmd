@@ -124,7 +124,7 @@ imputed <- missCompare::impute_data(cleaned$Dataframe_clean,
 #### Post imputation diagnostics
 ```{r eval = FALSE} 
 diag <- missCompare::post_imp_diag(cleaned$Dataframe_clean,
-                                   imputed$mean_imputation[[1]], 
+                                   imputed$mean_imputation[[1]],
                                    scale=T, 
                                    n.boot = 100)
 ```
