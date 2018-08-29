@@ -902,15 +902,15 @@
                 "type" : 1
             },
             {
-                "editor_line_number" : 24,
+                "editor_line_number" : 26,
                 "editor_state" : 1,
                 "function_name" : "toplevel",
                 "function_steps" : "",
                 "id" : 545,
                 "is_package_breakpoint" : false,
                 "is_pending_debug_completion" : false,
-                "line_number" : 24,
-                "needs_updated_steps" : false,
+                "line_number" : 26,
+                "needs_updated_steps" : true,
                 "package_name" : "",
                 "path" : "~/Documents/temp/missCompare_install.R",
                 "state" : 1,
@@ -930,6 +930,21 @@
                 "path" : "~/Documents/GitHub/missCompare/R/MAP.R",
                 "state" : 1,
                 "type" : 0
+            },
+            {
+                "editor_line_number" : 22,
+                "editor_state" : 1,
+                "function_name" : "toplevel",
+                "function_steps" : "",
+                "id" : 564,
+                "is_package_breakpoint" : false,
+                "is_pending_debug_completion" : false,
+                "line_number" : 22,
+                "needs_updated_steps" : false,
+                "package_name" : "",
+                "path" : "~/Documents/GitHub/missCompare/tests/testthat/test.get_data.R",
+                "state" : 1,
+                "type" : 1
             }
         ]
     }
