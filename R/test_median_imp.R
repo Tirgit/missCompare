@@ -69,9 +69,10 @@ test_median_imp <- function(X_hat, list) {
 
 
 
-# LAB res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable) res
-# <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable,
-# assumed_pattern = c('MAR', 'MCAR', 'MCAR', 'MAR', 'MNAR', 'MCAR', 'MAR', 'MAR', 'MNAR',
-# 'MNAR'))
+# LAB res <- dimple_all_patterns(yy$Simulated_matrix,
+# y$Fraction_missingness_per_variable) res <-
+# dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable,
+# assumed_pattern = c('MAR', 'MCAR', 'MCAR', 'MAR', 'MNAR', 'MCAR', 'MAR', 'MAR',
+# 'MNAR', 'MNAR'))
 
 # xxzz <- test_median_imp(X_hat = yy$Simulated_matrix, list = res)

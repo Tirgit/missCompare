@@ -35,10 +35,10 @@ test_aregImpute <- function(X_hat, list) {
         Xcolnames <- colnames(Xdf)
         Xformula <- stats::as.formula(paste("~", paste(Xcolnames, collapse = "+")))
         
-        hmisc_algo <- Hmisc::aregImpute(formula = Xformula, data = Xdf, n.impute = 1, burnin = 5, 
-            nk = 3, type = "pmm", pmmtype = 2)
-        completeData <- as.data.frame(Hmisc::impute.transcan(hmisc_algo, imputation = 1, data = Xdf, 
-            list.out = TRUE, pr = FALSE, check = FALSE))
+        hmisc_algo <- Hmisc::aregImpute(formula = Xformula, data = Xdf, n.impute = 1, 
+            burnin = 5, nk = 3, type = "pmm", pmmtype = 2)
+        completeData <- as.data.frame(Hmisc::impute.transcan(hmisc_algo, imputation = 1, 
+            data = Xdf, list.out = TRUE, pr = FALSE, check = FALSE))
         
         imp_matrix <- as.matrix(completeData)
         
@@ -74,6 +74,7 @@ test_aregImpute <- function(X_hat, list) {
     
 }
 
-# LAB res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-# test_aregImpute(X_hat = yy$Simulated_matrix, list = res)
+# LAB res <- dimple_all_patterns(yy$Simulated_matrix,
+# y$Fraction_missingness_per_variable) test_aregImpute(X_hat = yy$Simulated_matrix,
+# list = res)
 

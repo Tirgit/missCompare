@@ -35,48 +35,43 @@
 
 ### FUNCTION
 MAR <- function(X_hat, MD_pattern, NA_fraction, min_PDM = 10) {
-
-  rownames(X_hat) <- 1:nrow(X_hat)
-  data_names <- colnames(MD_pattern)
-  colnames(X_hat) <- data_names
-
-  # removing row 1 - the row representing complete cases from MD_pattern
-  # removing last row - the row with summary stats from MD_pattern
-  MD_pattern <- MD_pattern[-c(1, nrow(MD_pattern)),]
-
-  # trying to remove all patterns with less than min_PDM obs
-  index <- as.numeric(rownames(MD_pattern)) >= min_PDM
-  MD_pattern_simple <- MD_pattern[index,]
-  message(paste0(round(sum(100*as.numeric(rownames(MD_pattern_simple))) / sum(as.numeric(rownames(MD_pattern))),2),
-                 "% of observations covered by setting min_PDM to ",
-                 min_PDM), sep="")
-
-  # creating frequency vector
-  totrows <- as.numeric(rownames(MD_pattern_simple))
-  myfreq <- totrows/sum(totrows)
-
-  # removing row names, but keeping column names
-  rownames(MD_pattern_simple) <- NULL
-
-  # amputation
-  amputed <- mice::ampute(X_hat,
-                          prop=NA_fraction,
-                          patterns = MD_pattern_simple,
-                          freq = myfreq,
-                          bycases = F,
-                          mech = "MAR")
-
-  X_hat <- amputed$amp
-
-  # remove rows with full missingness
-  missfrac_per_ind <- rowMeans(is.na(X_hat))
-  inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
-  if (length(inds_above_thres) != 0)
-    X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
-
-  matrix_summary <- summary(X_hat)
-
-  list(MAR_matrix = X_hat, Summary = matrix_summary)
-
+    
+    rownames(X_hat) <- 1:nrow(X_hat)
+    data_names <- colnames(MD_pattern)
+    colnames(X_hat) <- data_names
+    
+    # removing row 1 - the row representing complete cases from MD_pattern removing
+    # last row - the row with summary stats from MD_pattern
+    MD_pattern <- MD_pattern[-c(1, nrow(MD_pattern)), ]
+    
+    # trying to remove all patterns with less than min_PDM obs
+    index <- as.numeric(rownames(MD_pattern)) >= min_PDM
+    MD_pattern_simple <- MD_pattern[index, ]
+    message(paste0(round(sum(100 * as.numeric(rownames(MD_pattern_simple)))/sum(as.numeric(rownames(MD_pattern))), 
+        2), "% of observations covered by setting min_PDM to ", min_PDM), sep = "")
+    
+    # creating frequency vector
+    totrows <- as.numeric(rownames(MD_pattern_simple))
+    myfreq <- totrows/sum(totrows)
+    
+    # removing row names, but keeping column names
+    rownames(MD_pattern_simple) <- NULL
+    
+    # amputation
+    amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple, 
+        freq = myfreq, bycases = F, mech = "MAR")
+    
+    X_hat <- amputed$amp
+    
+    # remove rows with full missingness
+    missfrac_per_ind <- rowMeans(is.na(X_hat))
+    inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
+    if (length(inds_above_thres) != 0) 
+        X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
+    
+    matrix_summary <- summary(X_hat)
+    
+    list(MAR_matrix = X_hat, Summary = matrix_summary)
+    
 }
 

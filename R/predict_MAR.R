@@ -66,9 +66,10 @@ predict_MAR <- function(X, scale = T) {
     
     # plot of AUC values and 95% CIs per variable
     AUC_loci <- AUC_hici <- Variable <- NULL
-    AUCplot <- ggplot(data = MAR_AUC, aes(x = Variable, y = AUC)) + geom_boxplot() + geom_errorbar(aes(ymin = AUC_loci, 
-        ymax = AUC_hici)) + ggtitle("ROC AUC statistics for predicting MAR pattern") + theme(plot.title = element_text(hjust = 0.5)) + 
-        coord_cartesian(ylim = c(0, 1))
+    AUCplot <- ggplot(data = MAR_AUC, aes(x = Variable, y = AUC)) + geom_boxplot() + 
+        geom_errorbar(aes(ymin = AUC_loci, ymax = AUC_hici)) + ggtitle("ROC AUC statistics for predicting MAR pattern") + 
+        theme(plot.title = element_text(hjust = 0.5)) + coord_cartesian(ylim = c(0, 
+        1))
     
     # output list
     list(MAR_stats = MAR_AUC, Plot = AUCplot)

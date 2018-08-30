@@ -32,8 +32,8 @@ test_random_imp <- function(X_hat, list) {
     
     random_imp <- function(X) {
         for (i in 1:ncol(X)) {
-            X[, i][is.na(X[, i])] <- sample(X[, i][!is.na(X[, i])], size = sum(is.na(X[, i])), 
-                replace = T)
+            X[, i][is.na(X[, i])] <- sample(X[, i][!is.na(X[, i])], size = sum(is.na(X[, 
+                i])), replace = T)
         }
         
         list(Imputed = X)
@@ -70,5 +70,6 @@ test_random_imp <- function(X_hat, list) {
 
 
 
-# LAB res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-# test_random_imp(X_hat = yy$Simulated_matrix, list = res)
+# LAB res <- dimple_all_patterns(yy$Simulated_matrix,
+# y$Fraction_missingness_per_variable) test_random_imp(X_hat = yy$Simulated_matrix,
+# list = res)

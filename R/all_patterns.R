@@ -46,23 +46,24 @@
 
 ### FUNCTION
 all_patterns <- function(X_hat, MD_pattern, NA_fraction, min_PDM = 10, assumed_pattern = NA) {
-
-    MCAR <- MCAR(X_hat, MD_pattern = MD_pattern, NA_fraction = NA_fraction, min_PDM =  min_PDM )
-    MAR <- MAR(X_hat, MD_pattern = MD_pattern, NA_fraction = NA_fraction,  min_PDM =  min_PDM)
-    MNAR <- MNAR(X_hat, MD_pattern = MD_pattern, NA_fraction = NA_fraction,  min_PDM =  min_PDM)
-
-    if (!is.na(assumed_pattern[1]) & (length(assumed_pattern) != ncol(X_hat)))
-      stop(paste("The number of columns in X_hat (", ncol(X_hat), ") and argument assumed_pattern (",
-                 length(assumed_pattern), ") do not match. Please double-check the arguments of the function.",
-                 sep = ""))
-
-
-    if (!is.na(assumed_pattern[1]))
-        MAP <- MAP(X_hat, MD_pattern = MD_pattern, NA_fraction = NA_fraction, min_PDM =  min_PDM, assumed_pattern = assumed_pattern)
-
-    if (!is.na(assumed_pattern[1]))
-        list(MCAR_matrix = MCAR$MCAR_matrix, MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix,
+    
+    MCAR <- MCAR(X_hat, MD_pattern = MD_pattern, NA_fraction = NA_fraction, min_PDM = min_PDM)
+    MAR <- MAR(X_hat, MD_pattern = MD_pattern, NA_fraction = NA_fraction, min_PDM = min_PDM)
+    MNAR <- MNAR(X_hat, MD_pattern = MD_pattern, NA_fraction = NA_fraction, min_PDM = min_PDM)
+    
+    if (!is.na(assumed_pattern[1]) & (length(assumed_pattern) != ncol(X_hat))) 
+        stop(paste("The number of columns in X_hat (", ncol(X_hat), ") and argument assumed_pattern (", 
+            length(assumed_pattern), ") do not match. Please double-check the arguments of the function.", 
+            sep = ""))
+    
+    
+    if (!is.na(assumed_pattern[1])) 
+        MAP <- MAP(X_hat, MD_pattern = MD_pattern, NA_fraction = NA_fraction, min_PDM = min_PDM, 
+            assumed_pattern = assumed_pattern)
+    
+    if (!is.na(assumed_pattern[1])) 
+        list(MCAR_matrix = MCAR$MCAR_matrix, MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix, 
             MAP_matrix = MAP$MAP_matrix) else list(MCAR_matrix = MCAR$MCAR_matrix, MAR_matrix = MAR$MAR_matrix, MNAR_matrix = MNAR$MNAR_matrix)
-
+    
 }
 

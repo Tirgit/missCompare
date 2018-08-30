@@ -34,7 +34,8 @@ test_kNN <- function(X_hat, list) {
         Xdf <- as.data.frame(X)
         Xcolnames <- colnames(Xdf)
         
-        completeData <- VIM::kNN(data = Xdf, variable = Xcolnames, k = 10, trace = F, imp_var = F)
+        completeData <- VIM::kNN(data = Xdf, variable = Xcolnames, k = 10, trace = F, 
+            imp_var = F)
         
         imp_matrix <- as.matrix(completeData)
         
@@ -70,6 +71,7 @@ test_kNN <- function(X_hat, list) {
     
 }
 
-# LAB res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-# dimple_kNN_imp(X_hat = yy$Simulated_matrix, list = res)
+# LAB res <- dimple_all_patterns(yy$Simulated_matrix,
+# y$Fraction_missingness_per_variable) dimple_kNN_imp(X_hat = yy$Simulated_matrix,
+# list = res)
 

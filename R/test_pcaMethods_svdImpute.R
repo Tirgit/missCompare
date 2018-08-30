@@ -34,7 +34,8 @@ test_pcaMethods_svdImpute <- function(X_hat, list) {
     pcaMethods_svdImpute_imp <- function(X) {
         ncomp <- missMDA::estim_ncpPCA(X)
         if (ncomp$ncp > 0) 
-            ressvdImpute <- pcaMethods::pca(X, method = "svdImpute", center = FALSE, nPcs = ncomp$ncp) else ressvdImpute <- pca(X, method = "svdImpute", center = FALSE, nPcs = 2)
+            ressvdImpute <- pcaMethods::pca(X, method = "svdImpute", center = FALSE, 
+                nPcs = ncomp$ncp) else ressvdImpute <- pca(X, method = "svdImpute", center = FALSE, nPcs = 2)
         imp_matrix <- ressvdImpute@completeObs
         
         list(Imputed = imp_matrix)
@@ -70,8 +71,9 @@ test_pcaMethods_svdImpute <- function(X_hat, list) {
     
 }
 
-# LAB res <- dimple_all_patterns(yy$Simulated_matrix, y$Fraction_missingness_per_variable)
-# test_pcaMethods_svdImpute(X_hat = yy$Simulated_matrix, list = res)
+# LAB res <- dimple_all_patterns(yy$Simulated_matrix,
+# y$Fraction_missingness_per_variable) test_pcaMethods_svdImpute(X_hat =
+# yy$Simulated_matrix, list = res)
 
 
 

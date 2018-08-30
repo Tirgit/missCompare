@@ -10,7 +10,7 @@ clean(X, var_remove = NULL, var_removal_threshold = 0.5,
 \arguments{
 \item{X}{Original dataframe with samples in rows and variables as columns}
 
-\item{var_remove}{Variables to remove (e.g. ID). Define by character vector, e.g. c("ID", "character_variable")}
+\item{var_remove}{Variables to remove (e.g. ID). Define by character vector, e.g. c('ID', 'character_variable')}
 
 \item{var_removal_threshold}{Variable removal threshold with default 0.5 (range between 0 and 1). Variables (columns) above this missingness fraction will be removed during the cleaning process}
 

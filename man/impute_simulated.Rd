@@ -61,9 +61,9 @@ wrap <- impute_simulated(rownum = metadata$Rows,
         MD_pattern = metadata$MD_Pattern,
         NA_fraction = metadata$Fraction_missingness,
         min_PDM = 10,
-        assumed_pattern = c("MAR","MAR","MCAR","MCAR",
-                          "MNAR","MCAR","MAR","MNAR",
-                          "MCAR","MNAR","MCAR"),
+        assumed_pattern = c('MAR','MAR','MCAR','MCAR',
+                          'MNAR','MCAR','MAR','MNAR',
+                          'MCAR','MNAR','MCAR'),
         n.iter = 50)
 }
 
