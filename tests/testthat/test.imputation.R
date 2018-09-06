@@ -13,8 +13,7 @@ test_that("errors in impute_data()", {
 })
 
 cleaned <- clean(clindata_miss)
-df_miss <- cleaned$Dataframe_clean
-y <- get_data(df_miss, matrixplot_sort = T)
+y <- get_data(cleaned, matrixplot_sort = T)
 simulated <- simulate(rownum = y$Rows, colnum =y$Columns, cormat=y$Corr_matrix)
 res <- all_patterns(X_hat = simulated$Simulated_matrix,
                     MD_pattern = y$MD_Pattern,
@@ -24,10 +23,10 @@ res <- all_patterns(X_hat = simulated$Simulated_matrix,
 # no error if multiple iterations are defined with algorithm that are not suitable for multiple imputation
 
 test_that("median imputation only one copy of imputation / 1", {
-  expect_error(missCompare::impute_data(df_miss, scale = T, n.iter = 2, sel_method = c(2)), NA)
+  expect_error(missCompare::impute_data(cleaned, scale = T, n.iter = 2, sel_method = c(2)), NA)
 })
 
-imputed <- missCompare::impute_data(df_miss, scale = T, n.iter = 2, sel_method = c(2))
+imputed <- missCompare::impute_data(cleaned, scale = T, n.iter = 2, sel_method = c(2))
 imputed$median_imputation[[1]]
 
 test_that("median imputation only one copy of imputation / 2", {
@@ -35,11 +34,11 @@ test_that("median imputation only one copy of imputation / 2", {
 })
 
 # generating imputed dataframe
-imputed <- missCompare::impute_data(df_miss, scale = T, n.iter = 1, sel_method = c(11))
+imputed <- missCompare::impute_data(cleaned, scale = T, n.iter = 1, sel_method = c(11))
 df_imp <- imputed$mice_mixed_imputation[[1]]
 
 # expecting no error when running post imp diag script
 test_that("no errors in post imp diag script", {
-  expect_error(missCompare::post_imp_diag(df_miss, df_imp, scale = T, n.boot = 10), NA)
+  expect_error(missCompare::post_imp_diag(cleaned, df_imp, scale = T, n.boot = 10), NA)
 })
 

@@ -39,8 +39,8 @@ test_that("no errors in clean()", {
 cleaned <- missCompare::clean(clindata_miss)
 
 test_that("output dataset obs", {
-  expect_output(str(cleaned$Dataframe_clean), "2500 obs")
+  expect_output(str(cleaned), "2500 obs")
 })
 test_that("output dataset vars", {
-  expect_output(str(cleaned$Dataframe_clean), "11 variables")
+  expect_output(str(cleaned), "11 variables")
 })

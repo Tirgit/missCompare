@@ -10,8 +10,7 @@ test_that("numeric errors in get_data()", {
 })
 
 cleaned <- clean(clindata_miss)
-df_miss <- cleaned$Dataframe_clean
-y <- get_data(df_miss, matrixplot_sort = T)
+y <- get_data(cleaned, matrixplot_sort = T)
 simulated <- simulate(rownum = y$Rows, colnum =y$Columns, cormat=y$Corr_matrix)
 res <- all_patterns(X_hat = simulated$Simulated_matrix,
                     MD_pattern = y$MD_Pattern,
@@ -20,7 +19,7 @@ res <- all_patterns(X_hat = simulated$Simulated_matrix,
 
 # checking no errors in functions
 test_that("no errors in get_data()", {
-  expect_error(missCompare::get_data(df_miss), NA)
+  expect_error(missCompare::get_data(cleaned), NA)
 })
 test_that("no errors in simulate()", {
   expect_error(missCompare::simulate(rownum = y$Rows, colnum =y$Columns, cormat=y$Corr_matrix), NA)
@@ -35,7 +34,7 @@ test_that("fraction of missingness vector length correct", {
   expect_equal(length(y$Fraction_missingness_per_variable), ncol(clindata_miss)-1)
 })
 test_that("equal dimensions of simulated matrix and original dataframe", {
-  expect_equal(dim(simulated$Simulated_matrix), dim(df_miss))
+  expect_equal(dim(simulated$Simulated_matrix), dim(cleaned))
 })
 test_that("equal dimensions of simulated matrix and MCAR matrix", {
   expect_equal(dim(simulated$Simulated_matrix), dim(res$MCAR_matrix))
