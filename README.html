@@ -201,7 +201,7 @@ hljs.initHighlightingOnLoad();
 
 <hr/>
 
-<p><a href="/commits/master"><img src="https://img.shields.io/badge/last change-2018--08--29-yellowgreen.svg" alt="Last-changedate"/></a></p>
+<p><a href="/commits/master"><img src="https://img.shields.io/badge/last change-2018--09--06-yellowgreen.svg" alt="Last-changedate"/></a></p>
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -263,7 +263,7 @@ data(&quot;clindata_miss&quot;)
 
 <h4>Extracting data</h4>
 
-<pre><code class="r">metadata &lt;- missCompare::get_data(cleaned$Dataframe_clean,
+<pre><code class="r">metadata &lt;- missCompare::get_data(cleaned,
                                   matrixplot_sort = T,
                                   plot_transform = T)
 </code></pre>
@@ -282,7 +282,7 @@ data(&quot;clindata_miss&quot;)
 
 <h4>Imputation - validation</h4>
 
-<pre><code class="r">missCompare::impute_data_validate(cleaned$Dataframe_clean,
+<pre><code class="r">missCompare::impute_data_validate(cleaned,
                                   scale = T,
                                   spike.in = 0.01,
                                   n.iter = 50,
@@ -291,7 +291,7 @@ data(&quot;clindata_miss&quot;)
 
 <h4>Imputation of data</h4>
 
-<pre><code class="r">imputed &lt;- missCompare::impute_data(cleaned$Dataframe_clean, 
+<pre><code class="r">imputed &lt;- missCompare::impute_data(cleaned, 
                          scale = T, 
                          n.iter = 10, 
                          sel_method = c(1:16))
@@ -299,7 +299,7 @@ data(&quot;clindata_miss&quot;)
 
 <h4>Post imputation diagnostics</h4>
 
-<pre><code class="r">diag &lt;- missCompare::post_imp_diag(cleaned$Dataframe_clean,
+<pre><code class="r">diag &lt;- missCompare::post_imp_diag(cleaned,
                                    imputed$mean_imputation[[1]],
                                    scale=T, 
                                    n.boot = 100)

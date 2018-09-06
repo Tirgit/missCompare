@@ -20,7 +20,7 @@ output: github_document
  
 ---
  
-[![Last-changedate](https://img.shields.io/badge/last%20change-2018--08--29-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2018--09--06-yellowgreen.svg)](/commits/master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -84,7 +84,7 @@ cleaned <- missCompare::clean(clindata_miss,
 #### Extracting data
 
 ```r
-metadata <- missCompare::get_data(cleaned$Dataframe_clean,
+metadata <- missCompare::get_data(cleaned,
                                   matrixplot_sort = T,
                                   plot_transform = T)
 ```
@@ -105,7 +105,7 @@ missCompare::impute_simulated(rownum = metadata$Rows,
 #### Imputation - validation
 
 ```r
-missCompare::impute_data_validate(cleaned$Dataframe_clean,
+missCompare::impute_data_validate(cleaned,
                                   scale = T,
                                   spike.in = 0.01,
                                   n.iter = 50,
@@ -115,7 +115,7 @@ missCompare::impute_data_validate(cleaned$Dataframe_clean,
 #### Imputation of data
 
 ```r
-imputed <- missCompare::impute_data(cleaned$Dataframe_clean, 
+imputed <- missCompare::impute_data(cleaned, 
                          scale = T, 
                          n.iter = 10, 
                          sel_method = c(1:16))
@@ -124,7 +124,7 @@ imputed <- missCompare::impute_data(cleaned$Dataframe_clean,
 #### Post imputation diagnostics
 
 ```r
-diag <- missCompare::post_imp_diag(cleaned$Dataframe_clean,
+diag <- missCompare::post_imp_diag(cleaned,
                                    imputed$mean_imputation[[1]],
                                    scale=T, 
                                    n.boot = 100)

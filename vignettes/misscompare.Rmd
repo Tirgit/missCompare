@@ -92,7 +92,7 @@ The cleaning function outputs the results to an R object called `cleaned`. This 
 You will get to know important details of your cleaned dataframe using the following line:
 
 ```{r eval = TRUE} 
-metadata <- missCompare::get_data(cleaned$Dataframe_clean,
+metadata <- missCompare::get_data(cleaned,
                                   matrixplot_sort = T,
                                   plot_transform = T)
 ```
@@ -212,7 +212,7 @@ If you want, you can also do this validation step in two separate blocks - one f
 Now, back to our data - as we observed previously, **missForest** and **pcaMethods BPCA** performed the best, while **Random replacement** performed the worst. Let's use all algorithms in the validation step and see whether the results here parallel what we obtained using the simulated data in the previous step:
 
 ```{r eval = FALSE} 
-missCompare::impute_data_validate(cleaned$Dataframe_clean,
+missCompare::impute_data_validate(cleaned,
                                   scale = T,
                                   spike.in = 0.01,
                                   n.iter = 5,
@@ -232,7 +232,7 @@ There will be situations where the results from the simulated dataset and your o
 Hopefully, by now you have a clear(er) idea on which method you would like to use to impute missing data for your dataset - you will be able to do this using `missCompare::impute_data()`. If you completed the validation step, this will be very easy for you, as the codes are very similar here. If you skipped validation, don't worry, it won't be too hard. Let's consider a scenario where you choose **missForest** to impute your data. You do not want to scale your data and you would like to create 10 imputed dataframes in order to set up a multiple imputation framework. Note, that setting up a multiple imputation framework is only a viable option with probabilistic models (e.g. you can impute you data with **Mean imputation** a billion times, but the NAs will always be replaced with exacty the same mean values!).
 
 ```{r eval = FALSE} 
-imputed <- missCompare::impute_data(cleaned$Dataframe_clean, 
+imputed <- missCompare::impute_data(cleaned, 
                          scale = F, 
                          n.iter = 10, 
                          sel_method = c(14)) # 14 is the code for missForest
@@ -243,7 +243,7 @@ The 10 imputed dataframes will be available under `imputed$missForest_imputation
 Let's see what happens when you similarly define 10 copies, but choose a non-probabilistic method - **Mean imputation** in this case.
 
 ```{r eval = TRUE, message = FALSE} 
-imputed <- missCompare::impute_data(cleaned$Dataframe_clean, 
+imputed <- missCompare::impute_data(cleaned, 
                          scale = T, 
                          n.iter = 10, 
                          sel_method = c(3)) # 3 is the code for mean imputation
@@ -260,7 +260,7 @@ The function `missCompare::post_imp_diag()` will help you assess how the imputat
 Let's run this with the results of the **Mean imputation** algorithm (`imputed$mean_imputation[[1]]`):
 
 ```{r eval = TRUE} 
-diag <- missCompare::post_imp_diag(cleaned$Dataframe_clean,
+diag <- missCompare::post_imp_diag(cleaned,
                                    imputed$mean_imputation[[1]], 
                                    scale=F, 
                                    n.boot = 5)
