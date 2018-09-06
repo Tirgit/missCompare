@@ -9,7 +9,7 @@ This is this first submission of the missCompare R package to CRAN.
 ## R CMD check results
 There were no ERRORs, WARNINGs or NOTEs. 
 
-During the checking process, a group of NOTEs were due to "no visible binding for global    variables". These problems arose due to the use of *dplyr* and *ggplot2* functions.    
+During the checking process, a group of NOTEs were due to "no visible binding for global variables". These problems arose due to the use of *dplyr* and *ggplot2* functions.    
 If, for instance, NOTEs were generated in a function for **x**, **y** and **z**, because    
 these were defined inside a ggplot() function as column names, these issues were eliminated by adding lines:     
 x <- y <- y <- NULL    

@@ -932,15 +932,15 @@
                 "type" : 0
             },
             {
-                "editor_line_number" : 22,
+                "editor_line_number" : 21,
                 "editor_state" : 1,
                 "function_name" : "toplevel",
                 "function_steps" : "",
                 "id" : 564,
                 "is_package_breakpoint" : false,
                 "is_pending_debug_completion" : false,
-                "line_number" : 22,
-                "needs_updated_steps" : false,
+                "line_number" : 21,
+                "needs_updated_steps" : true,
                 "package_name" : "",
                 "path" : "~/Documents/GitHub/missCompare/tests/testthat/test.get_data.R",
                 "state" : 1,
