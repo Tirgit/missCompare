@@ -23,6 +23,7 @@ get_data(X, matrixplot_sort = T, plot_transform = T)
 \item{Total_NA}{Total number of missing values in the dataframe}
 \item{NA_per_variable}{Number of missing values per variables in the dataframe. A (named) numeric vector of length the number of columns}
 \item{MD_Pattern}{Missing data pattern calculated using mice::md_pattern (see \code{\link[mice]{md.pattern}} in the mice package)}
+\item{NA_Correlations}{Correlation matrix of variables vs. variables converted to boolean based on missingness status (yes/no). Point-biserial correlation coefficients based on variable pairs is obtained using complete observations in the respective variable pairs. Higher correlation coefficients can indicate MAR missingness pattern}
 \item{Vars_above_half}{Character vector of variables names with missingness higher than 50\%}
 \item{Matrix_plot}{Matrixplot where missing values are colored gray and available values are colored based on value range}
 \item{Cluster_plot}{Cluster plot of co-missingness. Variables demostrating shared missingness patterns will branch at closer to the bottom of the plot, while no patterns will be represented by branches high in the plot}

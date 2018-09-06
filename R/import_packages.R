@@ -4,6 +4,7 @@
 #' @import ggdendro
 #' @import ggplot2
 #' @importFrom Hmisc aregImpute impute.transcan
+#' @importFrom ltm biserial.cor
 #' @importFrom magrittr %>%
 #' @importFrom MASS mvrnorm
 #' @importFrom Matrix nearPD

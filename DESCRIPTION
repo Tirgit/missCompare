@@ -28,6 +28,7 @@ Imports:
   ggdendro,
   ggplot2,
   Hmisc,
+  ltm,
   magrittr,
   MASS,
   Matrix,
