@@ -58,163 +58,129 @@
 
 
 # FUNCTION
-impute_simulated <- function(rownum, colnum, cormat, n.iter = 10, MD_pattern, NA_fraction, 
+impute_simulated <- function(rownum, colnum, cormat, n.iter = 10, MD_pattern, NA_fraction,
     min_PDM = 10, assumed_pattern = NA) {
-    
-    if (!is.na(assumed_pattern)) 
+
+    if (!is.na(assumed_pattern))
         collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 5)) else collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 4))
-    if (!is.na(assumed_pattern)) 
-        colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE", 
+    if (!is.na(assumed_pattern))
+        colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE",
             "MAP_RMSE") else colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE")
-    
+
     for (i in 1:n.iter) {
-        
+
         print(paste("ITERATION ", i, " OF TOTAL ", n.iter, " - IN PROGRESS", sep = ""))
-        
-        collect_res[((16 * (i - 1)) + 1):((16 * (i - 1)) + 16), 1] <- c("Random replacement", 
-            "Median imputation", "Mean imputation", "missMDA Regularized", "missMDA EM", 
-            "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA", "pcaMethods NIPALS", 
-            "pcaMethods NLPCA", "mice mixed", "mi Bayesian", "Amelia II", "missForest", 
+
+        collect_res[((16 * (i - 1)) + 1):((16 * (i - 1)) + 16), 1] <- c("Random replacement",
+            "Median imputation", "Mean imputation", "missMDA Regularized", "missMDA EM",
+            "pcaMethods PPCA", "pcaMethods svdImpute", "pcaMethods BPCA", "pcaMethods NIPALS",
+            "pcaMethods NLPCA", "mice mixed", "mi Bayesian", "Amelia II", "missForest",
             "Hmisc aregImpute", "VIM kNN")
-        
+
         sim <- simulate(rownum, colnum, cormat)
-        res <- all_patterns(sim$Simulated_matrix, MD_pattern = MD_pattern, NA_fraction = NA_fraction, 
+        res <- all_patterns(sim$Simulated_matrix, MD_pattern = MD_pattern, NA_fraction = NA_fraction,
             min_PDM = min_PDM, assumed_pattern = assumed_pattern)
-        
-        collect_res[((16 * (i - 1)) + 1), 2:ncol(collect_res)] <- as.data.frame(test_random_imp(sim$Simulated_matrix, 
+
+        collect_res[((16 * (i - 1)) + 1), 2:ncol(collect_res)] <- as.data.frame(test_random_imp(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 2), 2:ncol(collect_res)] <- as.data.frame(test_median_imp(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 2), 2:ncol(collect_res)] <- as.data.frame(test_median_imp(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 3), 2:ncol(collect_res)] <- as.data.frame(test_mean_imp(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 3), 2:ncol(collect_res)] <- as.data.frame(test_mean_imp(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 4), 2:ncol(collect_res)] <- as.data.frame(test_missMDA_reg(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 4), 2:ncol(collect_res)] <- as.data.frame(test_missMDA_reg(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 5), 2:ncol(collect_res)] <- as.data.frame(test_missMDA_EM(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 5), 2:ncol(collect_res)] <- as.data.frame(test_missMDA_EM(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 6), 2:ncol(collect_res)] <- as.data.frame(test_pcaMethods_PPCA(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 6), 2:ncol(collect_res)] <- as.data.frame(test_pcaMethods_PPCA(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 7), 2:ncol(collect_res)] <- as.data.frame(test_pcaMethods_svdImpute(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 7), 2:ncol(collect_res)] <- as.data.frame(test_pcaMethods_svdImpute(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 8), 2:ncol(collect_res)] <- as.data.frame(test_pcaMethods_BPCA(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 8), 2:ncol(collect_res)] <- as.data.frame(test_pcaMethods_BPCA(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 9), 2:ncol(collect_res)] <- as.data.frame(test_pcaMethods_Nipals(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 9), 2:ncol(collect_res)] <- as.data.frame(test_pcaMethods_Nipals(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 10), 2:ncol(collect_res)] <- as.data.frame(test_pcaMethods_NLPCA(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 10), 2:ncol(collect_res)] <- as.data.frame(test_pcaMethods_NLPCA(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 11), 2:ncol(collect_res)] <- as.data.frame(test_mice_mixed(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 11), 2:ncol(collect_res)] <- as.data.frame(test_mice_mixed(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 12), 2:ncol(collect_res)] <- as.data.frame(test_mi(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 12), 2:ncol(collect_res)] <- as.data.frame(test_mi(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 13), 2:ncol(collect_res)] <- as.data.frame(test_AmeliaII(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 13), 2:ncol(collect_res)] <- as.data.frame(test_AmeliaII(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 14), 2:ncol(collect_res)] <- as.data.frame(test_missForest(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 14), 2:ncol(collect_res)] <- as.data.frame(test_missForest(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 15), 2:ncol(collect_res)] <- as.data.frame(test_aregImpute(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 15), 2:ncol(collect_res)] <- as.data.frame(test_aregImpute(sim$Simulated_matrix,
             list = res))
-        collect_res[((16 * (i - 1)) + 16), 2:ncol(collect_res)] <- as.data.frame(test_kNN(sim$Simulated_matrix, 
+        collect_res[((16 * (i - 1)) + 16), 2:ncol(collect_res)] <- as.data.frame(test_kNN(sim$Simulated_matrix,
             list = res))
-        
+
     }
-    
-    notmiss <- function(x) {
-        sum(!is.na(x))
-    }
-    mymean <- function(x) {
-        mean(x, na.rm = TRUE)
-    }
-    mysd <- function(x) {
-        stats::sd(x, na.rm = TRUE)
-    }
-    
-    RMSE_statmaker <- function(x) {
-        Method <- MCAR_RMSE_stats <- MCAR_RMSE_notmiss <- MCAR_RMSE_mean <- MCAR_RMSE_mysd <- SE_RMSE_MCAR <- MAR_RMSE_stats <- MAR_RMSE_notmiss <- MAR_RMSE_mean <- MAR_RMSE_mysd <- SE_RMSE_MAR <- MNAR_RMSE_stats <- MNAR_RMSE_notmiss <- MNAR_RMSE_mean <- MNAR_RMSE_mysd <- SE_RMSE_MNAR <- MAP_RMSE_stats <- MAP_RMSE_notmiss <- MAP_RMSE_mean <- MAP_RMSE_mysd <- SE_RMSE_MAP <- lower.ci_RMSE_MCAR <- upper.ci_RMSE_MCAR <- lower.ci_RMSE_MAR <- upper.ci_RMSE_MAR <- lower.ci_RMSE_MNAR <- upper.ci_RMSE_MNAR <- lower.ci_RMSE_MAP <- upper.ci_RMSE_MAP <- NULL
-        if (ncol(x) == 5) {
-            RMSE_stats <- x %>% group_by(Method) %>% summarise_all(funs(mymean, mysd, 
-                notmiss)) %>% mutate(SE_RMSE_MCAR = MCAR_RMSE_mysd/sqrt(MCAR_RMSE_notmiss), 
-                lower.ci_RMSE_MCAR = MCAR_RMSE_mymean - stats::qt(1 - (0.05/2), MCAR_RMSE_notmiss - 
-                  1) * SE_RMSE_MCAR, upper.ci_RMSE_MCAR = MCAR_RMSE_mymean + stats::qt(1 - 
-                  (0.05/2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR, SE_RMSE_MAR = MAR_RMSE_mysd/sqrt(MAR_RMSE_notmiss), 
-                lower.ci_RMSE_MAR = MAR_RMSE_mymean - stats::qt(1 - (0.05/2), MAR_RMSE_notmiss - 
-                  1) * SE_RMSE_MAR, upper.ci_RMSE_MAR = MAR_RMSE_mymean + stats::qt(1 - 
-                  (0.05/2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR, SE_RMSE_MNAR = MNAR_RMSE_mysd/sqrt(MNAR_RMSE_notmiss), 
-                lower.ci_RMSE_MNAR = MNAR_RMSE_mymean - stats::qt(1 - (0.05/2), MNAR_RMSE_notmiss - 
-                  1) * SE_RMSE_MNAR, upper.ci_RMSE_MNAR = MNAR_RMSE_mymean + stats::qt(1 - 
-                  (0.05/2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR, SE_RMSE_MAP = MAP_RMSE_mysd/sqrt(MAP_RMSE_notmiss), 
-                lower.ci_RMSE_MAP = MAP_RMSE_mymean - stats::qt(1 - (0.05/2), MAP_RMSE_notmiss - 
-                  1) * SE_RMSE_MAP, upper.ci_RMSE_MAP = MAP_RMSE_mymean + stats::qt(1 - 
-                  (0.05/2), MAP_RMSE_notmiss - 1) * SE_RMSE_MAP) %>% dplyr::select(Method, 
-                MCAR_RMSE_mymean, MAR_RMSE_mymean, MNAR_RMSE_mymean, MAP_RMSE_mymean, 
-                lower.ci_RMSE_MCAR, upper.ci_RMSE_MCAR, lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, 
-                lower.ci_RMSE_MNAR, upper.ci_RMSE_MNAR, lower.ci_RMSE_MAP, upper.ci_RMSE_MAP)
-        } else {
-            RMSE_stats <- x %>% group_by(Method) %>% summarise_all(funs(mymean, mysd, 
-                notmiss)) %>% mutate(SE_RMSE_MCAR = MCAR_RMSE_mysd/sqrt(MCAR_RMSE_notmiss), 
-                lower.ci_RMSE_MCAR = MCAR_RMSE_mymean - stats::qt(1 - (0.05/2), MCAR_RMSE_notmiss - 
-                  1) * SE_RMSE_MCAR, upper.ci_RMSE_MCAR = MCAR_RMSE_mymean + stats::qt(1 - 
-                  (0.05/2), MCAR_RMSE_notmiss - 1) * SE_RMSE_MCAR, SE_RMSE_MAR = MAR_RMSE_mysd/sqrt(MAR_RMSE_notmiss), 
-                lower.ci_RMSE_MAR = MAR_RMSE_mymean - stats::qt(1 - (0.05/2), MAR_RMSE_notmiss - 
-                  1) * SE_RMSE_MAR, upper.ci_RMSE_MAR = MAR_RMSE_mymean + stats::qt(1 - 
-                  (0.05/2), MAR_RMSE_notmiss - 1) * SE_RMSE_MAR, SE_RMSE_MNAR = MNAR_RMSE_mysd/sqrt(MNAR_RMSE_notmiss), 
-                lower.ci_RMSE_MNAR = MNAR_RMSE_mymean - stats::qt(1 - (0.05/2), MNAR_RMSE_notmiss - 
-                  1) * SE_RMSE_MNAR, upper.ci_RMSE_MNAR = MNAR_RMSE_mymean + stats::qt(1 - 
-                  (0.05/2), MNAR_RMSE_notmiss - 1) * SE_RMSE_MNAR) %>% dplyr::select(Method, 
-                MCAR_RMSE_mymean, MAR_RMSE_mymean, MNAR_RMSE_mymean, lower.ci_RMSE_MCAR, 
-                upper.ci_RMSE_MCAR, lower.ci_RMSE_MAR, upper.ci_RMSE_MAR, lower.ci_RMSE_MNAR, 
-                upper.ci_RMSE_MNAR)
-        }
-        list(RMSE_stats = RMSE_stats)
-    }
-    
-    summary <- RMSE_statmaker(collect_res)
-    
-    MCAR_RMSE_mymean <- MAR_RMSE_mymean <- MNAR_RMSE_mymean <- MAP_RMSE_mymean <- Method <- NULL
-    # Best methods for the three missingness types
-    Best_method_MCAR <- summary$RMSE_stats %>% filter(MCAR_RMSE_mymean == min(MCAR_RMSE_mymean)) %>% 
-        dplyr::select(Method) %>% as.character()
-    
-    Best_method_MAR <- summary$RMSE_stats %>% filter(MAR_RMSE_mymean == min(MAR_RMSE_mymean)) %>% 
-        dplyr::select(Method) %>% as.character()
-    
-    Best_method_MNAR <- summary$RMSE_stats %>% filter(MNAR_RMSE_mymean == min(MNAR_RMSE_mymean)) %>% 
-        dplyr::select(Method) %>% as.character()
-    
-    if (!is.na(assumed_pattern)) 
-        Best_method_MAP <- summary$RMSE_stats %>% filter(MAP_RMSE_mymean == min(MAP_RMSE_mymean)) %>% 
-            dplyr::select(Method) %>% as.character()
-    
-    Pattern <- RMSE <- MCAR_RMSE <- MAR_RMSE <- MNAR_RMSE <- MAP_RMSE <- NULL
-    if (!is.na(assumed_pattern)) 
-        forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MAP_RMSE, factor_key = TRUE) else forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MNAR_RMSE, factor_key = TRUE)
-    forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation", 
-        "Mean imputation", "missMDA Regularized", "missMDA EM", "pcaMethods PPCA", 
-        "pcaMethods svdImpute", "pcaMethods BPCA", "pcaMethods NIPALS", "pcaMethods NLPCA", 
-        "mice mixed", "mi Bayesian", "Amelia II", "missForest", "Hmisc aregImpute", 
-        "VIM kNN"))
-    if (!is.na(assumed_pattern)) 
-        levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR", "MAP") else levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
-    p <- ggplot(forgraph, aes(x = Method, y = RMSE, fill = Method)) + geom_boxplot() + 
-        facet_grid(~Pattern, scales = "free") + theme(axis.text.x = element_text(angle = 90, 
-        hjust = 1)) + ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") + 
-        theme(plot.title = element_text(hjust = 0.5)) + labs(x = "")
-    
-    print(paste("In case you assume a missing completely at random (MCAR) missingness pattern, missCompare suggests the ", 
-        Best_method_MCAR, " algorithm for imputation", sep = ""))
-    print(paste("In case you assume a missing at random (MAR) missingness pattern, missCompare suggests the ", 
-        Best_method_MAR, " algorithm for imputation", sep = ""))
-    print(paste("In case you assume a missing not at random (MNAR) missingness pattern, missCompare suggests the ", 
-        Best_method_MNAR, " algorithm for imputation", sep = ""))
-    if (!is.na(assumed_pattern)) 
-        print(paste("For the defined assumed missingness pattern (MAP), missCompare suggests the ", 
-            Best_method_MAP, " algorithm for imputation", sep = ""))
-    
-    # output list
-    if (!is.na(assumed_pattern)) 
-        list(Imputation_RMSE = collect_res, Imputation_RMSE_means = summary$RMSE_stats, 
-            Best_method_MCAR = Best_method_MCAR, Best_method_MAR = Best_method_MAR, 
-            Best_method_MNAR = Best_method_MNAR, Best_method_MAP = Best_method_MAP, 
-            Plot = p) else list(Imputation_RMSE = collect_res, Imputation_RMSE_means = summary$RMSE_stats, 
-        Best_method_MCAR = Best_method_MCAR, Best_method_MAR = Best_method_MAR, Best_method_MNAR = Best_method_MNAR, 
-        Plot = p)
-    
-    
+
+            mymean <- function(x) {
+              mean(x, na.rm = TRUE)
+            }
+
+
+            RMSE_statmaker <- function(x) {
+              Method <- NULL
+              if (ncol(x) == 5) {
+                RMSE_stats <- x %>% group_by(Method) %>% summarise_all(funs(mymean))
+              } else {
+                RMSE_stats <- x %>% group_by(Method) %>% summarise_all(funs(mymean))
+              }
+              list(RMSE_stats = RMSE_stats)
+            }
+
+            summary <- RMSE_statmaker(collect_res)
+
+            Method <- MCAR_RMSE <- MAR_RMSE <- MNAR_RMSE <- MAP_RMSE <- NULL
+            # Best methods for the three missingness types
+            Best_method_MCAR <- summary$RMSE_stats %>% filter(MCAR_RMSE == min(MCAR_RMSE)) %>%
+              dplyr::select(Method) %>% as.character()
+
+            Best_method_MAR <- summary$RMSE_stats %>% filter(MAR_RMSE == min(MAR_RMSE)) %>%
+              dplyr::select(Method) %>% as.character()
+
+            Best_method_MNAR <- summary$RMSE_stats %>% filter(MNAR_RMSE == min(MNAR_RMSE)) %>%
+              dplyr::select(Method) %>% as.character()
+
+            if (!is.na(assumed_pattern))
+              Best_method_MAP <- summary$RMSE_stats %>% filter(MAP_RMSE == min(MAP_RMSE)) %>%
+              dplyr::select(Method) %>% as.character()
+
+            Pattern <- RMSE <- MCAR_RMSE <- MAR_RMSE <- MNAR_RMSE <- MAP_RMSE <- NULL
+            if (!is.na(assumed_pattern))
+              forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MAP_RMSE, factor_key = TRUE) else forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MNAR_RMSE, factor_key = TRUE)
+            forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation",
+                                                                  "Mean imputation", "missMDA Regularized", "missMDA EM", "pcaMethods PPCA",
+                                                                  "pcaMethods svdImpute", "pcaMethods BPCA", "pcaMethods NIPALS", "pcaMethods NLPCA",
+                                                                  "mice mixed", "mi Bayesian", "Amelia II", "missForest", "Hmisc aregImpute",
+                                                                  "VIM kNN"))
+            if (!is.na(assumed_pattern))
+              levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR", "MAP") else levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
+            p <- ggplot(forgraph, aes(x = Method, y = RMSE, fill = Method)) + geom_boxplot() +
+              facet_grid(~Pattern, scales = "free") + theme(axis.text.x = element_text(angle = 90,
+                                                                                       hjust = 1)) + ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
+              theme(plot.title = element_text(hjust = 0.5)) + labs(x = "")
+
+            print(paste("In case you assume a missing completely at random (MCAR) missingness pattern, missCompare suggests the ",
+                        Best_method_MCAR, " algorithm for imputation", sep = ""))
+            print(paste("In case you assume a missing at random (MAR) missingness pattern, missCompare suggests the ",
+                        Best_method_MAR, " algorithm for imputation", sep = ""))
+            print(paste("In case you assume a missing not at random (MNAR) missingness pattern, missCompare suggests the ",
+                        Best_method_MNAR, " algorithm for imputation", sep = ""))
+            if (!is.na(assumed_pattern))
+              print(paste("For the defined assumed missingness pattern (MAP), missCompare suggests the ",
+                          Best_method_MAP, " algorithm for imputation", sep = ""))
+
+            # output list
+            if (!is.na(assumed_pattern))
+              list(Imputation_RMSE = collect_res, Imputation_RMSE_means = summary$RMSE_stats,
+                   Best_method_MCAR = Best_method_MCAR, Best_method_MAR = Best_method_MAR,
+                   Best_method_MNAR = Best_method_MNAR, Best_method_MAP = Best_method_MAP,
+                   Plot = p) else list(Imputation_RMSE = collect_res, Imputation_RMSE_means = summary$RMSE_stats,
+                                       Best_method_MCAR = Best_method_MCAR, Best_method_MAR = Best_method_MAR, Best_method_MNAR = Best_method_MNAR,
+                                       Plot = p)
+
+
 }
