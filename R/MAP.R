@@ -40,62 +40,62 @@
 #' @export
 
 ### FUNCTION
-MAP <- function(X_hat, MD_pattern, NA_fraction, min_PDM = 10, assumed_pattern = c("MAR", 
+MAP <- function(X_hat, MD_pattern, NA_fraction, min_PDM = 10, assumed_pattern = c("MAR",
     "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MCAR")) {
-    
-    if (length(assumed_pattern) != ncol(X_hat)) 
-        stop(paste("The number of columns in X_hat (", ncol(X_hat), ") and argument assumed_pattern (", 
-            length(assumed_pattern), ") do not match. Please double-check the arguments of the function.", 
+
+    if (length(assumed_pattern) != ncol(X_hat))
+        stop(paste("The number of columns in X_hat (", ncol(X_hat), ") and argument assumed_pattern (",
+            length(assumed_pattern), ") do not match. Please double-check the arguments of the function.",
             sep = ""))
-    
+
     rownames(X_hat) <- 1:nrow(X_hat)
     data_names <- colnames(MD_pattern)
     colnames(X_hat) <- data_names
-    
+
     # removing row 1 - the row representing complete cases from MD_pattern removing
     # last row - the row with summary stats from MD_pattern
     MD_pattern <- MD_pattern[-c(1, nrow(MD_pattern)), ]
-    
+
     # trying to remove all patterns with less than min_PDM obs
     index <- as.numeric(rownames(MD_pattern)) >= min_PDM
     MD_pattern_simple <- MD_pattern[index, ]
-    message(paste0(round(sum(100 * as.numeric(rownames(MD_pattern_simple)))/sum(as.numeric(rownames(MD_pattern))), 
-        2), "% of observations covered by setting min_PDM to ", min_PDM), sep = "")
-    
+    message(paste0(round(sum(100 * as.numeric(rownames(MD_pattern_simple)))/sum(as.numeric(rownames(MD_pattern))),
+        2), "% of observations (with at least one missing datapoint) covered by setting min_PDM to ", min_PDM), sep = "")
+
     # creating frequency vector
     totrows <- as.numeric(rownames(MD_pattern_simple))
     myfreq <- totrows/sum(totrows)
-    
+
     # removing row names, but keeping column names
     rownames(MD_pattern_simple) <- NULL
-    
+
     # amputation in 3 patterns
-    amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple, 
+    amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple,
         freq = myfreq, bycases = F, mech = "MCAR")
     X_hat_MCAR <- amputed$amp
-    
-    amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple, 
+
+    amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple,
         freq = myfreq, bycases = F, mech = "MAR")
     X_hat_MAR <- amputed$amp
-    
-    amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple, 
+
+    amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple,
         freq = myfreq, bycases = F, mech = "MNAR")
     X_hat_MNAR <- amputed$amp
-    
-    X_hat <- cbind(X_hat_MCAR[, assumed_pattern == "MCAR"], X_hat_MAR[, assumed_pattern == 
+
+    X_hat <- cbind(X_hat_MCAR[, assumed_pattern == "MCAR"], X_hat_MAR[, assumed_pattern ==
         "MAR"], X_hat_MNAR[, assumed_pattern == "MNAR"])
-    
+
     X_hat <- X_hat[, data_names]
-    
+
     # remove rows with full missingness
     missfrac_per_ind <- rowMeans(is.na(X_hat))
     inds_above_thres <- rownames(X_hat)[missfrac_per_ind == 1]
-    if (length(inds_above_thres) != 0) 
+    if (length(inds_above_thres) != 0)
         X_hat <- X_hat[-which(missfrac_per_ind == 1), ]
-    
+
     matrix_summary <- summary(X_hat)
-    
+
     list(MAP_matrix = X_hat, Summary = matrix_summary)
-    
+
 }
 

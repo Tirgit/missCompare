@@ -23,6 +23,7 @@
 #' \item{NA_per_variable}{Number of missing values per variables in the dataframe. A (named) numeric vector of length the number of columns}
 #' \item{MD_Pattern}{Missing data pattern calculated using mice::md_pattern (see \code{\link[mice]{md.pattern}} in the mice package)}
 #' \item{NA_Correlations}{Correlation matrix of variables vs. variables converted to boolean based on missingness status (yes/no). Point-biserial correlation coefficients based on variable pairs is obtained using complete observations in the respective variable pairs. Higher correlation coefficients can indicate MAR missingness pattern}
+#' \item{min_PDM_thresholds}{Small dataframe offering clues on how to set min_PDM thresholds in the next steps of the pipeline. The first column represents min_PDM thresholds, while the second column represents percentages that would be retained by setting min_PDM to the respective values. These values are the percentages of the total rows with any number of missing data (excluding complete observations), so a value of e.g. 80\% would mean that 80\% of rows with missing data with the most common patterns are represented in the simulation step}
 #' \item{Vars_above_half}{Character vector of variables names with missingness higher than 50\%}
 #' \item{Matrix_plot}{Matrixplot where missing values are colored gray and available values are colored based on value range}
 #' \item{Cluster_plot}{Cluster plot of co-missingness. Variables demostrating shared missingness patterns will branch at closer to the bottom of the plot, while no patterns will be represented by branches high in the plot}
@@ -57,6 +58,20 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   data_names <- colnames(X)
   mdpat <- mdpat[, data_names]
 
+  # checking min_PDM thresholds
+  mdpat_count <- mdpat[-c(1, nrow(mdpat)), ]
+  min_PDM <- c(5,10,20,50,100,200,500,1000)
+  min_PDM_obs <- c()
+  for (i in 1:length(min_PDM)) {
+    index <- as.numeric(rownames(mdpat_count)) > min_PDM[i]
+    mdpat_count_simple <- mdpat_count[index, ]
+    min_PDM_obs[i] <- round(sum(100 * as.numeric(rownames(mdpat_count_simple)))/sum(as.numeric(rownames(mdpat_count))))
+  }
+
+  min_PDM_df <- cbind(min_PDM, min_PDM_obs)
+  colnames(min_PDM_df) <- c("min_PDM_threshold", "perc_obs_retained")
+
+  # NA correlation
   na_cor <- matrix(nrow = cols, ncol = cols)
   colnames(na_cor) <- colnames(X)
   row.names(na_cor) <- paste0(colnames(X), "_is.na")
@@ -114,8 +129,8 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   # output
   list(Complete_cases = comp, Rows = rows, Columns = cols, Corr_matrix = mat, Fraction_missingness = missfrac_per_df,
        Fraction_missingness_per_variable = missfrac_per_var, Total_NA = na_per_df,
-       NA_per_variable = na_per_var, MD_Pattern = mdpat, NA_Correlations = na_cor, Vars_above_half = vars_above_half,
+       NA_per_variable = na_per_var, MD_Pattern = mdpat, NA_Correlations = na_cor,
+       min_PDM_thresholds = min_PDM_df, Vars_above_half = vars_above_half,
        Matrix_plot = matrix_plot, Cluster_plot = cluster_plot)
-
 }
 
