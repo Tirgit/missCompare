@@ -133,19 +133,24 @@ impute_simulated <- function(rownum, colnum, cormat, n.iter = 10, MD_pattern, NA
 
             summary <- RMSE_statmaker(collect_res)
 
-            Method <- MCAR_RMSE <- MAR_RMSE <- MNAR_RMSE <- MAP_RMSE <- NULL
+            if (!is.na(assumed_pattern))
+              colnames(summary$RMSE_stats) <- c("Method", "MCAR_RMSE_mean", "MAR_RMSE_mean", "MNAR_RMSE_mean", "MAP_RMSE_mean") else
+                colnames(summary$RMSE_stats) <- c("Method", "MCAR_RMSE_mean", "MAR_RMSE_mean", "MNAR_RMSE_mean")
+
+
+            Method <- MCAR_RMSE_mean <- MAR_RMSE_mean <- MNAR_RMSE_mean <- MAP_RMSE_mean <- NULL
             # Best methods for the three missingness types
-            Best_method_MCAR <- summary$RMSE_stats %>% filter(MCAR_RMSE == min(MCAR_RMSE)) %>%
+            Best_method_MCAR <- summary$RMSE_stats %>% filter(MCAR_RMSE_mean == min(MCAR_RMSE_mean)) %>%
               dplyr::select(Method) %>% as.character()
 
-            Best_method_MAR <- summary$RMSE_stats %>% filter(MAR_RMSE == min(MAR_RMSE)) %>%
+            Best_method_MAR <- summary$RMSE_stats %>% filter(MAR_RMSE_mean == min(MAR_RMSE_mean)) %>%
               dplyr::select(Method) %>% as.character()
 
-            Best_method_MNAR <- summary$RMSE_stats %>% filter(MNAR_RMSE == min(MNAR_RMSE)) %>%
+            Best_method_MNAR <- summary$RMSE_stats %>% filter(MNAR_RMSE_mean == min(MNAR_RMSE_mean)) %>%
               dplyr::select(Method) %>% as.character()
 
             if (!is.na(assumed_pattern))
-              Best_method_MAP <- summary$RMSE_stats %>% filter(MAP_RMSE == min(MAP_RMSE)) %>%
+              Best_method_MAP <- summary$RMSE_stats %>% filter(MAP_RMSE_mean == min(MAP_RMSE_mean)) %>%
               dplyr::select(Method) %>% as.character()
 
             Pattern <- RMSE <- MCAR_RMSE <- MAR_RMSE <- MNAR_RMSE <- MAP_RMSE <- NULL
