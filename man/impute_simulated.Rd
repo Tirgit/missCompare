@@ -26,7 +26,7 @@ impute_simulated(rownum, colnum, cormat, n.iter = 10, MD_pattern,
 }
 \value{
 \item{Imputation_RMSE}{Raw RMSE values per method, per missingness pattern, per iteration)}
-\item{Imputation_RMSE_means}{RMSE summary statistics including mean, standard error and 95\% confidence intervals per method and missingness pattern}
+\item{Imputation_RMSE_means}{RMSE means per method and missingness pattern}
 \item{Best_method_MCAR}{The best performing method with MCAR assumption. The method with the lowest mean RMSE calculated from RMSE values from all iterations (default output)}
 \item{Best_method_MAR}{The best performing method with MAR assumption. The method with the lowest mean RMSE calculated from RMSE values from all iterations (default output)}
 \item{Best_method_MNAR}{The best performing method with MNAR assumption. The method with the lowest mean RMSE calculated from RMSE values from all iterations (default output)}
