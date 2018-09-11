@@ -69,6 +69,7 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   }
 
   min_PDM_df <- cbind(min_PDM, min_PDM_obs)
+  row.names(min_PDM_df) <- c(1:8)
   colnames(min_PDM_df) <- c("min_PDM_threshold", "perc_obs_retained")
 
   # NA correlation
