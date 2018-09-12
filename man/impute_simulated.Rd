@@ -4,7 +4,7 @@
 \alias{impute_simulated}
 \title{Imputation algorithm tester on simulated data}
 \usage{
-impute_simulated(rownum, colnum, cormat, n.iter = 2, MD_pattern,
+impute_simulated(rownum, colnum, cormat, n.iter = 10, MD_pattern,
   NA_fraction, min_PDM = 10, assumed_pattern = NA)
 }
 \arguments{

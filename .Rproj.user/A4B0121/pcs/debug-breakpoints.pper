@@ -932,19 +932,49 @@
                 "type" : 1
             },
             {
-                "editor_line_number" : 83,
-                "editor_state" : 1,
-                "function_name" : "toplevel",
+                "editor_line_number" : 576,
+                "editor_state" : 2,
+                "function_name" : "test_mice_mixed",
                 "function_steps" : "",
-                "id" : 576,
+                "id" : 587,
                 "is_package_breakpoint" : false,
                 "is_pending_debug_completion" : false,
-                "line_number" : 83,
+                "line_number" : 576,
+                "needs_updated_steps" : true,
+                "package_name" : "",
+                "path" : "~/Documents/temp/dimple_flow.R",
+                "state" : 2,
+                "type" : 0
+            },
+            {
+                "editor_line_number" : 532,
+                "editor_state" : 2,
+                "function_name" : "test_pcaMethods_BPCA",
+                "function_steps" : "",
+                "id" : 593,
+                "is_package_breakpoint" : false,
+                "is_pending_debug_completion" : false,
+                "line_number" : 532,
+                "needs_updated_steps" : true,
+                "package_name" : "",
+                "path" : "~/Documents/temp/dimple_flow.R",
+                "state" : 2,
+                "type" : 0
+            },
+            {
+                "editor_line_number" : 533,
+                "editor_state" : 2,
+                "function_name" : "test_pcaMethods_BPCA",
+                "function_steps" : "",
+                "id" : 594,
+                "is_package_breakpoint" : false,
+                "is_pending_debug_completion" : false,
+                "line_number" : 533,
                 "needs_updated_steps" : false,
                 "package_name" : "",
                 "path" : "~/Documents/temp/dimple_flow.R",
-                "state" : 1,
-                "type" : 1
+                "state" : 2,
+                "type" : 0
             }
         ]
     }
