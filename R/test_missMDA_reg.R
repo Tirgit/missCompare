@@ -64,15 +64,6 @@ test_missMDA_reg <- function(X_hat, list) {
         rmse_MAP <- sqrt(mean((orig_MAP - imp_MAP)^2))
 
     if (length(index) == 4)
-        list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
+      list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR, MAP_RMSE = rmse_MAP) else list(MCAR_RMSE = rmse_MCAR, MAR_RMSE = rmse_MAR, MNAR_RMSE = rmse_MNAR)
 
 }
-
-
-
-# LAB res <- dimple_all_patterns(yy$Simulated_matrix,
-# y$Fraction_missingness_per_variable) test_missMDA_reg(X_hat =
-# yy$Simulated_matrix, list = res)
-
-
-

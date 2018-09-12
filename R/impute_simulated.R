@@ -64,8 +64,8 @@ impute_simulated <- function(rownum, colnum, cormat, n.iter = 10, MD_pattern, NA
     if (!is.na(assumed_pattern))
         collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 5)) else collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 4))
     if (!is.na(assumed_pattern))
-        colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE",
-            "MAP_RMSE") else colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE")
+        colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE", "MAP_RMSE") else
+          colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE")
 
     for (i in 1:n.iter) {
 
@@ -120,37 +120,26 @@ impute_simulated <- function(rownum, colnum, cormat, n.iter = 10, MD_pattern, NA
               mean(x, na.rm = TRUE)
             }
 
-
-            RMSE_statmaker <- function(x) {
-              Method <- NULL
-              if (ncol(x) == 5) {
-                RMSE_stats <- x %>% group_by(Method) %>% summarise_all(funs(mymean))
-              } else {
-                RMSE_stats <- x %>% group_by(Method) %>% summarise_all(funs(mymean))
-              }
-              list(RMSE_stats = RMSE_stats)
-            }
-
-            summary <- RMSE_statmaker(collect_res)
+            Method <- NULL
+            RMSE_stats <- collect_res %>% group_by(Method) %>% summarise_all(funs(mymean))
 
             if (!is.na(assumed_pattern))
-              colnames(summary$RMSE_stats) <- c("Method", "MCAR_RMSE_mean", "MAR_RMSE_mean", "MNAR_RMSE_mean", "MAP_RMSE_mean") else
-                colnames(summary$RMSE_stats) <- c("Method", "MCAR_RMSE_mean", "MAR_RMSE_mean", "MNAR_RMSE_mean")
-
+              colnames(RMSE_stats) <- c("Method", "MCAR_RMSE_mean", "MAR_RMSE_mean", "MNAR_RMSE_mean", "MAP_RMSE_mean") else
+                colnames(RMSE_stats) <- c("Method", "MCAR_RMSE_mean", "MAR_RMSE_mean", "MNAR_RMSE_mean")
 
             Method <- MCAR_RMSE_mean <- MAR_RMSE_mean <- MNAR_RMSE_mean <- MAP_RMSE_mean <- NULL
             # Best methods for the three missingness types
-            Best_method_MCAR <- summary$RMSE_stats %>% filter(MCAR_RMSE_mean == min(MCAR_RMSE_mean)) %>%
+            Best_method_MCAR <- RMSE_stats %>% filter(MCAR_RMSE_mean == min(MCAR_RMSE_mean)) %>%
               dplyr::select(Method) %>% as.character()
 
-            Best_method_MAR <- summary$RMSE_stats %>% filter(MAR_RMSE_mean == min(MAR_RMSE_mean)) %>%
+            Best_method_MAR <- RMSE_stats %>% filter(MAR_RMSE_mean == min(MAR_RMSE_mean)) %>%
               dplyr::select(Method) %>% as.character()
 
-            Best_method_MNAR <- summary$RMSE_stats %>% filter(MNAR_RMSE_mean == min(MNAR_RMSE_mean)) %>%
+            Best_method_MNAR <- RMSE_stats %>% filter(MNAR_RMSE_mean == min(MNAR_RMSE_mean)) %>%
               dplyr::select(Method) %>% as.character()
 
             if (!is.na(assumed_pattern))
-              Best_method_MAP <- summary$RMSE_stats %>% filter(MAP_RMSE_mean == min(MAP_RMSE_mean)) %>%
+              Best_method_MAP <- RMSE_stats %>% filter(MAP_RMSE_mean == min(MAP_RMSE_mean)) %>%
               dplyr::select(Method) %>% as.character()
 
             Pattern <- RMSE <- MCAR_RMSE <- MAR_RMSE <- MNAR_RMSE <- MAP_RMSE <- NULL
@@ -180,10 +169,10 @@ impute_simulated <- function(rownum, colnum, cormat, n.iter = 10, MD_pattern, NA
 
             # output list
             if (!is.na(assumed_pattern))
-              list(Imputation_RMSE = collect_res, Imputation_RMSE_means = summary$RMSE_stats,
+              list(Imputation_RMSE = collect_res, Imputation_RMSE_means = RMSE_stats,
                    Best_method_MCAR = Best_method_MCAR, Best_method_MAR = Best_method_MAR,
                    Best_method_MNAR = Best_method_MNAR, Best_method_MAP = Best_method_MAP,
-                   Plot = p) else list(Imputation_RMSE = collect_res, Imputation_RMSE_means = summary$RMSE_stats,
+                   Plot = p) else list(Imputation_RMSE = collect_res, Imputation_RMSE_means = RMSE_stats,
                                        Best_method_MCAR = Best_method_MCAR, Best_method_MAR = Best_method_MAR, Best_method_MNAR = Best_method_MNAR,
                                        Plot = p)
 
