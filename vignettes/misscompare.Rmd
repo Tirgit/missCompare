@@ -1,3 +1,4 @@
+
 ---
 title: "Introduction to missCompare"
 author: "Tibor V. Varga"
@@ -34,18 +35,17 @@ library(missCompare)
 ## Description of data: *clindata_full* and *clindata_miss*
 
 To walk you through the missCompare missing data imputation pipeline, the authors created
-the `missCompare::clindata_full` and `missCompare::clindata_miss` dataframes. As the names suggest, while clindata_miss contains missing data, clindata_full does not. You can load them into your workspace by:
+the `missCompare::clindata_miss` dataframe. As the name suggest, clindata_miss contains missing data. You can load this dataframe into your workspace by:
 
 ```{r eval = TRUE}
-data("clindata_full")
 data("clindata_miss")
 ```
 
 The data is created by the authors with the purpose of generating a dataset that resembles a real-life
-dataset with variables generally available in realistic clinicial epidemiology datasets. The datasets
+dataset with variables generally available in realistic clinicial epidemiology datasets. The dataset
 have "believable" variable means, distributions, correlations and in clindata_miss, realistic
 missing data patterns. You can find further information on these datasets and the variables within
-using `?clindata_full` and `?clindata_miss`.
+using `?clindata_miss`.
 
 
 ## The missCompare pipeline

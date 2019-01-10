@@ -12,7 +12,7 @@ test_that("errors in impute_data()", {
   expect_error(missCompare::impute_data(clindata_miss))
 })
 
-cleaned <- clean(clindata_miss)
+cleaned <- missCompare::clean(clindata_miss)
 y <- get_data(cleaned, matrixplot_sort = T)
 simulated <- simulate(rownum = y$Rows, colnum =y$Columns, cormat=y$Corr_matrix)
 res <- all_patterns(X_hat = simulated$Simulated_matrix,
