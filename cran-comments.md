@@ -2,8 +2,8 @@
 This is this first submission of the missCompare R package to CRAN.    
 
 ## Test environments
-* local OS X install, R 3.5.1        
-* ubuntu 14.04 (on travis-ci), R 3.5.1    
+* local OS X install, R 3.5.2        
+* ubuntu 14.04 (on travis-ci), R 3.5.0    
 * win-builder (R-devel, R-release)   
 
 ## R CMD check results
