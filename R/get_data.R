@@ -104,14 +104,14 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   colnames(df_miss_id) <- c("Observations", colnames(arr_X))
   df_melt <- data.table::melt(df_miss_id, id = c("Observations"))
   matrixplot_sorted <- ggplot(df_melt, aes(x = variable, y = Observations)) + geom_tile(aes(fill = value)) +
-    scale_fill_gradient(low = "white", high = "lightblue") + theme(panel.background = element_blank()) +
+    scale_fill_gradient(low = "white", high = "blue") + theme(panel.background = element_blank()) +
     ggtitle("Matrix plot of missing data") + theme(plot.title = element_text(hjust = 0.5))
 
   df_miss_id <- cbind(c(1:rows), X_update)
   colnames(df_miss_id) <- c("Observations", colnames(X_update))
   df_melt <- data.table::melt(df_miss_id, id = c("Observations"))
   matrixplot_unsorted <- ggplot(df_melt, aes(x = variable, y = Observations)) + geom_tile(aes(fill = value)) +
-    scale_fill_gradient(low = "white", high = "lightblue") + theme(panel.background = element_blank()) +
+    scale_fill_gradient(low = "white", high = "blue") + theme(panel.background = element_blank()) +
     ggtitle("Matrix plot of missing data") + theme(plot.title = element_text(hjust = 0.5))
 
   if (matrixplot_sort == F)
