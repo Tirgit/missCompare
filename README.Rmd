@@ -50,9 +50,8 @@ missing data using `missCompare::get_data()`
     + missing not at random (MNAR) - `missCompare::MNAR()` - missing data occurence correlates with variables' own values
     + missing in assumed pattern (MAP) - `missCompare::MAP()` - a combination of the previous three, where the user can define a pattern per variable
   + imputing missing data, obtaining imputation accuracy (root mean squared errors - RMSE) per method and plotting results using `missCompare::impute_simulated()`
-4. **Imputation - validation** - After the previous step, you will have a general idea on what are the best performing algorithms for your data structure (size, degree of correlation between variables). With `missCompare::impute_data_validate()` you can use your original data and spike in a tiny fraction of missing data, impute and check imputation accuracy on that tiny fraction and validate that the best performing algorithms from the previous step are indeed good to work with.
-5. **Imputating your data** - Here you can impute your original data with your chosen algorithm(s) using `missCompare::impute_data()`.
-6. **Post imputation diagnostics** will give an informative assessment on how the imputation changed your data structure (e.g. variable means, distributions, correlations). The function here is `missCompare::post_imp_diag()`.
+4. **Imputating your data** -  After the previous step, you will have a general idea on what are the best performing algorithms for your data structure (size, degree of correlation between variables). In this step, you can impute your original data with your chosen algorithm(s) using `missCompare::impute_data()`.
+5. **Post imputation diagnostics** will give an informative assessment on how the imputation changed your data structure (e.g. variable means, distributions, correlations). The function here is `missCompare::post_imp_diag()`.
 
 ## Installation
 
@@ -95,15 +94,6 @@ missCompare::impute_simulated(rownum = metadata$Rows,
                               min_PDM = 10,
                               n.iter = 50, 
                               assumed_pattern = NA)
-```
-
-#### Imputation - validation
-```{r eval = FALSE} 
-missCompare::impute_data_validate(cleaned,
-                                  scale = T,
-                                  spike.in = 0.01,
-                                  n.iter = 50,
-                                  sel_method = c(1:16))
 ```
                                   
 #### Imputation of data

@@ -193,7 +193,7 @@ hljs.initHighlightingOnLoad();
 
 <hr/>
 
-<p><a href="/commits/master"><img src="https://img.shields.io/badge/last change-2019--01--10-yellowgreen.svg" alt="Last-changedate"/></a></p>
+<p><a href="/commits/master"><img src="https://img.shields.io/badge/last change-2019--01--14-yellowgreen.svg" alt="Last-changedate"/></a></p>
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -225,8 +225,7 @@ missing data using <code>missCompare::get_data()</code></li>
 <li>missing in assumed pattern (MAP) - <code>missCompare::MAP()</code> - a combination of the previous three, where the user can define a pattern per variable</li>
 <li>imputing missing data, obtaining imputation accuracy (root mean squared errors - RMSE) per method and plotting results using <code>missCompare::impute_simulated()</code></li>
 </ul></li>
-<li><strong>Imputation - validation</strong> - After the previous step, you will have a general idea on what are the best performing algorithms for your data structure (size, degree of correlation between variables). With <code>missCompare::impute_data_validate()</code> you can use your original data and spike in a tiny fraction of missing data, impute and check imputation accuracy on that tiny fraction and validate that the best performing algorithms from the previous step are indeed good to work with.</li>
-<li><strong>Imputating your data</strong> - Here you can impute your original data with your chosen algorithm(s) using <code>missCompare::impute_data()</code>.</li>
+<li><strong>Imputating your data</strong> -  After the previous step, you will have a general idea on what are the best performing algorithms for your data structure (size, degree of correlation between variables). In this step, you can impute your original data with your chosen algorithm(s) using <code>missCompare::impute_data()</code>.</li>
 <li><strong>Post imputation diagnostics</strong> will give an informative assessment on how the imputation changed your data structure (e.g. variable means, distributions, correlations). The function here is <code>missCompare::post_imp_diag()</code>.</li>
 </ol>
 
@@ -270,15 +269,6 @@ data(&quot;clindata_miss&quot;)
                               min_PDM = 10,
                               n.iter = 50, 
                               assumed_pattern = NA)
-</code></pre>
-
-<h4>Imputation - validation</h4>
-
-<pre><code class="r">missCompare::impute_data_validate(cleaned,
-                                  scale = T,
-                                  spike.in = 0.01,
-                                  n.iter = 50,
-                                  sel_method = c(1:16))
 </code></pre>
 
 <h4>Imputation of data</h4>
