@@ -93,7 +93,7 @@ missCompare::impute_simulated(rownum = metadata$Rows,
                               n.iter = 50, 
                               assumed_pattern = NA)
 ```
-                                  
+
 #### Imputation of data
 
 ```r
