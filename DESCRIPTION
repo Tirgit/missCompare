@@ -17,7 +17,7 @@ Description: The missCompare package offers a convenient pipeline to test and co
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
-RoxygenNote: 6.1.0
+RoxygenNote: 6.1.1
 BugReports: https://github.com/Tirgit/missingdata/issues
 Depends: R (>= 3.5.0)
 biocViews: pcaMethods
