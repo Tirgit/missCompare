@@ -61,11 +61,11 @@
 impute_simulated <- function(rownum, colnum, cormat, n.iter = 10, MD_pattern, NA_fraction,
     min_PDM = 10, assumed_pattern = NA) {
 
+  if (!is.na(assumed_pattern))
+    collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 14)) else collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 11))
     if (!is.na(assumed_pattern))
-        collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 5)) else collect_res <- data.frame(matrix(NA, nrow = 16 * n.iter, ncol = 4))
-    if (!is.na(assumed_pattern))
-        colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE", "MAP_RMSE") else
-          colnames(collect_res) <- c("Method", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE")
+      colnames(collect_res) <- c("Method", "Comp_time", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE", "MAP_RMSE", "MCAR_MAE", "MAR_MAE", "MNAR_MAE", "MAP_MAE", "MCAR_KS", "MAR_KS", "MNAR_KS", "MAP_KS") else
+        colnames(collect_res) <- c("Method", "Comp_time", "MCAR_RMSE", "MAR_RMSE", "MNAR_RMSE", "MCAR_MAE", "MAR_MAE", "MNAR_MAE", "MCAR_KS", "MAR_KS", "MNAR_KS")
 
     for (i in 1:n.iter) {
 
