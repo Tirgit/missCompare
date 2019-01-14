@@ -1,7 +1,7 @@
 Package: missCompare
 Type: Package
 Title: Missing Data Imputation Made Simple
-Version: 0.1.0
+Version: 1.0.0
 Authors@R: c(person("Tibor", "V. Varga", email = "tirgit@hotmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-2383-699X")),
             person("David", "Westergaard", email = "david.westergaard@cpr.ku.dk", role= c("aut"), comment = c(ORCID = "0000-0003-0128-8432")))
 Maintainer: Tibor V. Varga <tirgit@hotmail.com>

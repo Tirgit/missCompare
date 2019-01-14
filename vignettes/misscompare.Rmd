@@ -32,7 +32,7 @@ library(missCompare)
 ```
 
 
-## Description of data: *clindata_full* and *clindata_miss*
+## Description of data: *clindata_miss*
 
 To walk you through the missCompare missing data imputation pipeline, the authors created
 the `missCompare::clindata_miss` dataframe. As the name suggest, clindata_miss contains missing data. You can load this dataframe into your workspace by:
@@ -41,11 +41,10 @@ the `missCompare::clindata_miss` dataframe. As the name suggest, clindata_miss c
 data("clindata_miss")
 ```
 
-The data is created by the authors with the purpose of generating a dataset that resembles a real-life
-dataset with variables generally available in realistic clinicial epidemiology datasets. The dataset
-have "believable" variable means, distributions, correlations and in clindata_miss, realistic
-missing data patterns. You can find further information on these datasets and the variables within
-using `?clindata_miss`.
+The data is created by the authors with the purpose of generating a dataset that resembles real-life
+data with variables generally available in a simple, realistic clinicial epidemiology dataset. This R dataframe
+have realistic variable means, distributions, correlations and missing data patterns. You can find further information
+on the dataframe using `?clindata_miss`.
 
 
 ## The missCompare pipeline
@@ -62,8 +61,9 @@ missing data using `missCompare::get_data()`
     + missing at random (MAR) - `missCompare::MAR()` - missing data occurence correlates with other variables' values
     + missing not at random (MNAR) - `missCompare::MNAR()` - missing data occurence correlates with variables' own values
     + missing in assumed pattern (MAP) - `missCompare::MAP()` - a combination of the previous three, where the user can define a pattern per variable
-  + imputing missing data, obtaining imputation accuracy (root mean squared errors - RMSE) per method and plotting results using `missCompare::impute_simulated()`
-4. **Imputating your data** - After the previous step, you will have a general idea on what are the best performing algorithms for your data structure (size, degree of correlation between variables). In this step you can impute your original data with your chosen algorithm(s) using `missCompare::impute_data()`.
+  + imputing missing data, obtaining measures of imputation quality (root mean squared error - RMSE; mean absolute error - MAE;
+  Kolmogorov–Smirnov test statistic - KS; computation time) per method and plotting results using `missCompare::impute_simulated()`
+4. **Imputing your data** - After the previous step, you will have a general idea on what are the best performing algorithms for your data structure (size, degree of correlation between variables). In this step you can impute your original data with your chosen algorithm(s) using `missCompare::impute_data()`
 5. **Post imputation diagnostics** will give an informative assessment on how the imputation changed your data structure (e.g. variable means, distributions, correlations). The function here is `missCompare::post_imp_diag()`.
 
 Now let's look into these, step by step!
@@ -96,7 +96,7 @@ metadata <- missCompare::get_data(cleaned,
                                   plot_transform = T)
 ```
 
-If there are factor variables in the data, a warning will appear: **Warning! Variable(s) sex, education is/are not numeric. Convert this/these variables to numeric using missCompare::clean() and repeat the missCompare::get_data() function until no warnings are shown.**
+If there are non-numeric variables in the data, a warning will appear: **Warning! Variable(s) sex, education is/are not numeric. Convert this/these variables to numeric using missCompare::clean() and repeat the missCompare::get_data() function until no warnings are shown.**
 
 As we cleaned clindata_miss in the previous step, the function should run without any warnings and errors. The output object, `metadata` is a list of the following elements.
 
@@ -174,11 +174,11 @@ missCompare::MAP(simulated$Simulated_matrix,
 
 All patterns can be run with a single line using `missCompare::all_patterns()`.
 
-Again, `missCompare::impute_simulated()does all these in one step, and more:     
+Again, `missCompare::impute_simulated()` does all these in one step, and more:     
 1. it simulates the dataset with no missing values;     
 2. spikes in NAs in MCAR, MAR, MNAR and - if you define a custom pattern - MAP patterns;     
 3. imputes missing data using a curated list of 16 algorithms;     
-4. evaluates imputation accuracy by calculating RMSE values between the imputed and the original datapoints.
+4. evaluates imputation accuracy by calculating RMSE, MAE and KS values between the imputed and the original datapoints.
 
 This can be achieved by a single command! This means you DON'T have to run `missCompare::simulate()`, `missCompare::MCAR()`, `missCompare::MAR()`, `missCompare::MNAR()`, `missCompare::MAP()` or `missCompare::all_patterns()`. The command goes as (note that we defined `assumed_pattern = NA` - the defeault - so MAP pattern will be skipped):
 
@@ -195,7 +195,7 @@ missCompare::impute_simulated(rownum = metadata$Rows,
 
 The `n.iter` argument controls how many times the process will repeat itself (spiking in missing data, imputation and assessment of imputation accuracy, that is).
 
-When this is completed (it can take some time!), you should get messages stating what are the best performing algorithms for each missingness patterns and a graph that gives you a visual aid on which algorithms perform with the smallest imputation errors. The less the error, the better the imputation accuracy!
+When this is completed (depending on the size of you data, it can take some time!), you should get messages stating what are the best performing algorithms for each missingness patterns (evaluated by various metrics) and a graph that gives you a visual aid on which algorithms perform in the most desired fashion. The less the error, and the more the imputed values' distributions match the original values' distributions, the better!
 
 [Graph 1 here](https://github.com/Tirgit/missCompare/blob/master/vignettes/RMSE_plot.pdf)    
 
