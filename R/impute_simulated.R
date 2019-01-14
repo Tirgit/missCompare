@@ -116,65 +116,60 @@ impute_simulated <- function(rownum, colnum, cormat, n.iter = 10, MD_pattern, NA
 
     }
 
-            mymean <- function(x) {
-              mean(x, na.rm = TRUE)
-            }
+      mymean <- function(x) {
+        mean(x, na.rm = TRUE)
+      }
 
-            Method <- NULL
-            RMSE_stats <- collect_res %>% group_by(Method) %>% summarise_all(funs(mymean))
+      Method <- NULL
+      RMSE_stats <- collect_res %>% group_by(Method) %>% summarise_all(funs(mymean))
 
-            if (!is.na(assumed_pattern))
-              colnames(RMSE_stats) <- c("Method", "MCAR_RMSE_mean", "MAR_RMSE_mean", "MNAR_RMSE_mean", "MAP_RMSE_mean") else
-                colnames(RMSE_stats) <- c("Method", "MCAR_RMSE_mean", "MAR_RMSE_mean", "MNAR_RMSE_mean")
+      Pattern <- Method <- value <- Comp_time <- MCAR_RMSE <- MAR_RMSE <- MNAR_RMSE <- MAP_RMSE <- NULL
+      MCAR_MAE <- MAR_MAE <- MNAR_MAE <- MAP_MAE <- MCAR_KS <- MAR_KS <- MNAR_KS <- MAP_KS <- NULL
 
-            Method <- MCAR_RMSE_mean <- MAR_RMSE_mean <- MNAR_RMSE_mean <- MAP_RMSE_mean <- NULL
-            # Best methods for the three missingness types
-            Best_method_MCAR <- RMSE_stats %>% filter(MCAR_RMSE_mean == min(MCAR_RMSE_mean)) %>%
-              dplyr::select(Method) %>% as.character()
+      if (!is.na(assumed_pattern))
+        forgraph <- gather(collect_res, Pattern, value, Comp_time:MAP_KS, factor_key = TRUE) else forgraph <- gather(collect_res, Pattern, value, Comp_time:MNAR_KS, factor_key = TRUE)
+      forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation",
+                                                            "Mean imputation", "missMDA Regularized", "missMDA EM", "pcaMethods PPCA",
+                                                            "pcaMethods svdImpute", "pcaMethods BPCA", "pcaMethods NIPALS", "pcaMethods NLPCA",
+                                                            "mice mixed", "mi Bayesian", "Amelia II", "missForest", "Hmisc aregImpute",
+                                                            "VIM kNN"))
 
-            Best_method_MAR <- RMSE_stats %>% filter(MAR_RMSE_mean == min(MAR_RMSE_mean)) %>%
-              dplyr::select(Method) %>% as.character()
+      forgraph_time <- forgraph[forgraph$Pattern == "Comp_time",]
+      forgraph_RMSE <- forgraph[grepl("_RMSE", forgraph$Pattern),]
+      forgraph_MAE <- forgraph[grepl("_MAE", forgraph$Pattern),]
+      forgraph_KS <- forgraph[grepl("_KS", forgraph$Pattern),]
+      forgraph_RMSE$Pattern <- droplevels(forgraph_RMSE$Pattern)
+      forgraph_MAE$Pattern <- droplevels(forgraph_MAE$Pattern)
+      forgraph_KS$Pattern <- droplevels(forgraph_KS$Pattern)
 
-            Best_method_MNAR <- RMSE_stats %>% filter(MNAR_RMSE_mean == min(MNAR_RMSE_mean)) %>%
-              dplyr::select(Method) %>% as.character()
+      p_time <- ggplot(forgraph_time, aes(x = Method, y = value, fill = Method)) + geom_boxplot() +
+        theme(axis.text.x = element_text(angle = 90, hjust = 1)) + ggtitle("Computation time of various missing data imputation methods") +
+        theme(plot.title = element_text(hjust = 0.5)) + labs(x = "", y = "Computation time (minutes)")
 
-            if (!is.na(assumed_pattern))
-              Best_method_MAP <- RMSE_stats %>% filter(MAP_RMSE_mean == min(MAP_RMSE_mean)) %>%
-              dplyr::select(Method) %>% as.character()
+      if (!is.na(assumed_pattern))
+        levels(forgraph_RMSE$Pattern) <- c("MCAR", "MAR", "MNAR", "MAP") else levels(forgraph_RMSE$Pattern) <- c("MCAR", "MAR", "MNAR")
+      p_RMSE <- ggplot(forgraph_RMSE, aes(x = Method, y = value, fill = Method)) + geom_boxplot() +
+        facet_grid(~Pattern, scales = "free") + theme(axis.text.x = element_text(angle = 90,
+                                                                                 hjust = 1)) + ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
+        theme(plot.title = element_text(hjust = 0.5)) + labs(x = "", y = "RMSE")
 
-            Pattern <- RMSE <- MCAR_RMSE <- MAR_RMSE <- MNAR_RMSE <- MAP_RMSE <- NULL
-            if (!is.na(assumed_pattern))
-              forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MAP_RMSE, factor_key = TRUE) else forgraph <- gather(collect_res, Pattern, RMSE, MCAR_RMSE:MNAR_RMSE, factor_key = TRUE)
-            forgraph$Method <- factor(forgraph$Method, levels = c("Random replacement", "Median imputation",
-                                                                  "Mean imputation", "missMDA Regularized", "missMDA EM", "pcaMethods PPCA",
-                                                                  "pcaMethods svdImpute", "pcaMethods BPCA", "pcaMethods NIPALS", "pcaMethods NLPCA",
-                                                                  "mice mixed", "mi Bayesian", "Amelia II", "missForest", "Hmisc aregImpute",
-                                                                  "VIM kNN"))
-            if (!is.na(assumed_pattern))
-              levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR", "MAP") else levels(forgraph$Pattern) <- c("MCAR", "MAR", "MNAR")
-            p <- ggplot(forgraph, aes(x = Method, y = RMSE, fill = Method)) + geom_boxplot() +
-              facet_grid(~Pattern, scales = "free") + theme(axis.text.x = element_text(angle = 90,
-                                                                                       hjust = 1)) + ggtitle("Root-mean-square error (RMSE) of various missing data imputation methods") +
-              theme(plot.title = element_text(hjust = 0.5)) + labs(x = "")
+      if (!is.na(assumed_pattern))
+        levels(forgraph_MAE$Pattern) <- c("MCAR", "MAR", "MNAR", "MAP") else levels(forgraph_MAE$Pattern) <- c("MCAR", "MAR", "MNAR")
+      p_MAE <- ggplot(forgraph_MAE, aes(x = Method, y = value, fill = Method)) + geom_boxplot() +
+        facet_grid(~Pattern, scales = "free") + theme(axis.text.x = element_text(angle = 90,
+                                                                                 hjust = 1)) + ggtitle("Mean absolute error (MAE) of various missing data imputation methods") +
+        theme(plot.title = element_text(hjust = 0.5)) + labs(x = "", y = "MAE")
 
-            print(paste("In case you assume a missing completely at random (MCAR) missingness pattern, missCompare suggests the ",
-                        Best_method_MCAR, " algorithm for imputation", sep = ""))
-            print(paste("In case you assume a missing at random (MAR) missingness pattern, missCompare suggests the ",
-                        Best_method_MAR, " algorithm for imputation", sep = ""))
-            print(paste("In case you assume a missing not at random (MNAR) missingness pattern, missCompare suggests the ",
-                        Best_method_MNAR, " algorithm for imputation", sep = ""))
-            if (!is.na(assumed_pattern))
-              print(paste("For the defined assumed missingness pattern (MAP), missCompare suggests the ",
-                          Best_method_MAP, " algorithm for imputation", sep = ""))
+      if (!is.na(assumed_pattern))
+        levels(forgraph_KS$Pattern) <- c("MCAR", "MAR", "MNAR", "MAP") else levels(forgraph_KS$Pattern) <- c("MCAR", "MAR", "MNAR")
+      p_KS <- ggplot(forgraph_KS, aes(x = Method, y = value, fill = Method)) + geom_boxplot() +
+        facet_grid(~Pattern, scales = "free") + theme(axis.text.x = element_text(angle = 90,
+                                                                                 hjust = 1)) + ggtitle("Kolmogorov–Smirnov test statistic of various missing data imputation methods") +
+        theme(plot.title = element_text(hjust = 0.5)) + labs(x = "", y = "Kolmogorov–Smirnov D")
 
-            # output list
-            if (!is.na(assumed_pattern))
-              list(Imputation_RMSE = collect_res, Imputation_RMSE_means = RMSE_stats,
-                   Best_method_MCAR = Best_method_MCAR, Best_method_MAR = Best_method_MAR,
-                   Best_method_MNAR = Best_method_MNAR, Best_method_MAP = Best_method_MAP,
-                   Plot = p) else list(Imputation_RMSE = collect_res, Imputation_RMSE_means = RMSE_stats,
-                                       Best_method_MCAR = Best_method_MCAR, Best_method_MAR = Best_method_MAR, Best_method_MNAR = Best_method_MNAR,
-                                       Plot = p)
 
+      # output list
+      list(Imputation_RMSE = collect_res, Imputation_RMSE_means = RMSE_stats, Plot_TIME = p_time, Plot_RMSE = p_RMSE,
+           Plot_MAE = p_MAE, Plot_KS = p_KS)
 
 }
