@@ -13,7 +13,7 @@
  
 ---
  
-[![Last-changedate](https://img.shields.io/badge/last%20change-2019--01--14-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2019--01--15-yellowgreen.svg)](/commits/master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -44,7 +44,7 @@ missing data using `missCompare::get_data()`
     + missing not at random (MNAR) - `missCompare::MNAR()` - missing data occurence correlates with variables' own values
     + missing in assumed pattern (MAP) - `missCompare::MAP()` - a combination of the previous three, where the user can define a pattern per variable
   + imputing missing data, obtaining imputation accuracy (root mean squared errors - RMSE) per method and plotting results using `missCompare::impute_simulated()`
-4. **Imputating your data** -  After the previous step, you will have a general idea on what are the best performing algorithms for your data structure (size, degree of correlation between variables). In this step, you can impute your original data with your chosen algorithm(s) using `missCompare::impute_data()`.
+4. **Imputing your data** -  After the previous step, you will have a general idea on what are the best performing algorithms for your data structure (size, degree of correlation between variables). In this step, you can impute your original data with your chosen algorithm(s) using `missCompare::impute_data()`.
 5. **Post imputation diagnostics** will give an informative assessment on how the imputation changed your data structure (e.g. variable means, distributions, correlations). The function here is `missCompare::post_imp_diag()`.
 
 ## Installation

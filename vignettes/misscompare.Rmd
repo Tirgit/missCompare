@@ -202,6 +202,9 @@ When this is completed (depending on the size of you data, it can take some time
 [MAE comparison here](https://github.com/Tirgit/missCompare/blob/master/man/figures/Plot_MAE.png)     
 [KS comparison here](https://github.com/Tirgit/missCompare/blob/master/man/figures/Plot_KS.png)    
 
+![Time comparison](../man/figures/Plot_TIME.png)
+
+
 ## Imputing your dataset
 
 Hopefully, by now you have a good idea on which method you would like to use to impute missing data for your dataset - you will be able to do this using `missCompare::impute_data()`. Let's consider a scenario where you choose **missForest** to impute your data. You do not want to scale your data and you would like to create 10 imputed dataframes in order to set up a multiple imputation framework. Note, that setting up a multiple imputation framework is only a viable option with probabilistic models (e.g. you can impute you data with **Mean imputation** a billion times, but the NAs will always be replaced with exacty the same mean values!).
