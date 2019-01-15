@@ -199,19 +199,19 @@ When this is completed (depending on the size of you data, it can take some time
 
 
 ## Computation time comparison
-<img src="../man/figures/Plot_TIME.png", width = "100%">
+<img src="../man/figures/Plot_TIME.png" width = "100%"/>
 
 
 ## RMSE comparison
-<img src="../man/figures/Plot_RMSE.png", width = "100%">
+<img src="../man/figures/Plot_RMSE.png" width = "100%"/>
 
 
 ## MAE comparison
-<img src="../man/figures/Plot_MAE.png", width = "100%">
+<img src="../man/figures/Plot_MAE.png" width = "100%"/>
 
 
 ## KS comparison
-<img src="../man/figures/Plot_KS.png", width = "100%">
+<img src="../man/figures/Plot_KS.png" width = "100%"/>
 
 ## Imputing your dataset
 
