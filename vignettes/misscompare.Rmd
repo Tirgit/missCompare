@@ -197,13 +197,21 @@ The `n.iter` argument controls how many times the process will repeat itself (sp
 
 When this is completed (depending on the size of you data, it can take some time!), you should get messages stating what are the best performing algorithms for each missingness patterns (evaluated by various metrics) and a graph that gives you a visual aid on which algorithms perform in the most desired fashion. The less the error, and the more the imputed values' distributions match the original values' distributions, the better!
 
-[TIME comparison here](https://github.com/Tirgit/missCompare/blob/master/man/figures/Plot_TIME.png)    
-[RMSE comparison here](https://github.com/Tirgit/missCompare/blob/master/man/figures/Plot_RMSE.png)    
-[MAE comparison here](https://github.com/Tirgit/missCompare/blob/master/man/figures/Plot_MAE.png)     
-[KS comparison here](https://github.com/Tirgit/missCompare/blob/master/man/figures/Plot_KS.png)    
 
-![Time comparison](../man/figures/Plot_TIME.png)
+## Computation time comparison
+<img src="../man/figures/Plot_TIME.png" alt="Upside-down sloths are so cute", width = "100%">
 
+
+## RMSE comparison
+<img src="../man/figures/Plot_RMSE.png" alt="Upside-down sloths are so cute", width = "100%">
+
+
+## MAE comparison
+<img src="../man/figures/Plot_MAE.png" alt="Upside-down sloths are so cute", width = "100%">
+
+
+## KS comparison
+<img src="../man/figures/Plot_KS.png" alt="Upside-down sloths are so cute", width = "100%">
 
 ## Imputing your dataset
 
