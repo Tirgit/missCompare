@@ -95,19 +95,19 @@ missCompare::impute_simulated(rownum = metadata$Rows,
 ```
 
 ## Computation time comparison
-<img src="./man/figures/Plot_TIME.png", width = "70%">
+<img src="./man/figures/Plot_TIME.png" width = "70%"/>
 
 
 ## RMSE comparison
-<img src="./man/figures/Plot_RMSE.png", width = "70%">
+<img src="./man/figures/Plot_RMSE.png" width = "70%"/>
 
 
 ## MAE comparison
-<img src="./man/figures/Plot_MAE.png", width = "70%">
+<img src="./man/figures/Plot_MAE.png" width = "70%"/>
 
 
 ## KS comparison
-<img src="./man/figures/Plot_KS.png", width = "70%">
+<img src="./man/figures/Plot_KS.png" width = "70%"/>
 
 
 #### Imputation of data
