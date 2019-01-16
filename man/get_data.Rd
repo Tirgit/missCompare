@@ -24,6 +24,7 @@ get_data(X, matrixplot_sort = T, plot_transform = T)
 \item{NA_per_variable}{Number of missing values per variables in the dataframe. A (named) numeric vector of length the number of columns}
 \item{MD_Pattern}{Missing data pattern calculated using mice::md_pattern (see \code{\link[mice]{md.pattern}} in the mice package)}
 \item{NA_Correlations}{Correlation matrix of variables vs. variables converted to boolean based on missingness status (yes/no). Point-biserial correlation coefficients based on variable pairs is obtained using complete observations in the respective variable pairs. Higher correlation coefficients can indicate MAR missingness pattern}
+\item{NA_Correlation_plot}{Plot based on NA_Correlations}
 \item{min_PDM_thresholds}{Small dataframe offering clues on how to set min_PDM thresholds in the next steps of the pipeline. The first column represents min_PDM thresholds, while the second column represents percentages that would be retained by setting min_PDM to the respective values. These values are the percentages of the total rows with any number of missing data (excluding complete observations), so a value of e.g. 80\% would mean that 80\% of rows with missing data with the most common patterns are represented in the simulation step}
 \item{Vars_above_half}{Character vector of variables names with missingness higher than 50\%}
 \item{Matrix_plot}{Matrixplot where missing values are colored gray and available values are colored based on value range}
