@@ -27,7 +27,7 @@
 #' \item{Histograms}{List of density plots of all numeric variables. The density plots show the original values and the imputed values overlaid for each variables in the dataframe}
 #' \item{Boxplots}{List of boxplots of all numeric variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
 #' \item{Barcharts}{List of bar charts of all categorical (factor) variables. The bar charts show the original categories and the imputed categories for each categorical variables in the dataframe}
-#' \item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values and a P value from Welch's t test}
+#' \item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values, P value from Welch's t test and D test statistic from a Kolmogorov–Smirnov test}
 #' \item{Variable_clusters_orig}{Variable clusters based on the original dataframe (with missingness). Regardless of the argument scale being set to TRUE or FALSE, the clusters are assessed based on normalized data}
 #' \item{Variable_clusters_imp}{Variable clusters based on the imputed dataframe. Regardless of the argument scale being set to TRUE or FALSE, the clusters are assessed based on normalized data}
 #' \item{Correlation_stats}{Mean pairwise Pearson's correlation coefficients and 95\% confidence intervals from the original dataframe (with missingness) and the imputed dataframe}
@@ -128,8 +128,10 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 1000) {
     if (length(imp_values) != 0) {
       tstats <- stats::t.test(orig_values, imp_values, alternative = "two.sided",
                               var.equal = FALSE)
+      ksstats <- stats::ks.test(orig_values, imp_values, exact=TRUE)$statistic
       statistics[[pltName]] <- c(Mean_original = mean(orig_values), SD_original = stats::sd(orig_values),
-                                 Mean_imputed = mean(imp_values), SD_imputed = stats::sd(imp_values), Welch_ttest_P = tstats$p.value)
+                                 Mean_imputed = mean(imp_values), SD_imputed = stats::sd(imp_values),
+                                 Welch_ttest_P = tstats$p.value, KS_test = ksstats)
 
       origvec <- rep("Original values", length(orig_values))
       impvec <- rep("Imputed values", length(imp_values))
@@ -153,7 +155,7 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 1000) {
     } else { # in case there are no missing values in a variable
 
       statistics[[pltName]] <- c(Mean_original = mean(orig_values), SD_original = stats::sd(orig_values),
-                                 Mean_imputed = NA, SD_imputed = NA, Welch_ttest_P = NA)
+                                 Mean_imputed = NA, SD_imputed = NA, Welch_ttest_P = NA, KS_test = NA)
 
       origvec <- rep("Original values", length(orig_values))
       impvec <- rep("Imputed values", length(imp_values))

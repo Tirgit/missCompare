@@ -16,12 +16,12 @@ post_imp_diag(X_orig, X_imp, scale = T, n.boot = 1000)
 \item{n.boot}{Number of bootstrap iterations to generate mean pairwise Pearson correlation coefficients and 95\% confidence intervals for variable pairs from the original and the imputed dataframes.}
 }
 \value{
-\item{Densityplots}{List of density plots of all numeric variables. The density plots show the original values and the imputed values overlaid for each variables in the dataframe}
+\item{Histograms}{List of density plots of all numeric variables. The density plots show the original values and the imputed values overlaid for each variables in the dataframe}
 \item{Boxplots}{List of boxplots of all numeric variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
 \item{Barcharts}{List of bar charts of all categorical (factor) variables. The bar charts show the original categories and the imputed categories for each categorical variables in the dataframe}
-\item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values and a P value from Welch's t test}
-\item{Variable_clusters_orig}{Variable clusters based on the original dataframe (with missingness). Argument scale should be TRUE to assess for correct implementation of this plot}
-\item{Variable_clusters_imp}{Variable clusters based on the imputed dataframe. Argument scale should be TRUE to assess for correct implementation of this plot}
+\item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values, P value from Welch's t test and D test statistic from a Kolmogorov–Smirnov test}
+\item{Variable_clusters_orig}{Variable clusters based on the original dataframe (with missingness). Regardless of the argument scale being set to TRUE or FALSE, the clusters are assessed based on normalized data}
+\item{Variable_clusters_imp}{Variable clusters based on the imputed dataframe. Regardless of the argument scale being set to TRUE or FALSE, the clusters are assessed based on normalized data}
 \item{Correlation_stats}{Mean pairwise Pearson's correlation coefficients and 95\% confidence intervals from the original dataframe (with missingness) and the imputed dataframe}
 \item{Correlation_plot}{Scatter plot of mean pairwise Pearson's correlation coefficients from the original dataframe (with missingness) and the imputed dataframe. The blue line represents a line with slope 1 and intercept 0. The red line is a fitted line of the correlation coefficient pairs. The error bars around the points represent the individual 95\% confidence intervals drawn from bootstrapping the correlation coefficients}
 }
@@ -43,7 +43,7 @@ the variable distributions and the variable clusters should be similar.
 \examples{
 \dontrun{
 diagnostics <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=T)
-diagnostics$Densityplots$variable_X
+diagnostics$Histograms$variable_X
 diagnostics$Boxplots$variable_Z
 diagnostics$Statistics$variable_Y
 }
