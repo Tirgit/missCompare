@@ -22,7 +22,7 @@ library(missCompare)
 
 If you work with data, you have almost certainly encountered issues regarding missing data. The most commonly used statistical methods often only work with complete sets of observations and it can be a huge pain when you realize that you can only utilize a fraction of your data because of missing datapoints here and there. Indeed, just 5\% random missing data in a huge dataset can dramatically reduce the number of complete observations to as low as 25\% of the original number of observations! Scary! Thankfully, there are numerous algorithms that can help you tackle this issue, but often, the most commonly used methods, such as mean and median imputation, offer suboptimal solutions and sophisticated algorithms often need a lot of consideration and background knowledge. The authors wrote the missCompare package to help you through your missing data problem. The initial hypothesis of the authors was that **datasets with different parameters (size, distributions, correlations, etc.) will benefit differently from various missing data imputation algorithms**.
 
-This tutorial will navigate you through the missCompare package and its functions. So... let's start.
+This tutorial will navigate you through the missCompare package and its functions. So... let's jump right into it!
 
 First, let's begin by installing and loading the missCompare package!
 
@@ -46,7 +46,36 @@ data with variables generally available in a simple, realistic clinicial epidemi
 have realistic variable means, distributions, correlations and missing data patterns. You can find further information
 on the dataframe using `?clindata_miss`.
 
+## Before you start...
 
+...Some words on alternative imputation methods. Before you get yourself acquainted with missCompare and its functions, it is **always** a good idea to carefully observe, and do some thinking about your data, your variables/features and your missing data. Before trying fancy methods, there are some cases when **deductive imputation** can be applied. This is a form of imputation based on logical reasoning rather than statistical methods. Let's consider three separate cases when this can be applied:
+
+1. Constant variables: In this scenario, in a prospective dataset, sex information is available at a participant's first visit in 1998 and third visit in 2005, but missing in 2000. With logical deduction, it can be concluded that biological sex is constant, therefore the missing datapoint is also **Female**
+    
+    ID        | Date        |   Sex   |   BMI   |
+    --------  |------------ |-------- |---------|
+    ID13      | 01-01-1998  |   Female|   25.8  |
+    ID13      | 01-01-2000  |   *NA*  |   27.7  |
+    ID13      | 01-01-2005  |   Female|   27.0  |
+    
+2. Prospective changes: In this scenario, in a prospective dataset, age information is available at a participant's first visit in 1998, but missing in 2000 and 2005. With logical deduction, it can be concluded that missing age information is **25** and **30** for the missing two years
+    
+    ID        | Date        |   Age   |   BMI
+    --------  |------------ |-------- |---------
+    ID13      | 01-01-1998  |   23    |   25.8
+    ID13      | 01-01-2000  |   *NA*  |   27.7
+    ID13      | 01-01-2005  |   *NA*  |   27.0
+
+3. Cumulative variables: In this scenario, in a prospective dataset, there is information available on how many times the participant has been pregnant. This information is available at a participant's last visit in 2005, but missing in 1998 and 2000. With logical deduction, it can be concluded that if the participant has never been pregnant in 2005, than she has never been pregnant earlier either, therefore the missing numbers are **0** and **0**
+    
+    ID        | Date        |   Number of pregnancies   |   BMI   |
+    --------  |------------ |-------------------------- |---------|
+    ID13      | 01-01-1998  |   *NA*                    |   25.8  |
+    ID13      | 01-01-2000  |   *NA*                    |   27.7  |
+    ID13      | 01-01-2005  |   0                       |   27.0  |
+
+Also, it is highly recommended to check data ranges. By running a simple `summary()` on your data you can check minimum and maximum values for each numeric variables and browse through all categories for factors. Oftentimes it happens that a variable - a blood biomarker, for instance - has a minus value as its minimum. While this can be OK in some cases (e.g. the variable is already normalized), but sometimes this can be a data input error or missing datapoints can be coded as minus values. In these cases, it is important that the minus values are set to *NA*.
+    
 ## The missCompare pipeline
 
 The missCompare pipeline is comprised of the following steps:
