@@ -224,20 +224,18 @@ missCompare::impute_simulated(rownum = metadata$Rows,
 
 The `n.iter` argument controls how many times the process will repeat itself (spiking in missing data, imputation and assessment of imputation accuracy, that is).
 
-When this is completed (depending on the size of you data, it can take some time!), you should get messages stating what are the best performing algorithms for each missingness patterns (evaluated by various metrics) and a graph that gives you a visual aid on which algorithms perform in the most desired fashion. The less the error, and the more the imputed values' distributions match the original values' distributions, the better!
+When this is completed (depending on the size of you data, it can take some time!), you should get messages stating what are the best performing algorithms for each missingness patterns (evaluated by various metrics) and a graph that gives you a visual aid on which algorithms perform in the most desired fashion. The less the error, and the more the imputed values' distributions match the original values' distributions, the better - i.e. lower RMSE, MAE and KS D statistic values are better! Computation time of course can also play a role in your decision on what to use eventually!
 
+Let's look at some plots:
 
 ## Computation time comparison
 <img src="../man/figures/Plot_TIME.png" width = "100%"/>
 
-
 ## RMSE comparison
 <img src="../man/figures/Plot_RMSE.png" width = "100%"/>
 
-
 ## MAE comparison
 <img src="../man/figures/Plot_MAE.png" width = "100%"/>
-
 
 ## KS comparison
 <img src="../man/figures/Plot_KS.png" width = "100%"/>
@@ -277,11 +275,34 @@ Let's run this with the results of the **Mean imputation** algorithm (`imputed$m
 ```{r eval = TRUE} 
 diag <- missCompare::post_imp_diag(cleaned,
                                    imputed$mean_imputation[[1]], 
-                                   scale=F, 
+                                   scale=T, 
                                    n.boot = 5)
 ```
 
-The `diag` list contains several interesting assessments. The `Densityplots` and `Boxplots` lists should give an idea on the distributions of the original and the imputed values. Perhaps the limitations of mean imputation are the most apparent on these plots. For example, let's inspect HDL levels on this boxplot:
+The `diag` list contains several interesting assessments. The `Histograms` and `Boxplots` lists should give an idea on the distributions of the original and the imputed values. Perhaps the limitations of mean imputation are the most apparent on these plots. For example, let's inspect HDL levels (scaled to mean 0 in the data!) on this boxplot:
+
+```{r echo = FALSE, fig.width=6, fig.height=3} 
+diag$Boxplots$HDL
+```
+
+Or this histogram:
+```{r echo = FALSE, fig.width=6, fig.height=3} 
+diag$Histograms$HDL
+```
+
+This, of course will look different for a probabilistic model, e.g. **AmeliaII**:
+
+```{r eval = TRUE, echo = FALSE, message=FALSE} 
+imputed <- missCompare::impute_data(cleaned, 
+                         scale = T, 
+                         n.iter = 1, 
+                         sel_method = c(13)) # 13 is the code for AmeliaII
+
+diag <- missCompare::post_imp_diag(cleaned,
+                                   imputed$ameliaII_imputation[[1]], 
+                                   scale=T, 
+                                   n.boot = 5)
+```
 
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 diag$Boxplots$HDL
@@ -289,9 +310,20 @@ diag$Boxplots$HDL
 
 The `Barcharts` list only contains elements if there were factors in the original data. 
 
-The `Statistics` list shows the mean and SD values for the original and imputed values per variables and calculates Welch's t test on the two groups of values.
+The `Statistics` list shows the mean and SD values for the original and imputed values per variables and calculates Welch's t test P values (testing for mean difference) and Kolmogorov-Smirnov test statistic D (testing for unequal distributions) on the two groups of values. Low Welch's t test P values and high Kolmogorov-Smirnov test statistics reflect worse results.
+
+```{r echo = FALSE, fig.width=6, fig.height=3} 
+head(diag$Statistics, 2)
+```
 
 The `Variable_clusters_orig` and `Variable_clusters_imp` plots visualize the clusters of variables before and after the imputation. The clusters should not change too much!
+
+
+```{r echo = FALSE, fig.width=6, fig.height=3} 
+diag$Variable_clusters_orig
+```
+
+vs.
 
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 diag$Variable_clusters_imp
