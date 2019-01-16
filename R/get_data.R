@@ -84,6 +84,7 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   }
 
   melted_cormat <- data.table::melt(na_cor)
+  Var1 <- Var2 <- NULL
   p_cor <- ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) +
     geom_tile() + labs(x= "", y= "") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     ggtitle("Variable - Variable NA Correlation Matrix") +

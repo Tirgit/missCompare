@@ -1,6 +1,6 @@
 
 ---
-title: "Introduction to missCompare"
+title: "A complete tutorial to missCompare"
 author: "Tibor V. Varga"
 date: "`r Sys.Date()`"
 output: rmarkdown::html_vignette
@@ -136,6 +136,10 @@ As we cleaned clindata_miss in the previous step, the function should run withou
 * `metadata$Total_NA` and `metadata$NA_per_variable` return the total number of missing values in the dataframe and per variable.
 * `metadata$MD_Pattern` - The missing data pattern is calculated using mice::md.pattern (`?mice::md.pattern`).
 * `metadata$NA_Correlations` - Pairwise correlation point-biserial correlation coefficients between variable pairs. Namely, for each calculation, variables are converted to TRUE/FALSE based on missing data status (missing or not missing) and these boolean vectors and correlated to the native variables. The resulting correlation matrix has rows with variable names + _is.na - the rows represent the converted variables, while the columns are the original variables.
+* `metadata$NA_Correlation_plot` - A correlation plot based on the previous object, `metadata$NA_Correlations`.
+```{r echo = FALSE, fig.width=6, fig.height=3} 
+metadata$NA_Correlation_plot
+```
 * `metadata$min_PDM_thresholds` - This object is a small dataframe that informs about the various min_PDM (minimum number of observations per distinct missing data pattern) values. min_PDM will need to be defined in further functions, so it is informative to get a sense on what is the proportion of missing data patterns that should be used in the simulation framework. In the table below we see that if this number is too high (only those missing data patterns are considered that describe 100 or more observations) than more than 80\% of observations with other missing data patterns will be ignored in the simulation framework. On the other hand, if this number is set too low, e.g. below 5, than this may result in retaining almost all missing data patterns that are applicable to only a few observations. Therefore, this number will need to be set carefully later. This table shows approximate percentages of observations with missing data retained with setting min_PDM in later steps.
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 metadata$min_PDM_thresholds
@@ -272,7 +276,7 @@ The function `missCompare::post_imp_diag()` will help you assess how the imputat
 
 Let's run this with the results of the **Mean imputation** algorithm (`imputed$mean_imputation[[1]]`):
 
-```{r eval = TRUE} 
+```{r eval = TRUE, warning = FALSE} 
 diag <- missCompare::post_imp_diag(cleaned,
                                    imputed$mean_imputation[[1]], 
                                    scale=T, 
@@ -286,13 +290,15 @@ diag$Boxplots$HDL
 ```
 
 Or this histogram:
+
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 diag$Histograms$HDL
 ```
 
+
 This, of course will look different for a probabilistic model, e.g. **AmeliaII**:
 
-```{r eval = TRUE, echo = FALSE, message=FALSE} 
+```{r eval = TRUE, echo = FALSE, message=FALSE, warning = FALSE, results='hide'} 
 imputed <- missCompare::impute_data(cleaned, 
                          scale = T, 
                          n.iter = 1, 
@@ -306,6 +312,12 @@ diag <- missCompare::post_imp_diag(cleaned,
 
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 diag$Boxplots$HDL
+```
+
+And the histogram:
+
+```{r echo = FALSE, fig.width=6, fig.height=3} 
+diag$Histograms$HDL
 ```
 
 The `Barcharts` list only contains elements if there were factors in the original data. 
@@ -328,6 +340,8 @@ vs.
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 diag$Variable_clusters_imp
 ```
+
+Great, these two do look very similar!
 
 Finally, the `Correlation_plot` shows bootstrapped correlation coefficients from the original data and the imputed data. You can specify how many iterations you would like to run to obtain bootstrapped correlation coefficients and 95\% confidence intervals using the `n.boot` argument in the function. In this vignette this is set to 5, which is far too low. The blue line has intercept 0 and slope 1 and  correlation coefficients (represented by the dots and the red line) should align this line as much as possible. With mean and median imputations, the line is often "turned clockwise", with a lower slope than 1 (regression to the mean).
 
