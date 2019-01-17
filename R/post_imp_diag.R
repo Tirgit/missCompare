@@ -26,7 +26,7 @@
 #' @return
 #' \item{Histograms}{List of density plots of all numeric variables. The density plots show the original values and the imputed values overlaid for each variables in the dataframe}
 #' \item{Boxplots}{List of boxplots of all numeric variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
-#' \item{Barcharts}{List of bar charts of all categorical (factor) variables. The bar charts show the original categories and the imputed categories for each categorical variables in the dataframe}
+#' \item{Barcharts}{List of bar charts of all categorical (factor) variables. The bar charts show the original categories and the imputed categories for each categorical variables in the dataframe. Barcharts will only be output if scale is set to FALSE and both the original and imputed data contain the same factor variables}
 #' \item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values, P value from Welch's t test and D test statistic from a Kolmogorov–Smirnov test}
 #' \item{Variable_clusters_orig}{Variable clusters based on the original dataframe (with missingness). Regardless of the argument scale being set to TRUE or FALSE, the clusters are assessed based on normalized data}
 #' \item{Variable_clusters_imp}{Variable clusters based on the imputed dataframe. Regardless of the argument scale being set to TRUE or FALSE, the clusters are assessed based on normalized data}
@@ -43,7 +43,7 @@
 #'
 #' @export
 
-post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 1000) {
+post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
 
   # warning if dimensions are unequal
   if (!identical(dim(X_orig), dim(X_imp)))
@@ -94,7 +94,7 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 1000) {
 
       q <- ggplot(data = data.frame(x = vals[, 1], y = vals[, 2]), aes(x = factor(y),
                                                                        fill = factor(x))) + geom_bar(position = "fill") + ggtitle("Bar chart of original values and imputed values") +
-        labs(x = colnames(X_orig_factor)[i]) + guides(fill = guide_legend(title = ""))
+        labs(y = "Proportion", x = colnames(X_orig_factor)[i]) + guides(fill = guide_legend(title = ""))
 
       barcharts[[pltName]] <- q
 
