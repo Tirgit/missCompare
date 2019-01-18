@@ -37,7 +37,7 @@ test_that("runs OK when all numeric and with scaling", {
 # expect all methods to run OK when variables are all numeric - without scaling (note is output though)
 small <-  clindata_miss[1:60, 3:7]
 test_that("runs OK when all numeric and without scaling", {
-  expect_error(impute_data(small, n.iter = 1, scale = F, sel_method = c(1:16)), NA)
+  expect_error(suppressWarnings(impute_data(small, n.iter = 1, scale = F, sel_method = c(1:16))), NA)
 })
 
 # test that single imputation methods do not output multiple imputed sets when multiple iters are defined
@@ -91,7 +91,7 @@ test_that("barcharts not present", {
 small <- clindata_miss[1:100, 1:4]
 imputed <- impute_data(small, scale = F, n.iter = 1, sel_method = c(1))
 df_imp <- imputed$random_replacement[[1]]
-imp_res <- post_imp_diag(small, df_imp, scale = F, n.boot = 3)
+imp_res <- suppressWarnings(post_imp_diag(small, df_imp, scale = F, n.boot = 3))
 
 test_that("barchart is present", {
   expect_false(length(imp_res$Barcharts)==0)
