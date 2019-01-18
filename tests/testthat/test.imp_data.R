@@ -16,12 +16,6 @@ test_that("factors error when methods dont support it", {
   expect_error(impute_data(small, scale = T, sel_method = c(2:10,13)))
 })
 
-# expecting note output if scale is set to FALSE and PCA methods are defined
-small <-  clindata_miss[1:60, 3:7]
-test_that("expect note output", {
-  expect_output(impute_data(small, scale = F, sel_method = c(5)), "One or more of your selected methods is based on PCA - Although your command will run, scaling is strongly recommended.")
-})
-
 # expect methods that support factors run OK when factors are defined - with scaling
 small <- clindata_miss[1:60, 1:4]
 test_that("factors OK scaling runs OK", {
@@ -45,7 +39,6 @@ small <-  clindata_miss[1:60, 3:7]
 test_that("runs OK when all numeric and without scaling", {
   expect_error(impute_data(small, n.iter = 1, scale = F, sel_method = c(1:16)), NA)
 })
-
 
 # test that single imputation methods do not output multiple imputed sets when multiple iters are defined
 small <-  clindata_miss[1:60, 3:7]
@@ -80,7 +73,7 @@ test_that("VIM kNN imputation error", {
 df_imp <- imputed$VIM_kNN_imputation[[1]]
 # expecting no error when running post imp diag script, when scale = T and original was scaled
 test_that("scaling on, post imp diag no error", {
-  expect_error(post_imp_diag(small, df_imp, scale = T, n.boot = 2), NA)
+  expect_error(suppressWarnings(post_imp_diag(small, df_imp, scale = T, n.boot = 2)), NA)
 })
 
 # expecting  error when dimensions of imputed and original are not the same
@@ -88,9 +81,10 @@ test_that("post imp diag dim error", {
   expect_error(post_imp_diag(small[,1:4], df_imp, scale = T, n.boot = 2))
 })
 
+imp_res <- suppressWarnings(post_imp_diag(small, df_imp, scale = T, n.boot = 2))
 # expect no barcharts when only numeric variables are present
 test_that("barcharts not present", {
-  expect_true(is_empty(imp_res$Barcharts))
+  expect_true(length(imp_res$Barcharts)==0)
 })
 
 # expecting barcharts when factors are imputed
@@ -100,7 +94,7 @@ df_imp <- imputed$random_replacement[[1]]
 imp_res <- post_imp_diag(small, df_imp, scale = F, n.boot = 3)
 
 test_that("barchart is present", {
-  expect_false(is_empty(imp_res$Barcharts))
+  expect_false(length(imp_res$Barcharts)==0)
 })
 
 rm(list=ls())

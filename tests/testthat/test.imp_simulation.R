@@ -14,13 +14,13 @@ res <- all_patterns(X_hat = simulated$Simulated_matrix,
 
 # simulation runs OK
 test_that("simulation runs without errors", {
-  expect_error(impute_simulated(rownum = y$Rows,
+  suppressWarnings(expect_error(impute_simulated(rownum = y$Rows,
                            colnum = y$Columns,
                            cormat = y$Corr_matrix,
                            MD_pattern = y$MD_Pattern,
                            NA_fraction = y$Fraction_missingness,
                            min_PDM = 2,
-                           n.iter = 2), NA)
+                           n.iter = 2), NA))
 })
 
 rm(list=ls())

@@ -41,6 +41,7 @@ Imports:
   pROC,
   rlang,
   ROCR,
+  stats,
   utils,
   tidyr,
   VIM

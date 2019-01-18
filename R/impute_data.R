@@ -79,18 +79,18 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
   strings_present <- (sum(sapply(X, is.character)) > 0)
 
   if (strings_present == TRUE) {
-    stop("Warning! Your data contains string variables. Please inspect your data and either remove these variables or convert them
+    stop("Your data contains string variables. Please inspect your data and either remove these variables or convert them
          into type factor/numeric where applicable.") }
 
   factors_present <- (sum(sapply(X, is.factor)) > 0)
 
   if (any(((c(2:10,13) %in% sel_method) & factors_present))) {
-    stop("Warning! One or more of your selected methods does not allow factors - these methods are mean imputation, median imputation,
+    stop("One or more of your selected methods does not allow factors - these methods are mean imputation, median imputation,
           all missMDA and pcaMethods methods and AmeliaII. In case you aim to use any of these, please convert your dataframe to all
           numeric and attempt re-running this.") }
 
   if (any(((c(4:9) %in% sel_method) & (scale == F)))) {
-    note("One or more of your selected methods is based on PCA - Although your command will run, scaling is strongly recommended.") }
+    warning("One or more of your selected methods is based on PCA - Although your command will run, scaling is strongly recommended.") }
 
 
   # optional scaling
