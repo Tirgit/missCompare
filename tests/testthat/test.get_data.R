@@ -1,6 +1,5 @@
 context("Data extraction and simulation")
 library(missCompare)
-library(missForest)
 
 data("clindata_miss")
 

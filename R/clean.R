@@ -49,6 +49,12 @@ clean <- function(X, var_remove = NULL, var_removal_threshold = 0.5, ind_removal
     # remove undesired variables
     X[var_remove] <- NULL
 
+    strings_present <- sum(sapply(X, is.character)) > 0
+
+    if (strings_present == TRUE) {
+      stop("Warning! Your data contains string variables. Please inspect your data and either remove these variables using the
+var_remove argument or convert them into type factor/numeric where applicable.") }
+
     # convert all variables to numeric
     vars_non_num <- names(X)[!sapply(X, is.numeric)]
     if (length(vars_non_num) != 0)

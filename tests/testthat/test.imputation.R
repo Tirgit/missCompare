@@ -5,9 +5,6 @@ library(missForest)
 data("clindata_miss")
 
 # expecting error if non numeric variables are in the dataframe
-test_that("errors in impute_data_validate()", {
-  expect_error(missCompare::impute_data_validate(clindata_miss))
-})
 test_that("errors in impute_data()", {
   expect_error(missCompare::impute_data(clindata_miss))
 })

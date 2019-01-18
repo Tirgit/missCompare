@@ -89,12 +89,16 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
       origvec <- rep("Original values", length(orig_values))
       impvec <- rep("Imputed values", length(imp_values))
       vals <- data.frame(cbind(c(orig_values, imp_values), c(origvec, impvec)))
-      vals$X1 <- as.numeric(as.character(vals$X1))
+      levels(vals$X1) <- levels(orig_values)
+      #vals$X1 <- as.numeric(as.character(vals$X1))
       colnames(vals) <- c(colnames(X_orig_factor)[i], "Data")
 
-      q <- ggplot(data = data.frame(x = vals[, 1], y = vals[, 2]), aes(x = factor(y),
-                                                                       fill = factor(x))) + geom_bar(position = "fill") + ggtitle("Bar chart of original values and imputed values") +
-        labs(y = "Proportion", x = colnames(X_orig_factor)[i]) + guides(fill = guide_legend(title = ""))
+      q <- ggplot(data = data.frame(x = vals[, 1], y = vals[, 2]), aes(x = factor(y), fill = factor(x))) +
+        geom_bar(position = "fill") +
+        ggtitle("Bar chart of original values and imputed values") +
+        labs(y = "Proportion", x = colnames(X_orig_factor)[i]) +
+        guides(fill = guide_legend(title = "")) +
+        theme(plot.title = element_text(hjust = 0.5))
 
       barcharts[[pltName]] <- q
 
@@ -140,13 +144,14 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
       colnames(vals) <- c(colnames(X_orig_num)[i], "Data")
 
       p <- ggplot(data = data.frame(x = vals[, 1], y = vals[, 2]), aes(x, fill=y)) +
-        geom_histogram(alpha = 0.5, binwidth = 0.5, position="identity") + ggtitle("Overlaid density plot of original values and imputed values") +
+        geom_histogram(alpha = 0.5, binwidth = 0.5, position="identity") +
+        ggtitle("Overlaid density plot of original values and imputed values") +
         labs(x = colnames(X_orig_num)[i]) + guides(fill = guide_legend(title = "")) +
         theme(plot.title = element_text(hjust = 0.5))
 
       q <- ggplot(data = data.frame(x = vals[, 2], y = vals[, 1]), aes(x = x, y = y)) +
-        geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 3,
-                                      size = 5) + ggtitle("Boxplots of original values and imputed values") +
+        geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 3, size = 5) +
+        ggtitle("Boxplots of original values and imputed values") +
         labs(x = colnames(X_orig_num)[i], y = "") + theme(plot.title = element_text(hjust = 0.5))
 
       histograms[[pltName]] <- p
@@ -164,13 +169,14 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
       colnames(vals) <- c(colnames(X_orig_num)[i], "Data")
 
       p <- ggplot(data = data.frame(x = vals[, 1], y = vals[, 2]), aes(x, fill=y)) +
-        geom_histogram(alpha = 0.5, binwidth = 0.5, position="identity") + ggtitle("Histogram of original values") +
+        geom_histogram(alpha = 0.5, binwidth = 0.5, position="identity") +
+        ggtitle("Histogram of original values") +
         labs(x = colnames(X_orig_num)[i]) + guides(fill = guide_legend(title = "")) +
         theme(plot.title = element_text(hjust = 0.5))
 
       q <- ggplot(data = data.frame(x = vals[, 2], y = vals[, 1]), aes(x = x, y = y)) +
-        geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 3,
-                                      size = 5) + ggtitle("Boxplot of original values") +
+        geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 3, size = 5) +
+        ggtitle("Boxplot of original values") +
         labs(x = colnames(X_orig_num)[i], y = "") + theme(plot.title = element_text(hjust = 0.5))
 
       histograms[[pltName]] <- p

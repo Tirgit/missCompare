@@ -1,46 +1,52 @@
 context("Cleaning")
 library(missCompare)
-library(missForest)
 
 data("clindata_miss")
+small <- clindata_miss[1:80, 1:4]
+small$string <- "string"
+
+# string variables present, expecting a stop and warning
+test_that("error if strings present", {
+  testthat::expect_error(clean(small))
+})
+
+small <- clindata_miss[1:80, 1:4]
 
 # factor variables present, expecting a message of conversion
 test_that("message for numeric conversion", {
-  expect_message(missCompare::clean(clindata_miss))
+  testthat::expect_message(clean(small))
 })
 
 # converting factors to num, now NOT expecting message
-clindata_miss$education <- as.numeric(clindata_miss$education)
-clindata_miss$sex <- as.numeric(clindata_miss$sex)
+small$sex <- as.numeric(small$sex)
 test_that("no message for numeric conversion", {
-  expect_message(missCompare::clean(clindata_miss, var_removal_threshold = 0.7), NA)
+  expect_message(clean(small, var_removal_threshold = 0.7), NA)
 })
 
 # message when dropping variables
+small$age[1:60] <- NA
 test_that("message for variable removal", {
-  expect_message(missCompare::clean(clindata_miss,
-                                    var_removal_threshold = 0.5))
+  expect_message(clean(small, var_removal_threshold = 0.5))
 })
 
 # message when dropping individuals
-clindata_miss_ind <- clindata_miss
-clindata_miss_ind[c(1:10),] <- NA
+small$age <- NULL
+small[c(1:10),] <- NA
 test_that("message for individual removal", {
-  expect_message(missCompare::clean(clindata_miss_ind,
-                                    ind_removal_threshold = 1))
+  expect_message(clean(small, ind_removal_threshold = 1))
 })
 
-# checking for no error
-test_that("no errors in clean()", {
-  expect_error(missCompare::clean(clindata_miss), NA)
-})
 
 # checking output
-cleaned <- missCompare::clean(clindata_miss)
+small <- clindata_miss[1:80, 1:4]
+cleaned <- clean(small)
 
 test_that("output dataset obs", {
-  expect_output(str(cleaned), "2500 obs")
+  expect_output(str(cleaned), "80 obs")
 })
 test_that("output dataset vars", {
-  expect_output(str(cleaned), "11 variables")
+  expect_output(str(cleaned), "4 variables")
+})
+test_that("equal dims", {
+  expect_equal(dim(small), dim(cleaned))
 })

@@ -12,7 +12,7 @@
 #'
 #'
 #' @param X Dataframe - the original data that contains missing values.
-#' @param scale Boolean with default TRUE. Scaling will scale and center all variables to mean=0 and standard deviation=1. This is strongly suggested for all PCA-based methods, and for the sake of comparison (and in the case when all methods are run), for the other methods too. Please note, however, that some methods (e.g. pcaMethods NLPCA, missForest, etc.) are equipped to handle non-linear data. In these cases scaling is up to the user.
+#' @param scale Boolean with default TRUE. Scaling will scale and center all numeric variables to mean=0 and standard deviation=1. This is strongly suggested for all PCA-based methods, and for the sake of comparison (and in case all methods are run), for the other methods too. Please note, however, that some methods (e.g. pcaMethods NLPCA, missForest, etc.) are equipped to handle non-linear data. In these cases scaling is up to the user.
 #' @param n.iter Number of iterations to perform with default 10. This will only affect the probabilistic methods that allow for a multiple imputation framwork. The rest of the methods (if specified to run) will only generate 1 imputed dataframe.
 #' @param sel_method Numeric vector that specifies which methods to run. Default is all methods (1-16), but any combinations, including selecting a single method, are allowed. \tabular{ll}{
 #' 1 \tab random replacement\cr
@@ -35,7 +35,7 @@
 #'
 #'
 #' @return
-#' A nested list of imputed datasets. In case only a subset of methods was selected the not-selected list elements will be empty.
+#' A nested list of imputed datasets. In case only a subset of methods was selected the non-selected list elements will be empty.
 #' \item{random_replacement}{Imputed dataset using random replacement}
 #' \item{mean_imputation}{Imputed dataset using mean imputation}
 #' \item{median_imputation}{Imputed dataset using median imputation}
@@ -66,18 +66,38 @@
 #' #in simulations) on a non-scaled dataframe
 #' impute_data(df, scale = F, n.iter = 20,
 #'             sel_method = c(14))
+#' #running 1 iterations of four selected non-probabilistic algorithms on a scaled dataframe
+#' impute_data(df, scale = T, n.iter = 1,
+#'             sel_method = c(2:3, 5, 7))
 #' }
 #'
 #' @export
 
-
 ## FUNCTION
 impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
 
-    # optional scaling
-    if (scale == T) {
-        X <- as.data.frame(scale(X))
-    }
+  factors_present <- sum(sapply(X, is.factor)) > 0
+  strings_present <- sum(sapply(X, is.character)) > 0
+
+  if (strings_present) {
+    stop("Warning! Your data contains string variables. Please inspect your data and either remove these variables or convert them
+         into type factor/numeric where applicable.") }
+
+  if (any(((c(2:10,13) %in% sel_method) & factors_present))) {
+    stop("Warning! One or more of your selected methods does not allow factors - these methods are mean imputation, median imputation,
+          all missMDA and pcaMethods methods and AmeliaII. In case you aim to use any of these, please convert your dataframe to all
+          numeric and attempt re-running this.") }
+
+  if (any(((c(4:9) %in% sel_method) & (scale == F)))) {
+    note("One or more of your selected methods is based on PCA - Although your command will run, scaling is strongly recommended.") }
+
+
+  # optional scaling
+  if (factors_present & (scale == T)) {
+    ind <- sapply(X, is.numeric)
+    X[ind] <- as.data.frame(lapply(X[ind], scale)) } else if ((factors_present == F) & (scale == T)) {
+    X <- as.data.frame(scale(X)) }
+
 
     # creating empty lists for output
     random_imp_list <- list()
@@ -235,8 +255,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
         for (n in 1:n.iter) {
             log_output <- utils::capture.output(imputed_Data <- mice::mice(X, m = 1,
                 maxit = 100))
-            imp_matrix <- as.matrix(mice::complete(imputed_Data, 1))
-            mice_mixed_list[[n]] <- as.data.frame(imp_matrix)
+            mice_mixed_list[[n]] <- mice::complete(imputed_Data, 1)
         }
     }
 
@@ -247,8 +266,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
             log_output <- utils::capture.output(mi_data <- mi::mi(as.data.frame(X),
                 n.chain = 1, n.iter = 100, verbose = FALSE))
             imputed <- mi::complete(mi_data, 1)
-            imp_matrix <- as.matrix(imputed[, 1:ncol(X)])
-            mi_Bayesian_list[[n]] <- as.data.frame(imp_matrix)
+            mi_Bayesian_list[[n]] <- as.data.frame(imputed[, 1:ncol(X)])
         }
     }
 
@@ -277,14 +295,13 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
     if (15 %in% sel_method) {
         print("Hmisc aregImpute imputation - in progress")
         for (n in 1:n.iter) {
-            Xcolnames <- colnames(X)
-            Xformula <- stats::as.formula(paste("~", paste(Xcolnames, collapse = "+")))
-            log_output <- utils::capture.output(hmisc_algo <- Hmisc::aregImpute(formula = Xformula,
-                data = X, n.impute = 1, burnin = 5, nk = 0, type = "pmm", pmmtype = 2))
-            completeData <- as.data.frame(Hmisc::impute.transcan(hmisc_algo, imputation = 1,
-                data = X, list.out = TRUE, pr = FALSE, check = FALSE))
-            imp_matrix <- as.matrix(completeData)
-            aregImpute_list[[n]] <- as.data.frame(imp_matrix)
+          Xcolnames <- colnames(X)
+          Xformula <- stats::as.formula(paste("~", paste(Xcolnames, collapse = "+")))
+          log_output <- utils::capture.output(hmisc_algo <- Hmisc::aregImpute(formula = Xformula,
+                                                                              data = X, n.impute = 1, burnin = 5, nk = 0, type = "pmm", pmmtype = 2))
+          completeData <- as.data.frame(Hmisc::impute.transcan(hmisc_algo, imputation = 1,
+                                                               data = X, list.out = TRUE, pr = FALSE, check = FALSE))
+          aregImpute_list[[n]] <- as.data.frame(completeData)
         }
     }
 
@@ -294,8 +311,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
         Xcolnames <- colnames(X)
         log_output <- utils::capture.output(completeData <- VIM::kNN(data = X, variable = Xcolnames,
             k = 10, trace = F, imp_var = F))
-        imp_matrix <- as.matrix(completeData)
-        kNN_list[[1]] <- as.data.frame(imp_matrix)
+        kNN_list[[1]] <- as.data.frame(completeData)
     }
 
     list(random_replacement = random_imp_list, mean_imputation = mean_imp_list, median_imputation = median_imp_list,

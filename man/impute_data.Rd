@@ -9,7 +9,7 @@ impute_data(X, scale = T, n.iter = 10, sel_method = c(1:16))
 \arguments{
 \item{X}{Dataframe - the original data that contains missing values.}
 
-\item{scale}{Boolean with default TRUE. Scaling will scale and center all variables to mean=0 and standard deviation=1. This is strongly suggested for all PCA-based methods, and for the sake of comparison (and in the case when all methods are run), for the other methods too. Please note, however, that some methods (e.g. pcaMethods NLPCA, missForest, etc.) are equipped to handle non-linear data. In these cases scaling is up to the user.}
+\item{scale}{Boolean with default TRUE. Scaling will scale and center all numeric variables to mean=0 and standard deviation=1. This is strongly suggested for all PCA-based methods, and for the sake of comparison (and in case all methods are run), for the other methods too. Please note, however, that some methods (e.g. pcaMethods NLPCA, missForest, etc.) are equipped to handle non-linear data. In these cases scaling is up to the user.}
 
 \item{n.iter}{Number of iterations to perform with default 10. This will only affect the probabilistic methods that allow for a multiple imputation framwork. The rest of the methods (if specified to run) will only generate 1 imputed dataframe.}
 
@@ -33,7 +33,7 @@ impute_data(X, scale = T, n.iter = 10, sel_method = c(1:16))
 }}
 }
 \value{
-A nested list of imputed datasets. In case only a subset of methods was selected the not-selected list elements will be empty.
+A nested list of imputed datasets. In case only a subset of methods was selected the non-selected list elements will be empty.
 \item{random_replacement}{Imputed dataset using random replacement}
 \item{mean_imputation}{Imputed dataset using mean imputation}
 \item{median_imputation}{Imputed dataset using median imputation}
@@ -71,6 +71,9 @@ impute_data(df, scale = T, n.iter = 10,
 #in simulations) on a non-scaled dataframe
 impute_data(df, scale = F, n.iter = 20,
             sel_method = c(14))
+#running 1 iterations of four selected non-probabilistic algorithms on a scaled dataframe
+impute_data(df, scale = T, n.iter = 1,
+            sel_method = c(2:3, 5, 7))
 }
 
 }
