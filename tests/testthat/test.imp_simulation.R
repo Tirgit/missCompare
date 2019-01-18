@@ -23,3 +23,4 @@ test_that("simulation runs without errors", {
                            n.iter = 2), NA)
 })
 
+rm(list=ls())

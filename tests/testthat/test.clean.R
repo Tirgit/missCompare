@@ -50,3 +50,5 @@ test_that("output dataset vars", {
 test_that("equal dims", {
   expect_equal(dim(small), dim(cleaned))
 })
+
+rm(list=ls())

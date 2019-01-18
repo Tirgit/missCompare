@@ -47,8 +47,9 @@ clean <- function(X, var_remove = NULL, var_removal_threshold = 0.5, ind_removal
     missingness_coding = NA) {
 
     # remove undesired variables
-    X[var_remove] <- NULL
+    if (!is.null(var_remove)) {X[var_remove] <- NULL }
 
+    #give warning when strings are present variables
     strings_present <- sum(sapply(X, is.character)) > 0
 
     if (strings_present == TRUE) {
@@ -57,11 +58,12 @@ var_remove argument or convert them into type factor/numeric where applicable.")
 
     # convert all variables to numeric
     vars_non_num <- names(X)[!sapply(X, is.numeric)]
-    if (length(vars_non_num) != 0)
-        X <- as.data.frame(sapply(X, as.numeric))
-    if (length(vars_non_num) != 0)
+
+    if (length(vars_non_num) != 0) {
+        X <- as.data.frame(sapply(X, as.numeric)) }
+    if (length(vars_non_num) != 0) {
         message(paste("Variable(s) ", (paste(vars_non_num, collapse = ", ")), " converted to numeric.",
-            sep = ""))
+            sep = "")) }
 
     # convert to NA
     X <- as.data.frame(lapply(X, function(x) replace(x, x %in% missingness_coding,
@@ -73,19 +75,19 @@ var_remove argument or convert them into type factor/numeric where applicable.")
     if (length(vars_above_thres) != 0)
         new_df <- X[, -which(missfrac_per_var >= var_removal_threshold)] else new_df <- X
 
-    if (length(vars_above_thres) != 0)
+    if (length(vars_above_thres) != 0) {
         message(paste("Variable(s) ", (paste(vars_above_thres, collapse = ", ")), " removed due to exceeding the pre-defined removal threshold (>",
-            var_removal_threshold * 100, "%) for missingness.", sep = ""))
+            var_removal_threshold * 100, "%) for missingness.", sep = "")) }
 
     # remove individuals above missingness threshold
     missfrac_per_ind <- rowMeans(is.na(new_df))
     inds_above_thres <- rownames(X)[missfrac_per_ind >= ind_removal_threshold]
-    if (length(inds_above_thres) != 0)
-        clean_df <- new_df[-which(missfrac_per_ind >= ind_removal_threshold), ] else clean_df <- new_df
+    if (length(inds_above_thres) != 0) {
+        clean_df <- new_df[-which(missfrac_per_ind >= ind_removal_threshold), ] } else { clean_df <- new_df }
 
-    if (length(inds_above_thres) != 0)
+    if (length(inds_above_thres) != 0) {
         message(paste(length(inds_above_thres), " individual(s) removed due to exceeding the pre-defined removal threshold (>",
-            ind_removal_threshold * 100, "%) for missingness.", sep = ""))
+            ind_removal_threshold * 100, "%) for missingness.", sep = "")) }
 
     return(clean_df)
 

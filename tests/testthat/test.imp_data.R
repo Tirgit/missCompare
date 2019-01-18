@@ -6,43 +6,43 @@ small <- clindata_miss[1:60, 1:4]
 small$string <- "string"
 
 # expecting error if strings are in the dataframe
-test_that("string errors in impute_data()", {
+test_that("string errors in impute_data", {
   expect_error(impute_data(small))
 })
 
 # expecting error if factors are present and methods are defined that do not support factors
 small <- clindata_miss[1:60, 1:4]
-test_that("string errors in impute_data()", {
+test_that("factors error when methods dont support it", {
   expect_error(impute_data(small, scale = T, sel_method = c(2:10,13)))
 })
 
 # expecting note output if scale is set to FALSE and PCA methods are defined
 small <-  clindata_miss[1:60, 3:7]
-test_that("string errors in impute_data()", {
+test_that("expect note output", {
   expect_output(impute_data(small, scale = F, sel_method = c(5)), "One or more of your selected methods is based on PCA - Although your command will run, scaling is strongly recommended.")
 })
 
 # expect methods that support factors run OK when factors are defined - with scaling
 small <- clindata_miss[1:60, 1:4]
-test_that("string errors in impute_data()", {
+test_that("factors OK scaling runs OK", {
   expect_error(impute_data(small, n.iter = 1, scale = T, sel_method = c(1,11,12,14:16)), NA)
 })
 
 # expect methods that support factors run OK when factors are defined - without scaling
 small <- clindata_miss[1:60, 1:4]
-test_that("string errors in impute_data()", {
+test_that("factors OK no scaling runs OK", {
   expect_error(impute_data(small, n.iter = 1, scale = F, sel_method = c(1,11,12,14:16)), NA)
 })
 
 # expect all methods to run OK when variables are all numeric - with scaling
 small <-  clindata_miss[1:60, 3:7]
-test_that("string errors in impute_data()", {
+test_that("runs OK when all numeric and with scaling", {
   expect_error(impute_data(small, n.iter = 1, scale = T, sel_method = c(1:16)), NA)
 })
 
 # expect all methods to run OK when variables are all numeric - without scaling (note is output though)
 small <-  clindata_miss[1:60, 3:7]
-test_that("string errors in impute_data()", {
+test_that("runs OK when all numeric and without scaling", {
   expect_error(impute_data(small, n.iter = 1, scale = F, sel_method = c(1:16)), NA)
 })
 
@@ -79,12 +79,12 @@ test_that("VIM kNN imputation error", {
 
 df_imp <- imputed$VIM_kNN_imputation[[1]]
 # expecting no error when running post imp diag script, when scale = T and original was scaled
-test_that("no errors in post imp diag script", {
+test_that("scaling on, post imp diag no error", {
   expect_error(post_imp_diag(small, df_imp, scale = T, n.boot = 2), NA)
 })
 
 # expecting  error when dimensions of imputed and original are not the same
-test_that("no errors in post imp diag script", {
+test_that("post imp diag dim error", {
   expect_error(post_imp_diag(small[,1:4], df_imp, scale = T, n.boot = 2))
 })
 
@@ -102,3 +102,5 @@ imp_res <- post_imp_diag(small, df_imp, scale = F, n.boot = 3)
 test_that("barchart is present", {
   expect_false(is_empty(imp_res$Barcharts))
 })
+
+rm(list=ls())

@@ -46,3 +46,5 @@ test_that("equal dimensions of simulated matrix and MNAR matrix", {
 test_that("equal dimensions of simulated matrix and MAR matrix", {
   expect_equal(dim(simulated$Simulated_matrix), dim(res$MAR_matrix))
 })
+
+rm(list=ls())

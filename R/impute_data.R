@@ -76,12 +76,13 @@
 ## FUNCTION
 impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
 
-  factors_present <- sum(sapply(X, is.factor)) > 0
-  strings_present <- sum(sapply(X, is.character)) > 0
+  strings_present <- (sum(sapply(X, is.character)) > 0)
 
-  if (strings_present) {
+  if (strings_present == TRUE) {
     stop("Warning! Your data contains string variables. Please inspect your data and either remove these variables or convert them
          into type factor/numeric where applicable.") }
+
+  factors_present <- (sum(sapply(X, is.factor)) > 0)
 
   if (any(((c(2:10,13) %in% sel_method) & factors_present))) {
     stop("Warning! One or more of your selected methods does not allow factors - these methods are mean imputation, median imputation,
