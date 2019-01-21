@@ -250,10 +250,12 @@ Please note that RMSE and MAE measures correlate strongly. It is interesting to 
 
 ## Imputing your dataset
 
-Hopefully, by now you have a good idea on which method you would like to use to impute missing data for your dataset - you will be able to do this using `missCompare::impute_data()`. Let's consider a scenario where you choose **missForest** to impute your data. You do not want to scale your data and you would like to create 10 imputed dataframes in order to set up a multiple imputation framework. Note, that setting up a multiple imputation framework is only a viable option with probabilistic models (e.g. you can impute you data with **Mean imputation** a billion times, but the NAs will always be replaced with exacty the same mean values!).
+Hopefully, by now you have a good idea on which method you would like to use to impute missing data for your dataset - you will be able to do this using `missCompare::impute_data()`. Please note that while some algorithms can safely handle factors (random replacement, mice, mi, missForest, Hmisc, VIM), some do not (mean and median imputation, missMDA algorithms; pcaMethods algorithms; Amelia II). If you have factors and would like to use one of the methods that are able to handle them, you can directly use your original dataset here (without string variables). In case your choice is another method or you don't have factors in your original data, you can safely used the dataframe output by `missCompare::clean()`. 
+
+Let's consider a scenario where you choose **missForest** to impute your data. You would like to consider the original factor variables, you do not want to scale your data and you would like to create 10 imputed dataframes in order to set up a multiple imputation framework. Note, that setting up a multiple imputation framework is only a viable option with probabilistic models (e.g. you can impute you data with **Mean imputation** a billion times, but the NAs will always be replaced with exacty the same mean values!).
 
 ```{r eval = FALSE} 
-imputed <- missCompare::impute_data(cleaned, 
+imputed <- missCompare::impute_data(clindata_miss, 
                          scale = F, 
                          n.iter = 10, 
                          sel_method = c(14)) # 14 is the code for missForest
