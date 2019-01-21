@@ -211,9 +211,9 @@ Again, `missCompare::impute_simulated()` does all these in one step, and more:
 1. it simulates the dataset with no missing values;     
 2. spikes in NAs in MCAR, MAR, MNAR and - if you define a custom pattern - MAP patterns;     
 3. imputes missing data using a curated list of 16 algorithms;     
-4. evaluates imputation accuracy by calculating RMSE, MAE and KS values between the imputed and the original datapoints.
+4. compares computation time, evaluates imputation accuracy by calculating RMSE, MAE and KS values between the imputed and the original datapoints.
 
-This can be achieved by a single command! This means you DON'T have to run `missCompare::simulate()`, `missCompare::MCAR()`, `missCompare::MAR()`, `missCompare::MNAR()`, `missCompare::MAP()` or `missCompare::all_patterns()`. The command goes as (note that we defined `assumed_pattern = NA` - the defeault - so MAP pattern will be skipped):
+This all can be achieved by a single command! This means you DON'T have to run `missCompare::simulate()`, `missCompare::MCAR()`, `missCompare::MAR()`, `missCompare::MNAR()`, `missCompare::MAP()` or `missCompare::all_patterns()`. The command goes as (note that we defined `assumed_pattern = NA` - the defeault - so MAP pattern will be skipped):
 
 ```{r eval = FALSE} 
 missCompare::impute_simulated(rownum = metadata$Rows,
@@ -243,6 +243,10 @@ Let's look at some plots:
 
 ## KS comparison
 <img src="../man/figures/Plot_KS.png" width = "100%"/>
+
+
+Please note that RMSE and MAE measures correlate strongly. It is interesting to consider that there are two different main imputation strategies - one group of methods focus more on *prediction*, while the other does *imputation per se*. To give an intuitive explanation, while predictive algorithms set up models that try to predict missing data based on all the other data available and thereby often ignore the uncertainty of missing values, multiple imputation algorithms focus more on variables distributions.
+
 
 ## Imputing your dataset
 
