@@ -53,17 +53,18 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
   X_orig <- as.data.frame(X_orig)
   X_imp <- as.data.frame(X_imp)
 
+  factors_present <- (sum(sapply(X, is.factor)) > 0)
+
   # optional scaling
-  if (scale == T) {
-    X_orig <- as.data.frame(scale(X_orig))
-  }
+  if (factors_present & (scale == T)) {
+    ind <- sapply(X_orig, is.numeric)
+    X_orig[ind] <- as.data.frame(lapply(X_orig[ind], scale)) } else if ((factors_present == F) & (scale == T)) {
+      X_orig <- as.data.frame(scale(X_orig)) }
 
   histograms <- list()
   boxplots <- list()
   statistics <- list()
   barcharts <- list()
-
-  factors_present <- sum(!sapply(X_orig, is.numeric)) > 0
 
   X_orig_num <- X_orig[sapply(X_orig, is.numeric)]
   if (factors_present == T) {

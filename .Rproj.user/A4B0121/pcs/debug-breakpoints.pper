@@ -1650,6 +1650,21 @@
                 "path" : "~/Documents/GitHub/missCompare/tests/testthat/test.imp_data.R",
                 "state" : 1,
                 "type" : 1
+            },
+            {
+                "editor_line_number" : 85,
+                "editor_state" : 1,
+                "function_name" : "impute_data",
+                "function_steps" : "4",
+                "id" : 747,
+                "is_package_breakpoint" : true,
+                "is_pending_debug_completion" : false,
+                "line_number" : 85,
+                "needs_updated_steps" : false,
+                "package_name" : "missCompare",
+                "path" : "~/Documents/GitHub/missCompare/R/impute_data.R",
+                "state" : 1,
+                "type" : 0
             }
         ]
     }
