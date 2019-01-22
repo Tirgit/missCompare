@@ -53,7 +53,7 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
   X_orig <- as.data.frame(X_orig)
   X_imp <- as.data.frame(X_imp)
 
-  factors_present <- (sum(sapply(X, is.factor)) > 0)
+  factors_present <- (sum(sapply(X_orig, is.factor)) > 0)
 
   # optional scaling
   if (factors_present & (scale == T)) {
