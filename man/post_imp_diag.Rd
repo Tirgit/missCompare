@@ -11,7 +11,7 @@ post_imp_diag(X_orig, X_imp, scale = T, n.boot = 100)
 
 \item{X_imp}{Dataframe - the imputed data with no missing values.}
 
-\item{scale}{Boolean with default TRUE. Scaling will scale and center all variables to mean=0 and standard deviation=1 in the \strong{original dataframe with missingness}. The user should select TRUE or FALSE here depending on whether the imputed dataframe has scaled or unscaled values.}
+\item{scale}{Boolean with default TRUE. Scaling will scale and center all variables to mean = 0 and standard deviation = 1 in the \strong{original dataframe with missingness}. The user should select TRUE or FALSE here depending on whether the imputed dataframe has scaled or unscaled values (which is controlled by the scale argument in \code{\link{impute_data}}. Factor variables will not be scaled.}
 
 \item{n.boot}{Number of bootstrap iterations to generate mean pairwise Pearson correlation coefficients and 95\% confidence intervals for variable pairs from the original and the imputed dataframes.}
 }
@@ -26,17 +26,17 @@ post_imp_diag(X_orig, X_imp, scale = T, n.boot = 100)
 \item{Correlation_plot}{Scatter plot of mean pairwise Pearson's correlation coefficients from the original dataframe (with missingness) and the imputed dataframe. The blue line represents a line with slope 1 and intercept 0. The red line is a fitted line of the correlation coefficient pairs. The error bars around the points represent the individual 95\% confidence intervals drawn from bootstrapping the correlation coefficients}
 }
 \description{
-\code{\link{post_imp_diag}} serves as post imputation diagnostics. The function compares the original dataset (with missing data) with the imputed dataset. The function outputs statistics and visualizations that will help the user compare the distributions of the original values and the imputed values and potential differences between correlation statistics before and after imputation.
+\code{\link{post_imp_diag}} serves as post imputation diagnostics. The function compares the original dataset (with missing data) with the imputed dataset. The function outputs statistics and visualizations that will help the user compare the original and the imputed datasets.
 }
 \details{
 This function uses the original dataframe and produces plots that allows the user
 to compare the distributions of the original values and the imputed values for each
 numeric variables. If there are factors present in the dataframes, the function will
-recognize this and create barcharts for these categorical variables. In addition, the
+recognize this and create barcharts for these. In addition, the
 function will calculate bootstrapped pairwise Pearson correlation coefficients between
 numeric variables in the original dataframe (with missingness) and the imputed dataframe
 and plot these for the user to assess whether the imputation distorted the original
-data structure or not. The function will also visualize clusters of the variables from
+data structure or not. The function will also visualize variable clusters in
 the original dataframe and the imputed one. Should the imputation algorithm perform well,
 the variable distributions and the variable clusters should be similar.
 }

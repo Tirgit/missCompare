@@ -74,7 +74,20 @@ on the dataframe using `?clindata_miss`.
     ID13      | 01-01-2000  |   *NA*                    |   27.7  |
     ID13      | 01-01-2005  |   0                       |   27.0  |
 
+4. Dependent variables / known formula: In some cases, there could be a known relationship between variables. Such case is when the variables height, weight and BMI are present in the data, and some values are randomly missing. As BMI is calculated as *weight (kg) /height^2^ (m^2^)*, knowing the formula it can be deducted that the values below are **70 kg** and **31.2 kg/m^2^**. A similar scenario in clinical datasets would be missing laboratory lipid values, where LDL cholesterol values are calculated by the Friedewald formula from triglycerides, total cholesterol and HDL cholesterol values. Another classic scenario is linearly dependent variables, where the sum of two variables produce a third variable.
+    
+    ID        | Weight_kg   |   Height_meters           |    BMI  |
+    --------  |------------ |-------------------------- |---------|
+    ID13      |     *NA*    |   1.65                    |   25.8  |
+    ID15      |     74      |   1.78                    |   23.4  |
+    ID16      |     89      |   1.69                    |   *NA*  |
+
+
+All of the above scenarios need prior knowledge of the data, which is "easy" for humans, but is very hard to compute into any single missing data imputation algorithm. Therefore, it is always suggested that the variables and their relationships are thoroughly understood before jumping into hardcore data imputation using a fancy algorithm.
+
 Also, it is highly recommended to check data ranges. By running a simple `summary()` on your data you can check minimum and maximum values for each numeric variables and browse through all categories for factors. Oftentimes it happens that a variable - a blood biomarker, for instance - has a minus value as its minimum. While this can be OK in some cases (e.g. the variable is already normalized), but sometimes this can be a data input error or missing datapoints can be coded as minus values. In these cases, it is important that the minus values are set to *NA*.
+
+Another important aspect that should be considered are outliers. This tutorial is not meant to delve too deep into this, but it is suggested that outliers are visualized for each variables and are excluded if they are too extreme or represent non-sense values. E.g. an age value of 109 is definitely an outlier, but physiologically possible, but 309 is probably due to a data input error, therefore it should be set to *NA*.
     
 ## The missCompare pipeline
 
@@ -140,7 +153,7 @@ As we cleaned clindata_miss in the previous step, the function should run withou
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 metadata$NA_Correlation_plot
 ```
-* `metadata$min_PDM_thresholds` - This object is a small dataframe that informs about the various min_PDM (minimum number of observations per distinct missing data pattern) values. min_PDM will need to be defined in further functions, so it is informative to get a sense on what is the proportion of missing data patterns that should be used in the simulation framework. In the table below we see that if this number is too high (only those missing data patterns are considered that describe 100 or more observations) than more than 80\% of observations with other missing data patterns will be ignored in the simulation framework. On the other hand, if this number is set too low, e.g. below 5, than this may result in retaining almost all missing data patterns that are applicable to only a few observations. Therefore, this number will need to be set carefully later. This table shows approximate percentages of observations with missing data retained with setting min_PDM in later steps.
+* `metadata$min_PDM_thresholds` - This object is a small dataframe that informs about the various min_PDM (minimum number of observations per distinct missing data pattern) values. min_PDM will need to be defined in further functions, so it is informative to get a sense on what is the proportion of missing data patterns that should be used in the simulation framework. In the table below we see that if this number is too high (only those missing data patterns are considered that describe 100 or more observations) than more than 80\% of observations with other missing data patterns will be ignored in the simulation framework. On the other hand, if this number is set too low, e.g. below 5, than this may result in retaining almost all missing data patterns that are applicable to only a few observations resulting in a very complicated pattern that the algorithm might fail to apply to your dataset. Therefore, this number will need to be set carefully later. This table shows approximate percentages of observations with missing data retained with setting min_PDM in later steps.
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 metadata$min_PDM_thresholds
 ```
@@ -175,7 +188,7 @@ The output `simulated` is a list, where the first item is the simulated matrix a
 
 With this done, missing data can be spiked in in the simulated data using various patterns (MCAR, MAR, MNAR and MAP). This will be done with respect to the missing data fraction for each variable in the original dataframe.
 
-MCAR missingness is simple, NAs are spiked in randomly:
+MCAR missingness is simple, NAs are spiked in randomly. Please note that in all functions below, min_PDM is set to 10. As it was shown before when looking at outputs from `missCompare::get_data()`, this will result in the retention of the most important missing data patterns in which approximately 78\% of all observations will be accounted for.
 ```{r eval = FALSE} 
 missCompare::MCAR(simulated$Simulated_matrix,
              MD_pattern = metadata$MD_Pattern,

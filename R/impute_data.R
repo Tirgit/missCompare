@@ -6,13 +6,13 @@
 #' @details
 #' This function assumes that the user has performed simulations using the \code{\link{impute_simulated}} function and arrived to
 #' some conclusions regarding which functions would be the best performing on their datasets. This function offers a convenient
-#' way to impute datasets with a curated list of functions. Some of the functions allow for a multiple imputation framwork
+#' way to impute datasets with a curated list of functions. Some of the functions allow for a multiple imputation framework
 #' (they operate with probablistic models, hence there is uncertainty in the imputed values), so this function allows to generate
 #' multiple imputed datasets. The user can decide to impute their dataframe with a selected method or with multiple methods.
 #'
 #'
 #' @param X Dataframe - the original data that contains missing values.
-#' @param scale Boolean with default TRUE. Scaling will scale and center all numeric variables to mean=0 and standard deviation=1. This is strongly suggested for all PCA-based methods, and for the sake of comparison (and in case all methods are run), for the other methods too. Please note, however, that some methods (e.g. pcaMethods NLPCA, missForest, etc.) are equipped to handle non-linear data. In these cases scaling is up to the user.
+#' @param scale Boolean with default TRUE. Scaling will scale and center all numeric variables to mean = 0 and standard deviation = 1. This is strongly suggested for all PCA-based methods, and for the sake of comparison (and in case all methods are run), for the other methods too. Please note, however, that some methods (e.g. pcaMethods NLPCA, missForest, etc.) are equipped to handle non-linear data. In these cases scaling is up to the user. Factor variables will not be scaled.
 #' @param n.iter Number of iterations to perform with default 10. This will only affect the probabilistic methods that allow for a multiple imputation framwork. The rest of the methods (if specified to run) will only generate 1 imputed dataframe.
 #' @param sel_method Numeric vector that specifies which methods to run. Default is all methods (1-16), but any combinations, including selecting a single method, are allowed. \tabular{ll}{
 #' 1 \tab random replacement\cr
