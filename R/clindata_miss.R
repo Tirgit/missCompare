@@ -1,7 +1,7 @@
 #' Clinical dataset with missingness
 #'
 #' @description
-#' \code{\link{clindata_miss}} is a custom made clinical dataset that aimed to resemble a real-life clinical dataset.
+#' \code{\link{clindata_miss}} is a custom made dataframe that resembles a real-life clinical dataset.
 #' The correlations between variables, the data means, SDs and ranges are realistic, but
 #' the dataset is constructed by simulations and manual data input. The dataset contains
 #' missing values (approximately 10\% missing overall), and values are missing in a realistic pattern.
