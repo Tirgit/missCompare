@@ -32,8 +32,8 @@ with the same number of rows and columns and with the same or very similar corre
 in the original dataframe. When the correlation matrix is a non positive definitive matrix, the nearPD function
 estimates the closest positive definitive matrix. Outputs from the function makes it easy to compare the original
 correlation matrix with the nearPD correlation matrix. In the simulated matrix all variables have normal
-distribution and fixed mean and standard deviation. This matrix will subsequently used for spiking in missing
-values and test various missing data imputation algorithms.
+distribution and fixed mean and standard deviation. This matrix will be subsequently used for spiking in missing
+values and for the testing of various missing data imputation algorithms.
 }
 \examples{
 \dontrun{

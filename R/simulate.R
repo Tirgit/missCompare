@@ -10,8 +10,8 @@
 #' in the original dataframe. When the correlation matrix is a non positive definitive matrix, the nearPD function
 #' estimates the closest positive definitive matrix. Outputs from the function makes it easy to compare the original
 #' correlation matrix with the nearPD correlation matrix. In the simulated matrix all variables have normal
-#' distribution and fixed mean and standard deviation. This matrix will subsequently used for spiking in missing
-#' values and test various missing data imputation algorithms.
+#' distribution and fixed mean and standard deviation. This matrix will be subsequently used for spiking in missing
+#' values and for the testing of various missing data imputation algorithms.
 #'
 #' @param rownum Number of rows (samples) in the original dataframe (Rows output from the \code{\link{get_data}} function)
 #' @param colnum Number of rows (variables) in the original dataframe (Columns output from the \code{\link{get_data}} function)
@@ -42,13 +42,13 @@ simulate <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
     stddev <- rep(sdval, colnum)
     covMat <- stddev %*% t(stddev) * pd_corr_matrix$mat
     X_hat <- MASS::mvrnorm(n = rownum, mu = mu, Sigma = covMat, empirical = TRUE)  # Simulated values
-    if (colnum > 5) 
+    if (colnum > 5)
         original_sample <- cormat[1:5, 1:5] else original_sample <- cormat[1:colnum, 1:colnum]
-    if (colnum > 5) 
+    if (colnum > 5)
         nearPD_sample <- stats::cor(X_hat)[1:5, 1:5] else nearPD_sample <- stats::cor(X_hat)[1:colnum, 1:colnum]
-    
+
     rownames(X_hat) <- 1:nrow(X_hat)
-    
+
     list(Simulated_matrix = X_hat, Original_correlation_sample = original_sample, NearPD_correlation_sample = nearPD_sample)
 }
 
