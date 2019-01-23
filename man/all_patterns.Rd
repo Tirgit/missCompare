@@ -14,7 +14,7 @@ all_patterns(X_hat, MD_pattern, NA_fraction, min_PDM = 10,
 
 \item{NA_fraction}{Fraction of missingness in the original dataset (Fraction_missingness output from the \code{\link{get_data}} function)}
 
-\item{min_PDM}{All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors.}
+\item{min_PDM}{All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors. Please select a value based on the min_PDM_thresholds output from the \code{\link{get_data}} function}
 
 \item{assumed_pattern}{Vector of missingess types (must be same length as missingness fraction per variable). If this input is specified, the function will spike in missing datapoints in a MAP pattern as well.}
 }

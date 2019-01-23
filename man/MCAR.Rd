@@ -13,7 +13,7 @@ MCAR(X_hat, MD_pattern, NA_fraction, min_PDM = 10)
 
 \item{NA_fraction}{Fraction of missingness in the original dataset (Fraction_missingness output from the \code{\link{get_data}} function)}
 
-\item{min_PDM}{All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors.}
+\item{min_PDM}{All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors. Please select a value based on the min_PDM_thresholds output from the \code{\link{get_data}} function}
 }
 \value{
 \item{MCAR_matrix}{Matrix with MCAR pred-defined missingess pattern}
@@ -25,7 +25,8 @@ MCAR(X_hat, MD_pattern, NA_fraction, min_PDM = 10)
 \details{
 This function uses the generated simulated matrix and generates missing datapoints in a missing-completely-at-random
 pattern for each variable, considering the fraction of missingness for each variable, so potential missing data fraction
-imbalances between variables in the original data will be retained. The missing data spike-in is completely at random.
+imbalances between variables in the original data will be retained. The missing data spike-in is completely at random. Please note that after the missing data spike-in,
+the function will remove rows with 100\% missing data.
 }
 \examples{
 \dontrun{

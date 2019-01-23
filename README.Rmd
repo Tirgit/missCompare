@@ -130,7 +130,7 @@ diag <- missCompare::post_imp_diag(cleaned,
 ## Post imputation diagnostics - distributions of original and imputed values for a random variable
 <img src="./man/figures/pid_comp.png" width = "70%"/>
 
-## Post imputation diagnostics - variable clusters in the origina and imputed dataset
+## Post imputation diagnostics - variable clusters in the original and imputed datasets
 <img src="./man/figures/pid_clust.png" width = "70%"/>
 
 ## Post imputation diagnostics - comparison of variable-pair correlations

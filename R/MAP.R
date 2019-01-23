@@ -6,20 +6,19 @@
 #' @details
 #' This function uses the generated simulated matrix and generates missing datapoints in a missing-at-assumed
 #' pattern for each variable using the \code{\link[mice]{ampute}} function, considering the fraction of missingness in
-#' the original dataset and the original missingness pattern. It is suggested that the user carefully
-#' examines the missing data fractions, excludes variables with high missingess using the \code{\link{clean}} function before proceeding to
-#' missing data generation. In the \code{\link{MAP}} function, the user needs to define a character vector
+#' the original dataset and the original missingness pattern. In the \code{\link{MAP}} function, the user needs to define a character vector
 #' (of length the same as the fraction the number of columns in the dataset) that specifies which missingness pattern corresponds
 #' to the variables. In case the first four columns are assumed missing at random, the next one missing completely at random and
 #' the last two column not at random, the input vector will be:
 #' \code{c(rep('MAR', 4), 'MCAR', rep('MNAR',2))}
-#' The algorithm will spike in missing values according to the specified pattern.
+#' The algorithm will spike in missing values according to the specified pattern. Please note that after the missing data spike-in,
+#' the function will remove rows with 100\% missing data.
 #'
 #'
 #' @param X_hat Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)
 #' @param MD_pattern Missing data pattern in the original dataset (MD_Pattern output from the \code{\link{get_data}} function)
 #' @param NA_fraction Fraction of missingness in the original dataset (Fraction_missingness output from the \code{\link{get_data}} function)
-#' @param min_PDM All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors.
+#' @param min_PDM All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors. Please select a value based on the min_PDM_thresholds output from the \code{\link{get_data}} function
 #' @param assumed_pattern Vector of missingess types (must be same length as missingness fraction per variable)
 #'
 #' @name MAP

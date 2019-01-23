@@ -13,7 +13,7 @@ MAR(X_hat, MD_pattern, NA_fraction, min_PDM = 10)
 
 \item{NA_fraction}{Fraction of missingness in the original dataset (Fraction_missingness output from the \code{\link{get_data}} function)}
 
-\item{min_PDM}{All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors.}
+\item{min_PDM}{All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors. Please select a value based on the min_PDM_thresholds output from the \code{\link{get_data}} function}
 }
 \value{
 \item{MAR_matrix}{Matrix with MAR pred-defined missingess pattern}
@@ -26,9 +26,8 @@ MAR(X_hat, MD_pattern, NA_fraction, min_PDM = 10)
 This function uses the generated simulated matrix and generates missing datapoints in a missing-at-random
 pattern for each variable using the \code{\link[mice]{ampute}} function, considering the fraction of missingness in
 the original dataset and the original missingness pattern. The characteristic of the MAR pattern is that
-the missingness in a variable is dependent on the distribution of other variable/variables. It is suggested that the user carefully
-examines the missing data fractions, excludes variables with high missingess using the \code{\link{clean}} function before proceeding to
-missing data generation.
+the missingness in a variable is dependent on the distribution of other variable(s). Please note that after the missing data spike-in,
+the function will remove rows with 100\% missing data.
 }
 \examples{
 \dontrun{
