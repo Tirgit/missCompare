@@ -5,12 +5,11 @@
 #' pre-specified missingess
 #'
 #' @details
-#' For better imputation performance, a good quality dataframe is needed. Variables and samples with very high
-#' missingness rates might negatively impact missing data imputation algorithms. This function cleans the original
-#' dataframe by removing rows (samples) and columns (variables) above pre-specified thresholds. The function
-#' will also convert any strangely coded missing data to NAs. Note that all non numeric variables will
-#' be converted or coerced to numeric variables - you will receive a message when factors are converted,
-#' but a warning when character variables are coerced to numeric.
+#' For better imputation performance, a clean, filtered dataframe is needed. Variables and samples with very high
+#' missingness fractions will negatively impact most missing data imputation algorithms. This function cleans the original
+#' dataframe by removing rows (samples) and columns (variables) above pre-specified missingess thresholds. The function
+#' will also convert any prespecified, strangely coded missing data to NAs. Note that all factor variables will
+#' be converted or coerced to numeric variables.
 #'
 #' @param X Original dataframe with samples in rows and variables as columns
 #' @param var_remove Variables to remove (e.g. ID). Define by character vector, e.g. c('ID', 'character_variable')
@@ -49,7 +48,7 @@ clean <- function(X, var_remove = NULL, var_removal_threshold = 0.5, ind_removal
     # remove undesired variables
     if (!is.null(var_remove)) {X[var_remove] <- NULL }
 
-    #give warning when strings are present variables
+    # give warning when strings are present variables
     strings_present <- sum(sapply(X, is.character)) > 0
 
     if (strings_present == TRUE) {

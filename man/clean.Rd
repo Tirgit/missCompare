@@ -26,12 +26,11 @@ Clean dataset with NAs as missing values and rows/columns above the pre-specifie
 pre-specified missingess
 }
 \details{
-For better imputation performance, a good quality dataframe is needed. Variables and samples with very high
-missingness rates might negatively impact missing data imputation algorithms. This function cleans the original
-dataframe by removing rows (samples) and columns (variables) above pre-specified thresholds. The function
-will also convert any strangely coded missing data to NAs. Note that all non numeric variables will
-be converted or coerced to numeric variables - you will receive a message when factors are converted,
-but a warning when character variables are coerced to numeric.
+For better imputation performance, a clean, filtered dataframe is needed. Variables and samples with very high
+missingness fractions will negatively impact most missing data imputation algorithms. This function cleans the original
+dataframe by removing rows (samples) and columns (variables) above pre-specified missingess thresholds. The function
+will also convert any prespecified, strangely coded missing data to NAs. Note that all factor variables will
+be converted or coerced to numeric variables.
 }
 \examples{
 \dontrun{

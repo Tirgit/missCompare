@@ -1,10 +1,12 @@
-#' @title Extraction of meta-data from dataframes
+#' @title Extraction of metadata from dataframes
 #'
 #' @description
-#' \code{\link{get_data}} extracts descriptive meta-data from the dataframe including information on missing data
+#' \code{\link{get_data}} extracts descriptive metadata from the dataframe including information on missing data
 #'
 #' @details
-#' This function uses the original dataframe and extracts descriptive meta-data.
+#' This function uses the original dataframe and extracts descriptive metadata including dimensions,
+#' missingness fractions overall and by variable, number of missing values overall and by variable,
+#' missing data patterns, missing data correlations and missing data visualizations
 #'
 #' @param X Original dataframe with samples in rows and variables as columns. Can also use the resulting object from the \code{\link{clean}} function
 #' @param matrixplot_sort Boolean with default TRUE. If TRUE, the matrixplot will be sorted by missing/non-missing status. If FALSE, the original order of rows will be retained

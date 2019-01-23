@@ -1,7 +1,7 @@
 #' @importFrom Amelia amelia
 #' @importFrom data.table melt
 #' @import dplyr
-#' @import ggdendro
+#' @importFrom ggdendro dendro_data ggdendrogram
 #' @import ggplot2
 #' @importFrom Hmisc aregImpute impute.transcan
 #' @importFrom ltm biserial.cor

@@ -2,7 +2,7 @@
 % Please edit documentation in R/get_data.R
 \name{get_data}
 \alias{get_data}
-\title{Extraction of meta-data from dataframes}
+\title{Extraction of metadata from dataframes}
 \usage{
 get_data(X, matrixplot_sort = T, plot_transform = T)
 }
@@ -31,10 +31,12 @@ get_data(X, matrixplot_sort = T, plot_transform = T)
 \item{Cluster_plot}{Cluster plot of co-missingness. Variables demostrating shared missingness patterns will branch at closer to the bottom of the plot, while no patterns will be represented by branches high in the plot}
 }
 \description{
-\code{\link{get_data}} extracts descriptive meta-data from the dataframe including information on missing data
+\code{\link{get_data}} extracts descriptive metadata from the dataframe including information on missing data
 }
 \details{
-This function uses the original dataframe and extracts descriptive meta-data.
+This function uses the original dataframe and extracts descriptive metadata including dimensions,
+missingness fractions overall and by variable, number of missing values overall and by variable,
+missing data patterns, missing data correlations and missing data visualizations
 }
 \examples{
 \dontrun{
