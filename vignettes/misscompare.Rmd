@@ -302,20 +302,12 @@ diag <- missCompare::post_imp_diag(cleaned,
                                    n.boot = 5)
 ```
 
-The `diag` list contains several interesting assessments. The `Histograms` and `Boxplots` lists should give an idea on the distributions of the original and the imputed values. Perhaps the limitations of mean imputation are the most apparent on these plots. For example, let's inspect HDL levels (scaled to mean 0 in the data!) on this boxplot:
+The `diag` list contains several interesting assessments. The `Histograms` and `Boxplots` lists should give an idea on the distributions of the original and the imputed values. Perhaps the limitations of mean imputation are the most apparent on these plots. For example, let's inspect SBP levels (scaled to mean 0 in the data!):
 
-```{r echo = FALSE, fig.width=6, fig.height=3} 
-diag$Boxplots$HDL
-```
-
-Or this histogram:
-
-```{r echo = FALSE, fig.width=6, fig.height=3} 
-diag$Histograms$HDL
-```
+<img src="../man/figures/pid_comp_mean.png" width = "100%"/>
 
 
-This, of course will look different for a probabilistic model, e.g. **AmeliaII**:
+This, of course will look different for almost any other models, e.g. **AmeliaII**:
 
 ```{r eval = TRUE, echo = FALSE, message=FALSE, warning = FALSE, results='hide'} 
 imputed <- missCompare::impute_data(cleaned, 
@@ -329,15 +321,8 @@ diag <- missCompare::post_imp_diag(cleaned,
                                    n.boot = 5)
 ```
 
-```{r echo = FALSE, fig.width=6, fig.height=3} 
-diag$Boxplots$HDL
-```
+<img src="../man/figures/pid_comp.png" width = "100%"/>
 
-And the histogram:
-
-```{r echo = FALSE, fig.width=6, fig.height=3} 
-diag$Histograms$HDL
-```
 
 The `Barcharts` list only contains elements if there were factors in the original data. 
 
@@ -349,18 +334,9 @@ head(diag$Statistics, 2)
 
 The `Variable_clusters_orig` and `Variable_clusters_imp` plots visualize the clusters of variables before and after the imputation. The clusters should not change too much!
 
+<img src="../man/figures/pid_clust.png" width = "100%"/>
 
-```{r echo = FALSE, fig.width=6, fig.height=3} 
-diag$Variable_clusters_orig
-```
-
-vs.
-
-```{r echo = FALSE, fig.width=6, fig.height=3} 
-diag$Variable_clusters_imp
-```
-
-Great, these two do look very similar!
+Great, these two do look very similar with only very small differences.
 
 Finally, the `Correlation_plot` shows bootstrapped correlation coefficients from the original data and the imputed data. You can specify how many iterations you would like to run to obtain bootstrapped correlation coefficients and 95\% confidence intervals using the `n.boot` argument in the function. In this vignette this is set to 5, which is far too low. The blue line has intercept 0 and slope 1 and  correlation coefficients (represented by the dots and the red line) should align this line as much as possible. With mean and median imputations, the line is often "turned clockwise", with a lower slope than 1 (regression to the mean).
 
