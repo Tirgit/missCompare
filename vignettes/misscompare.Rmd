@@ -251,9 +251,6 @@ Let's look at some plots:
 ## RMSE comparison
 <img src="../man/figures/Plot_RMSE.png" width = "100%"/>
 
-## MAE comparison
-<img src="../man/figures/Plot_MAE.png" width = "100%"/>
-
 ## KS comparison
 <img src="../man/figures/Plot_KS.png" width = "100%"/>
 
@@ -304,8 +301,9 @@ diag <- missCompare::post_imp_diag(cleaned,
 
 The `diag` list contains several interesting assessments. The `Histograms` and `Boxplots` lists should give an idea on the distributions of the original and the imputed values. Perhaps the limitations of mean imputation are the most apparent on these plots. For example, let's inspect SBP levels (scaled to mean 0 in the data!):
 
-<img src="../man/figures/pid_comp_mean.png" width = "100%"/>
-
+```{r echo = FALSE, fig.width=6, fig.height=3} 
+diag$Histograms$SBP
+```
 
 This, of course will look different for almost any other models, e.g. **AmeliaII**:
 

@@ -101,10 +101,6 @@ missCompare::impute_simulated(rownum = metadata$Rows,
 <img src="./man/figures/Plot_RMSE.png" width = "70%"/>
 
 
-## MAE comparison
-<img src="./man/figures/Plot_MAE.png" width = "70%"/>
-
-
 ## KS comparison
 <img src="./man/figures/Plot_KS.png" width = "70%"/>
 
