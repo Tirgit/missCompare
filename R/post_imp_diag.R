@@ -24,7 +24,7 @@
 #' @name post_imp_diag
 #'
 #' @return
-#' \item{Histograms}{List of density plots of all numeric variables. The density plots show the original values and the imputed values overlaid for each variables in the dataframe}
+#' \item{Histograms}{List of histograms of all numeric variables. The histograms show the original values and the imputed values overlaid for each variables in the dataframe}
 #' \item{Boxplots}{List of boxplots of all numeric variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
 #' \item{Barcharts}{List of bar charts of all categorical (factor) variables. The bar charts show the original categories and the imputed categories for each categorical variables in the dataframe. Barcharts will only be output if scale is set to FALSE and both the original and imputed data contain the same factor variables}
 #' \item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values, P value from Welch's t test and D test statistic from a Kolmogorov–Smirnov test}
@@ -96,7 +96,7 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
 
       q <- ggplot(data = data.frame(x = vals[, 1], y = vals[, 2]), aes(x = factor(y), fill = factor(x))) +
         geom_bar(position = "fill") +
-        ggtitle("Bar chart of original values and imputed values") +
+        ggtitle("Bar chart of original and imputed values") +
         labs(y = "Proportion", x = colnames(X_orig_factor)[i]) +
         guides(fill = guide_legend(title = "")) +
         theme(plot.title = element_text(hjust = 0.5))
@@ -146,13 +146,13 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
 
       p <- ggplot(data = data.frame(x = vals[, 1], y = vals[, 2]), aes(x, fill=y)) +
         geom_histogram(alpha = 0.5, binwidth = 0.5, position="identity") +
-        ggtitle("Overlaid density plot of original values and imputed values") +
+        ggtitle("Overlaid histogram of original and imputed values") +
         labs(x = colnames(X_orig_num)[i]) + guides(fill = guide_legend(title = "")) +
         theme(plot.title = element_text(hjust = 0.5))
 
       q <- ggplot(data = data.frame(x = vals[, 2], y = vals[, 1]), aes(x = x, y = y)) +
         geom_boxplot() + stat_summary(fun.y = mean, geom = "point", shape = 3, size = 5) +
-        ggtitle("Boxplots of original values and imputed values") +
+        ggtitle("Boxplots of original and imputed values") +
         labs(x = colnames(X_orig_num)[i], y = "") + theme(plot.title = element_text(hjust = 0.5))
 
       histograms[[pltName]] <- p
