@@ -23,7 +23,6 @@ Depends: R (>= 3.5.0)
 biocViews: 
 Imports:
   Amelia,
-  BiocManager,
   data.table,
   dplyr,
   ggdendro,
