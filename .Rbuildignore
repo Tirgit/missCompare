@@ -6,6 +6,5 @@
 ^README\.md$
 ^README\.html$
 ^cran-comments\.md$
-^NEWS\.md$
 ^\.travis\.yml$
 
