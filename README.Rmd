@@ -62,13 +62,13 @@ install.packages("missCompare")
 
 ## Usage
 
-#### Loading library and sandbox data
+### Loading library and sandbox data
 ```{r eval = FALSE} 
 library(missCompare)
 data("clindata_miss")
 ```
 
-#### Cleaning
+### Cleaning
 ```{r eval = FALSE} 
 cleaned <- missCompare::clean(clindata_miss,
                               var_removal_threshold = 0.5, 
@@ -76,14 +76,14 @@ cleaned <- missCompare::clean(clindata_miss,
                               missingness_coding = -9)
 ```
 
-#### Extracting data
+### Extracting data
 ```{r eval = FALSE} 
 metadata <- missCompare::get_data(cleaned,
                                   matrixplot_sort = T,
                                   plot_transform = T)
 ```
 
-#### Imputation - simulation framework
+### Imputation - simulation framework
 ```{r eval = FALSE} 
 missCompare::impute_simulated(rownum = metadata$Rows,
                               colnum = metadata$Columns, 
@@ -95,19 +95,19 @@ missCompare::impute_simulated(rownum = metadata$Rows,
                               assumed_pattern = NA)
 ```
 
-## Computation time comparison
+#### Computation time comparison
 <img src="./man/figures/Plot_TIME.png" width = "70%"/>
 
 
-## RMSE comparison
+#### RMSE comparison
 <img src="./man/figures/Plot_RMSE.png" width = "70%"/>
 
 
-## KS comparison
+#### KS comparison
 <img src="./man/figures/Plot_KS.png" width = "70%"/>
 
 
-#### Imputation of data
+### Imputation of data
 ```{r eval = FALSE} 
 imputed <- missCompare::impute_data(cleaned, 
                          scale = T, 
@@ -115,7 +115,7 @@ imputed <- missCompare::impute_data(cleaned,
                          sel_method = c(1:16))
 ```
                          
-#### Post imputation diagnostics
+### Post imputation diagnostics
 ```{r eval = FALSE} 
 diag <- missCompare::post_imp_diag(cleaned,
                                    imputed$mean_imputation[[1]],
@@ -123,13 +123,13 @@ diag <- missCompare::post_imp_diag(cleaned,
                                    n.boot = 100)
 ```
 
-## Post imputation diagnostics - distributions of original and imputed values for a random variable
+#### Post imputation diagnostics - distributions of original and imputed values for a random variable
 <img src="./man/figures/pid_comp.png" width = "70%"/>
 
-## Post imputation diagnostics - variable clusters in the original and imputed datasets
+#### Post imputation diagnostics - variable clusters in the original and imputed datasets
 <img src="./man/figures/pid_clust.png" width = "70%"/>
 
-## Post imputation diagnostics - comparison of variable-pair correlations
+#### Post imputation diagnostics - comparison of variable-pair correlations
 <img src="./man/figures/pid_correlation.png" width = "70%"/>
 
 

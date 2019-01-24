@@ -12,7 +12,7 @@
  
 ---
  
-[![Last-changedate](https://img.shields.io/badge/last%20change-2019--01--23-yellowgreen.svg)](/commits/master)
+[![Last-changedate](https://img.shields.io/badge/last%20change-2019--01--24-yellowgreen.svg)](/commits/master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
@@ -56,14 +56,14 @@ install.packages("missCompare")
 
 ## Usage
 
-#### Loading library and sandbox data
+### Loading library and sandbox data
 
 ```r
 library(missCompare)
 data("clindata_miss")
 ```
 
-#### Cleaning
+### Cleaning
 
 ```r
 cleaned <- missCompare::clean(clindata_miss,
@@ -72,7 +72,7 @@ cleaned <- missCompare::clean(clindata_miss,
                               missingness_coding = -9)
 ```
 
-#### Extracting data
+### Extracting data
 
 ```r
 metadata <- missCompare::get_data(cleaned,
@@ -80,7 +80,7 @@ metadata <- missCompare::get_data(cleaned,
                                   plot_transform = T)
 ```
 
-#### Imputation - simulation framework
+### Imputation - simulation framework
 
 ```r
 missCompare::impute_simulated(rownum = metadata$Rows,
@@ -93,19 +93,19 @@ missCompare::impute_simulated(rownum = metadata$Rows,
                               assumed_pattern = NA)
 ```
 
-## Computation time comparison
+#### Computation time comparison
 <img src="./man/figures/Plot_TIME.png" width = "70%"/>
 
 
-## RMSE comparison
+#### RMSE comparison
 <img src="./man/figures/Plot_RMSE.png" width = "70%"/>
 
 
-## KS comparison
+#### KS comparison
 <img src="./man/figures/Plot_KS.png" width = "70%"/>
 
 
-#### Imputation of data
+### Imputation of data
 
 ```r
 imputed <- missCompare::impute_data(cleaned, 
@@ -114,7 +114,7 @@ imputed <- missCompare::impute_data(cleaned,
                          sel_method = c(1:16))
 ```
                          
-#### Post imputation diagnostics
+### Post imputation diagnostics
 
 ```r
 diag <- missCompare::post_imp_diag(cleaned,
@@ -123,13 +123,13 @@ diag <- missCompare::post_imp_diag(cleaned,
                                    n.boot = 100)
 ```
 
-## Post imputation diagnostics - distributions of original and imputed values for a random variable
+#### Post imputation diagnostics - distributions of original and imputed values for a random variable
 <img src="./man/figures/pid_comp.png" width = "70%"/>
 
-## Post imputation diagnostics - variable clusters in the original and imputed datasets
+#### Post imputation diagnostics - variable clusters in the original and imputed datasets
 <img src="./man/figures/pid_clust.png" width = "70%"/>
 
-## Post imputation diagnostics - comparison of variable-pair correlations
+#### Post imputation diagnostics - comparison of variable-pair correlations
 <img src="./man/figures/pid_correlation.png" width = "70%"/>
 
 
