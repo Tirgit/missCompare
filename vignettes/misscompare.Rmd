@@ -162,7 +162,7 @@ metadata$min_PDM_thresholds
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 metadata$Matrix_plot
 ```
-* `metadata$Cluster_plot` - Dendrogram (ggplot2 object) visualizing the **hierarchical clustering of missing data**. On the plot, the clades (bifurcations) closer to Height 0 (the bottom of the plot) represent closer relationships in terms of missing data - i.e. those variables in one group are more likely to be missing together compared to the rest. In our case, blood pressures SBP and DPB are missing together often and so as the three lipid traits, TC, TG and HDL-C. With respect to the other variables, waist and BMI have a closer relationship compared to the rest.    
+* `metadata$Cluster_plot` - Dendrogram (ggplot2 object) visualizing the **hierarchical clustering of missing data**. On the plot, the clades (bifurcations) closer to Height 0 (the bottom of the plot) represent closer relationships in terms of missing data - i.e. those variables in one group are more likely to be missing together compared to the rest. In our case, blood pressures SBP and DBP are missing together often and so as the three lipid traits, TC, TG and HDL-C. With respect to the other variables, waist and BMI have a closer relationship compared to the rest.    
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 metadata$Cluster_plot
 ```
