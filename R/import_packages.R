@@ -12,7 +12,6 @@
 #' @importFrom mice mice md.pattern
 #' @importFrom missForest missForest prodNA
 #' @importFrom missMDA estim_ncpPCA imputePCA
-#' @importFrom pcaMethods pca
 #' @importFrom plyr revalue
 #' @importFrom rlang .data
 #' @importFrom utils capture.output
