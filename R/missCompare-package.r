@@ -16,20 +16,20 @@
 #' Package: \tab missCompare\cr
 #' Depends: \tab R (>= 3.5.0)\cr
 #' Type: \tab Package\cr
-#' Version:  \tab 0.1.0\cr
-#' Date:  \tab 2018-05-03\cr
-#' License:  \tab CC0\cr
+#' Version:  \tab 1.0.0\cr
+#' Date:  \tab 2019-01-24\cr
+#' License:  \tab MIT\cr
 #' LazyLoad:  \tab Yes
 #' }
 #'
 #' @author
 #' \itemize{
-#'  \item Tibor V. Varga \email{tibor.varga@@cpr.ku.dk}
+#'  \item Tibor V. Varga \email{tirgit@@hotmail.com}
 #'  \item David Westergaard \email{david.westergaard@@cpr.ku.dk}
 #' }
 #'
 #' @seealso
-#' \url{https://github.com/Tirgit/missingdata}
+#' \url{https://github.com/Tirgit/missCompare}
 #'
 #' @name missCompare
 #' @docType package
