@@ -20,7 +20,7 @@ LazyData: true
 RoxygenNote: 6.1.1
 BugReports: https://github.com/Tirgit/missCompare/issues
 Depends: R (>= 3.5.0)
-biocViews: 
+biocViews:
 Imports:
   Amelia,
   data.table,
