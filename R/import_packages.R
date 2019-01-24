@@ -1,4 +1,5 @@
 #' @importFrom Amelia amelia
+#' @import BiocInstaller
 #' @importFrom data.table melt
 #' @import dplyr
 #' @importFrom ggdendro dendro_data ggdendrogram
