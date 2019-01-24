@@ -1,4 +1,4 @@
-#' @title Simulation of matrix with no missingess
+#' @title Simulation of matrix with no missingness
 #'
 #' @description
 #' \code{\link{simulate}} simulates a clean matrix with no missingness based on the original data structure

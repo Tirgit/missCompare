@@ -10,8 +10,8 @@
   \item{sex}{factor, male=1 and female=2, 2.88\% missing - similar to age, sex information is also not likely have missing data in a realistic dataset, no values are missing here}
   \item{waist}{numeric, waist circumference, in cm, 4.12\% missing - anthropometric data is easy to collect, therefore only a small fraction is missing here, often missing together with BMI, the other anthropometric variable}
   \item{BMI}{numeric, body mass index, in kg/m2, 4.16\% missing - anthropometric data is easy to collect, therefore only a small fraction is missing here, often missing together with waist, the other anthropometric variable}
-  \item{SBP}{numeric, systolic blood pressure, in Hgmm, 8.84\% missing - in a realistic fashion, SBP is almost always missing together with DBP}
-  \item{DBP}{numeric, diastolic blood pressure, in Hgmm, 8.84\% missing - in a realistic fashion, DBP is almost always missing together with SBP}
+  \item{SBP}{numeric, systolic blood pressure, in mmHg, 8.84\% missing - in a realistic fashion, SBP is almost always missing together with DBP}
+  \item{DBP}{numeric, diastolic blood pressure, in mmHg, 8.84\% missing - in a realistic fashion, DBP is almost always missing together with SBP}
   \item{FG}{numeric, blood fasting glucose concentration, in mmol/dl, 5.84\% missing - often missing together with other clinical variables}
   \item{PPG}{numeric, blood postprandial glucose concentration, in mmol/dl, 53.2\% missing - in this simulated dataset, only less than half of the participants had postprandial glucose measurements}
   \item{TC}{numeric, blood total cholesterol concentration, in mmol/dl, 7.2\% missing - often missing together with other lipids, TG and HDL-C}

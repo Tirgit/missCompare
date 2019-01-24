@@ -2,7 +2,7 @@
 % Please edit documentation in R/simulate.R
 \name{simulate}
 \alias{simulate}
-\title{Simulation of matrix with no missingess}
+\title{Simulation of matrix with no missingness}
 \usage{
 simulate(rownum, colnum, cormat, meanval = 0, sdval = 1)
 }

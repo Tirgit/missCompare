@@ -9,8 +9,8 @@
 #' missing data patterns, missing data correlations and missing data visualizations
 #'
 #' @param X Original dataframe with samples in rows and variables as columns. Can also use the resulting object from the \code{\link{clean}} function
-#' @param matrixplot_sort Boolean with default TRUE. If TRUE, the matrixplot will be sorted by missing/non-missing status. If FALSE, the original order of rows will be retained
-#' @param plot_transform Boolean with default TRUE. If TRUE, the matrixplot will plot all variables scaled (mean = 0, SD = 1). If FALSE, the matrixplot will show the variables on their original scale
+#' @param matrixplot_sort Boolean with default TRUE. If TRUE, the matrix plot will be sorted by missing/non-missing status. If FALSE, the original order of rows will be retained
+#' @param plot_transform Boolean with default TRUE. If TRUE, the matrix plot will plot all variables scaled (mean = 0, SD = 1). If FALSE, the matrix plot will show the variables on their original scale
 #'
 #' @name get_data
 #'
@@ -20,7 +20,7 @@
 #' \item{Columns}{Total number of columns (variables) in the dataframe}
 #' \item{Corr_matrix}{Correlation matrix of all variables. The correlation matrix contains Pearson correlation coefficients based on pairwise correlations between variable pairs}
 #' \item{Fraction_missingness}{Total fraction of missingness expressed as a number between 0 and 1, where 1 means 100\% of data is missing and 0 means there are no missing values}
-#' \item{Fraction_missingness_per_variable}{Fraction of missingness per variable. A (named) numeric vector of length the number of columns. Each variable missingess values are expressed as numbers between 0 and 1, where 1 means 100\% of data is missing and 0 means there are no missing values}
+#' \item{Fraction_missingness_per_variable}{Fraction of missingness per variable. A (named) numeric vector of length the number of columns. Each variable missingness values are expressed as numbers between 0 and 1, where 1 means 100\% of data is missing and 0 means there are no missing values}
 #' \item{Total_NA}{Total number of missing values in the dataframe}
 #' \item{NA_per_variable}{Number of missing values per variables in the dataframe. A (named) numeric vector of length the number of columns}
 #' \item{MD_Pattern}{Missing data pattern calculated using mice::md_pattern (see \code{\link[mice]{md.pattern}} in the mice package)}
@@ -28,8 +28,8 @@
 #' \item{NA_Correlation_plot}{Plot based on NA_Correlations}
 #' \item{min_PDM_thresholds}{Small dataframe offering clues on how to set min_PDM thresholds in the next steps of the pipeline. The first column represents min_PDM thresholds, while the second column represents percentages that would be retained by setting min_PDM to the respective values. These values are the percentages of the total rows with any number of missing data (excluding complete observations), so a value of e.g. 80\% would mean that 80\% of rows with missing data with the most common patterns are represented in the simulation step}
 #' \item{Vars_above_half}{Character vector of variables names with missingness higher than 50\%}
-#' \item{Matrix_plot}{Matrixplot where missing values are colored gray and available values are colored based on value range}
-#' \item{Cluster_plot}{Cluster plot of co-missingness. Variables demostrating shared missingness patterns will branch at closer to the bottom of the plot, while no patterns will be represented by branches high in the plot}
+#' \item{Matrix_plot}{Matrix plot where missing values are colored gray and available values are colored based on value range}
+#' \item{Cluster_plot}{Cluster plot of co-missingness. Variables demonstrating shared missingness patterns will branch at closer to the bottom of the plot, while no patterns will be represented by branches high in the plot}
 #'
 #' @examples
 #' \dontrun{

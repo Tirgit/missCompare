@@ -44,9 +44,9 @@ missing data using `missCompare::get_data()`
 3. **Imputation - simulated data**:
   + simulating full data with no missingness using metadata from the previous step (resembling your original data) using `missCompare::simulated()`
   + spiking in missing data in distinct missing data patterns using `missCompare::all_patterns()`. These patterns are:
-    + missing completely at random (MCAR) - `missCompare::MCAR()` - missing data occurence random
-    + missing at random (MAR) - `missCompare::MAR()` - missing data occurence correlates with other variables' values (univariate solution in missCompare)
-    + missing not at random (MNAR) - `missCompare::MNAR()` - missing data occurence correlates with variables' own values
+    + missing completely at random (MCAR) - `missCompare::MCAR()` - missing data occurrence random
+    + missing at random (MAR) - `missCompare::MAR()` - missing data occurrence correlates with other variables' values (univariate solution in missCompare)
+    + missing not at random (MNAR) - `missCompare::MNAR()` - missing data occurrence correlates with variables' own values
     + missing in assumed pattern (MAP) - `missCompare::MAP()` - a combination of the previous three, where the user can define a pattern per variable
   + imputing missing data, obtaining imputation metrics (root mean squared errors - RMSE, mean absolute error - MAE, Kolmogorov-Smirnov test statistic D for equal distributions, computation time) per method and plotting results using `missCompare::impute_simulated()`
 4. **Imputing your data** -  After the previous step, you will have a general idea about what are the best performing algorithms for your data structure (size, degree of correlation between variables). In this step, you can impute your original data with your chosen algorithm(s) using `missCompare::impute_data()`

@@ -219,9 +219,9 @@ missing data using <code>missCompare::get_data()</code></li>
 <ul>
 <li>simulating full data with no missingness using metadata from the previous step (resembling your original data) using <code>missCompare::simulated()</code></li>
 <li>spiking in missing data in distinct missing data patterns using <code>missCompare::all_patterns()</code>. These patterns are:</li>
-<li>missing completely at random (MCAR) - <code>missCompare::MCAR()</code> - missing data occurence random</li>
-<li>missing at random (MAR) - <code>missCompare::MAR()</code> - missing data occurence correlates with other variables&#39; values (univariate solution in missCompare)</li>
-<li>missing not at random (MNAR) - <code>missCompare::MNAR()</code> - missing data occurence correlates with variables&#39; own values</li>
+<li>missing completely at random (MCAR) - <code>missCompare::MCAR()</code> - missing data occurrence random</li>
+<li>missing at random (MAR) - <code>missCompare::MAR()</code> - missing data occurrence correlates with other variables&#39; values (univariate solution in missCompare)</li>
+<li>missing not at random (MNAR) - <code>missCompare::MNAR()</code> - missing data occurrence correlates with variables&#39; own values</li>
 <li>missing in assumed pattern (MAP) - <code>missCompare::MAP()</code> - a combination of the previous three, where the user can define a pattern per variable</li>
 <li>imputing missing data, obtaining imputation metrics (root mean squared errors - RMSE, mean absolute error - MAE, Kolmogorov-Smirnov test statistic D for equal distributions, computation time) per method and plotting results using <code>missCompare::impute_simulated()</code></li>
 </ul></li>

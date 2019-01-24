@@ -9,7 +9,7 @@ MAP(X_hat, MD_pattern, NA_fraction, min_PDM = 10,
   "MCAR", "MAR", "MNAR", "MCAR", "MCAR"))
 }
 \arguments{
-\item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)}
+\item{X_hat}{Simulated matrix with no missingness (Simulated_matrix output from the \code{\link{simulate}} function)}
 
 \item{MD_pattern}{Missing data pattern in the original dataset (MD_Pattern output from the \code{\link{get_data}} function)}
 
@@ -17,10 +17,10 @@ MAP(X_hat, MD_pattern, NA_fraction, min_PDM = 10,
 
 \item{min_PDM}{All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors. Please select a value based on the min_PDM_thresholds output from the \code{\link{get_data}} function}
 
-\item{assumed_pattern}{Vector of missingess types (must be same length as missingness fraction per variable)}
+\item{assumed_pattern}{Vector of missingness types (must be same length as missingness fraction per variable)}
 }
 \value{
-\item{MAP_matrix}{Matrix with MAP pred-defined missingess pattern}
+\item{MAP_matrix}{Matrix with MAP pre-defined missingness pattern}
 \item{Summary}{Summary of MAP_matrix including number of missing values per variable}
 }
 \description{

@@ -20,7 +20,7 @@ library(missCompare)
 ```
 
 
-If you work with data, you have almost certainly encountered issues regarding missing data. The most commonly used statistical methods often only work with complete sets of observations and it can be a huge pain when you realize that you can only utilize a fraction of your data because of missing datapoints here and there. Indeed, just 5\% random missing data in a huge dataset can dramatically reduce the number of complete observations to as low as 25\% of the original number of observations! Scary! Thankfully, there are numerous algorithms that can help you tackle this issue, but often, the most commonly used methods, such as mean and median imputation, offer suboptimal solutions and sophisticated algorithms often need a lot of consideration and background knowledge. The authors wrote the missCompare package to help you through your missing data problem. The initial hypothesis of the authors was that **datasets with different parameters (size, distributions, correlations, etc.) will benefit differently from various missing data imputation algorithms**.
+If you work with data, you have almost certainly encountered issues regarding missing data. The most commonly used statistical methods often only work with complete sets of observations and it can be a huge pain when you realize that you can only utilize a fraction of your data because of missing data points here and there. Indeed, just 5\% random missing data in a huge dataset can dramatically reduce the number of complete observations to as low as 25\% of the original number of observations! Scary! Thankfully, there are numerous algorithms that can help you tackle this issue, but often, the most commonly used methods, such as mean and median imputation, offer suboptimal solutions and sophisticated algorithms often need a lot of consideration and background knowledge. The authors wrote the missCompare package to help you through your missing data problem. The initial hypothesis of the authors was that **datasets with different parameters (size, distributions, correlations, etc.) will benefit differently from various missing data imputation algorithms**.
 
 This tutorial will navigate you through the missCompare package and its functions. So... let's jump right into it!
 
@@ -42,7 +42,7 @@ data("clindata_miss")
 ```
 
 The data is created by the authors with the purpose of generating a dataset that resembles real-life
-data with variables generally available in a simple, realistic clinicial epidemiology dataset. This R dataframe
+data with variables generally available in a simple, realistic clinical epidemiology dataset. This R dataframe
 have realistic variable means, distributions, correlations and missing data patterns. You can find further information
 on the dataframe using `?clindata_miss`.
 
@@ -50,7 +50,7 @@ on the dataframe using `?clindata_miss`.
 
 ...Some words on alternative imputation methods. Before you get yourself acquainted with missCompare and its functions, it is **always** a good idea to carefully observe, and do some thinking about your data, your variables/features and your missing data. Before trying fancy methods, there are some cases when **deductive imputation** can be applied. This is a form of imputation based on logical reasoning rather than statistical methods. Let's consider three separate cases when this can be applied:
 
-1. Constant variables: In this scenario, in a prospective dataset, sex information is available at a participant's first visit in 1998 and third visit in 2005, but missing in 2000. With logical deduction, it can be concluded that biological sex is constant, therefore the missing datapoint is also **Female**
+1. Constant variables: In this scenario, in a prospective dataset, sex information is available at a participant's first visit in 1998 and third visit in 2005, but missing in 2000. With logical deduction, it can be concluded that biological sex is constant, therefore the missing data point is also **Female**
     
     ID        | Date        |   Sex   |   BMI   |
     --------  |------------ |-------- |---------|
@@ -85,7 +85,7 @@ on the dataframe using `?clindata_miss`.
 
 All of the above scenarios need prior knowledge of the data, which is "easy" for humans, but is very hard to compute into any single missing data imputation algorithm. Therefore, it is always suggested that the variables and their relationships are thoroughly understood before jumping into hardcore data imputation using a fancy algorithm.
 
-Also, it is highly recommended to check data ranges. By running a simple `summary()` on your data you can check minimum and maximum values for each numeric variables and browse through all categories for factors. Oftentimes it happens that a variable - a blood biomarker, for instance - has a minus value as its minimum. While this can be OK in some cases (e.g. the variable is already normalized), but sometimes this can be a data input error or missing datapoints can be coded as minus values. In these cases, it is important that the minus values are set to *NA*.
+Also, it is highly recommended to check data ranges. By running a simple `summary()` on your data you can check minimum and maximum values for each numeric variables and browse through all categories for factors. Oftentimes it happens that a variable - a blood biomarker, for instance - has a minus value as its minimum. While this can be OK in some cases (e.g. the variable is already normalized), but sometimes this can be a data input error or missing data points can be coded as minus values. In these cases, it is important that the minus values are set to *NA*.
 
 Another important aspect that should be considered are outliers. This tutorial is not meant to delve too deep into this, but it is suggested that outliers are visualized for each variables and are excluded if they are too extreme or represent non-sense values. E.g. an age value of 109 is definitely an outlier, but physiologically possible, but 309 is probably due to a data input error, therefore it should be set to *NA*.
     
@@ -99,9 +99,9 @@ missing data using `missCompare::get_data()`
 3. **Imputation - simulated data**:
   + simulating full data with no missingness using metadata from the previous step (resembling your original data) using `missCompare::simulated()`
   + spiking in missing data in distinct missing data patterns using `missCompare::all_patterns()`. These patterns are:
-    + missing completely at random (MCAR) - `missCompare::MCAR()` - missing data occurence random
-    + missing at random (MAR) - `missCompare::MAR()` - missing data occurence correlates with other variables' values
-    + missing not at random (MNAR) - `missCompare::MNAR()` - missing data occurence correlates with variables' own values
+    + missing completely at random (MCAR) - `missCompare::MCAR()` - missing data occurrence random
+    + missing at random (MAR) - `missCompare::MAR()` - missing data occurrence correlates with other variables' values
+    + missing not at random (MNAR) - `missCompare::MNAR()` - missing data occurrence correlates with variables' own values
     + missing in assumed pattern (MAP) - `missCompare::MAP()` - a combination of the previous three, where the user can define a pattern per variable
   + imputing missing data, obtaining measures of imputation quality (root mean squared error - RMSE; mean absolute error - MAE;
   Kolmogorov–Smirnov test statistic - KS; computation time) per method and plotting results using `missCompare::impute_simulated()`
@@ -125,7 +125,7 @@ cleaned <- missCompare::clean(clindata_miss,
 
 * You can convert all factor variables (sex and education, in this case) to numeric. The function will alert you with a message: **"Variable(s) sex, education converted to numeric."**
 * You can remove variables exceeding a set threshold (default is 50\%, but this is up to you, you can set it lower or higher). In other words, you can discard those variables where lots of data are missing. Such variables can only be imputed with low accuracy, so the authors suggest that you remove variables with high missingness fraction, but there is no recipe for this, e.g. you will find no guidelines on whether 50\% is too high or too low, the threshold will be YOUR decision. In case there is a variable removed here, the function will alert you with a message: **Variable(s) PPG removed due to exceeding the pre-defined removal threshold (>50%) for missingness.**
-* Similarly, you can remove individuals with a high percentage of missing values (default is 100\%, but this is up to you, you can set it lower). In other words, you can discard those observations that have only missing datapoints (these will be totally uninformative for imputation), or those with lots of missing data points. Again, there are no guidelines here, the threshold is ultimately YOUR decision. In this case, we set this threshold to 0.8, and the function alerted us with a message: **1 individual(s) removed due to exceeding the pre-defined removal threshold (>80%) for missingness.**
+* Similarly, you can remove individuals with a high percentage of missing values (default is 100\%, but this is up to you, you can set it lower). In other words, you can discard those observations that have only missing data points (these will be totally uninformative for imputation), or those with lots of missing data points. Again, there are no guidelines here, the threshold is ultimately YOUR decision. In this case, we set this threshold to 0.8, and the function alerted us with a message: **1 individual(s) removed due to exceeding the pre-defined removal threshold (>80%) for missingness.**
 * In some datasets, missing values can be coded in a weird way. In clindata_miss, we emulated a real-life scenario where lipid values were set to **-9** when measured below the sensitivity of a hypothetical machine. The cleaning function will let you convert pre-defined values to **NAs**.
 
 The cleaning function outputs a dataframe called `cleaned`. In the next step, where you extract important metadata from your dataframe, you will continue working with this object.
@@ -145,7 +145,7 @@ As we cleaned clindata_miss in the previous step, the function should run withou
 * `metadata$Complete_cases` - the number of complete observations with no missing data. In this case, there are **1349 observations from the original 2500** with no missing data. Note, that with only ~7\% missing data, the number of complete observations is dramatically decreased to around half of the original data. As many methods (e.g. regression, principal component analysis, etc.) require complete sets of observations, this decrease in complete observations presents a very strong case for missing data imputation.
 * `metadata$Rows` and `metadata$Columns` give you the dimensions of the dataframe, **2499 rows and 11 columns**, in our case.
 * `metadata$Corr_matrix` - gives you the **correlation matrix of all variables** in the dataframe. The function assesses pairwise Pearson correlation coefficients using complete sets of pairs between any two variables. For example there are 2312 complete BMI-waist pairs (`sum(!is.na(cleaned$BMI) & !is.na(cleaned$waist))`) - in this case correlation will be calculated based on these 2312 value pairs, even though the number of complete observations (no NAs for any variables) is 1349. This way all of the data will be utilized to obtain the most accurate correlation coefficients.
-* `metadata$Fraction_missingness` and `metadata$Fraction_missingness_per_variable` return the the total fraction of missingness in the dataframe and the fraction of missingness per variable, respectively. In our case, the **total fraction of missingess is 6.9\%** after removing one variable, PPG with >50\% missing. Inspecting the fraction of missingness per variable it is also apparent that the true missing data fraction of TG and HDL-C after converting -9s to NAs are 10.6\% and 13.7\%, respectively.
+* `metadata$Fraction_missingness` and `metadata$Fraction_missingness_per_variable` return the the total fraction of missingness in the dataframe and the fraction of missingness per variable, respectively. In our case, the **total fraction of missingness is 6.9\%** after removing one variable, PPG with >50\% missing. Inspecting the fraction of missingness per variable it is also apparent that the true missing data fraction of TG and HDL-C after converting -9s to NAs are 10.6\% and 13.7\%, respectively.
 * `metadata$Total_NA` and `metadata$NA_per_variable` return the total number of missing values in the dataframe and per variable.
 * `metadata$MD_Pattern` - The missing data pattern is calculated using mice::md.pattern (`?mice::md.pattern`).
 * `metadata$NA_Correlations` - Pairwise correlation point-biserial correlation coefficients between variable pairs. Namely, for each calculation, variables are converted to TRUE/FALSE based on missing data status (missing or not missing) and these boolean vectors and correlated to the native variables. The resulting correlation matrix has rows with variable names + _is.na - the rows represent the converted variables, while the columns are the original variables.
@@ -162,7 +162,7 @@ metadata$min_PDM_thresholds
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 metadata$Matrix_plot
 ```
-* `metadata$Cluster_plot` - Dendrogram (ggplot2 object) visualizing the **hierarchical clustering of missing data**. On the plot, the clades (bifurcations) closer to Height 0 (the bottom of the plot) represent closer relationships in terms of missing data - i.e. those variables in one group are more likely to be missing together compared to the rest. In our case, blood pressures SBP and DPB are missing together often and so as the three lipid traits, TC, TG and HLD-C. With respect to the other variables, waist and BMI have a closer relationship compared to the rest.    
+* `metadata$Cluster_plot` - Dendrogram (ggplot2 object) visualizing the **hierarchical clustering of missing data**. On the plot, the clades (bifurcations) closer to Height 0 (the bottom of the plot) represent closer relationships in terms of missing data - i.e. those variables in one group are more likely to be missing together compared to the rest. In our case, blood pressures SBP and DPB are missing together often and so as the three lipid traits, TC, TG and HDL-C. With respect to the other variables, waist and BMI have a closer relationship compared to the rest.    
 ```{r echo = FALSE, fig.width=6, fig.height=3} 
 metadata$Cluster_plot
 ```
@@ -224,9 +224,9 @@ Again, `missCompare::impute_simulated()` does all these in one step, and more:
 1. it simulates the dataset with no missing values;     
 2. spikes in NAs in MCAR, MAR, MNAR and - if you define a custom pattern - MAP patterns;     
 3. imputes missing data using a curated list of 16 algorithms;     
-4. compares computation time, evaluates imputation accuracy by calculating RMSE, MAE and KS values between the imputed and the original datapoints.
+4. compares computation time, evaluates imputation accuracy by calculating RMSE, MAE and KS values between the imputed and the original data points.
 
-This all can be achieved by a single command! This means you DON'T have to run `missCompare::simulate()`, `missCompare::MCAR()`, `missCompare::MAR()`, `missCompare::MNAR()`, `missCompare::MAP()` or `missCompare::all_patterns()`. The command goes as (note that we defined `assumed_pattern = NA` - the defeault - so MAP pattern will be skipped):
+This all can be achieved by a single command! This means you DON'T have to run `missCompare::simulate()`, `missCompare::MCAR()`, `missCompare::MAR()`, `missCompare::MNAR()`, `missCompare::MAP()` or `missCompare::all_patterns()`. The command goes as (note that we defined `assumed_pattern = NA` - the default - so MAP pattern will be skipped):
 
 ```{r eval = FALSE} 
 missCompare::impute_simulated(rownum = metadata$Rows,
@@ -262,7 +262,7 @@ Please note that RMSE and MAE measures correlate strongly. It is interesting to 
 
 Hopefully, by now you have a good idea on which method you would like to use to impute missing data for your dataset - you will be able to do this using `missCompare::impute_data()`. Please note that while some algorithms can safely handle factors (random replacement, mice, mi, missForest, Hmisc, VIM), some do not (mean and median imputation, missMDA algorithms; pcaMethods algorithms; Amelia II). If you have factors and would like to use one of the methods that are able to handle them, you can directly use your original dataset here (without string variables). In case your choice is another method or you don't have factors in your original data, you can safely used the dataframe output by `missCompare::clean()`. 
 
-Let's consider a scenario where you choose **missForest** to impute your data. You would like to consider the original factor variables, you do not want to scale your data and you would like to create 10 imputed dataframes in order to set up a multiple imputation framework. Note, that setting up a multiple imputation framework is only a viable option with probabilistic models (e.g. you can impute you data with **Mean imputation** a billion times, but the NAs will always be replaced with exacty the same mean values!).
+Let's consider a scenario where you choose **missForest** to impute your data. You would like to consider the original factor variables, you do not want to scale your data and you would like to create 10 imputed dataframes in order to set up a multiple imputation framework. Note, that setting up a multiple imputation framework is only a viable option with probabilistic models (e.g. you can impute you data with **Mean imputation** a billion times, but the NAs will always be replaced with exactly the same mean values!).
 
 ```{r eval = FALSE} 
 imputed <- missCompare::impute_data(clindata_miss, 
@@ -305,13 +305,13 @@ The `diag` list contains several interesting assessments. The `Histograms` and `
 diag$Histograms$SBP
 ```
 
-This, of course will look different for almost any other models, e.g. **AmeliaII**:
+This, of course will look different for almost any other models, e.g. **Amelia II**:
 
 ```{r eval = TRUE, echo = FALSE, message=FALSE, warning = FALSE, results='hide'} 
 imputed <- missCompare::impute_data(cleaned, 
                          scale = T, 
                          n.iter = 1, 
-                         sel_method = c(13)) # 13 is the code for AmeliaII
+                         sel_method = c(13)) # 13 is the code for Amelia II
 
 diag <- missCompare::post_imp_diag(cleaned,
                                    imputed$ameliaII_imputation[[1]], 
@@ -345,6 +345,6 @@ diag$Correlation_plot
 ## Closing words
 
 Well done!
-You completed the tutorial and by now, you should ideally have one or more imputed datasets of your data. Awesome job! We hope that you achieved what you were set out to do and you are ready for the next stes in your statistical analysis! Please let us know if you have any issues here -  [missCompare GitHub](https://github.com/Tirgit/missCompare/issues) - or contact the authors if you have any feedback!
+You completed the tutorial and by now, you should ideally have one or more imputed datasets of your data. Awesome job! We hope that you achieved what you were set out to do and you are ready for the next steps in your statistical analysis! Please let us know if you have any issues here -  [missCompare GitHub](https://github.com/Tirgit/missCompare/issues) - or contact the authors if you have any feedback!
 
  -- authors of missCompare

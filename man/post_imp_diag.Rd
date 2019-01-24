@@ -18,7 +18,7 @@ post_imp_diag(X_orig, X_imp, scale = T, n.boot = 100)
 \value{
 \item{Histograms}{List of histograms of all numeric variables. The histograms show the original values and the imputed values overlaid for each variables in the dataframe}
 \item{Boxplots}{List of boxplots of all numeric variables. The boxplots show the original values and the imputed values for each variables in the dataframe. As normally, the boxplots show the median values, the IQR and the range of values}
-\item{Barcharts}{List of bar charts of all categorical (factor) variables. The bar charts show the original categories and the imputed categories for each categorical variables in the dataframe. Barcharts will only be output if scale is set to FALSE and both the original and imputed data contain the same factor variables}
+\item{Barcharts}{List of bar charts of all categorical (factor) variables. The bar charts show the original categories and the imputed categories for each categorical variables in the dataframe. Bar charts will only be output if scale is set to FALSE and both the original and imputed data contain the same factor variables}
 \item{Statistics}{List of output statistics for all variables. A named vector containing means and standard deviations of the original and imputed values, P value from Welch's t test and D test statistic from a Kolmogorov–Smirnov test comparing the original and the imputed values by variable}
 \item{Variable_clusters_orig}{Variable clusters based on the original dataframe (with missingness). Regardless of the argument scale being set to TRUE or FALSE, the clusters are assessed based on normalized data}
 \item{Variable_clusters_imp}{Variable clusters based on the imputed dataframe. Regardless of the argument scale being set to TRUE or FALSE, the clusters are assessed based on normalized data}
@@ -32,7 +32,7 @@ post_imp_diag(X_orig, X_imp, scale = T, n.boot = 100)
 This function uses the original dataframe and produces plots that allows the user
 to compare the distributions of the original values and the imputed values for each
 numeric variables. If there are factors present in the dataframes, the function will
-recognize this and create barcharts for these. In addition, the
+recognize this and create bar charts for these. In addition, the
 function will calculate bootstrapped pairwise Pearson correlation coefficients between
 numeric variables in the original dataframe (with missingness) and the imputed dataframe
 and plot these for the user to assess whether the imputation distorted the original

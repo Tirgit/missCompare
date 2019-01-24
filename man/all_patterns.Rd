@@ -8,7 +8,7 @@ all_patterns(X_hat, MD_pattern, NA_fraction, min_PDM = 10,
   assumed_pattern = NA)
 }
 \arguments{
-\item{X_hat}{Simulated matrix with no missingess (Simulated_matrix output from the \code{\link{simulate}} function)}
+\item{X_hat}{Simulated matrix with no missingness (Simulated_matrix output from the \code{\link{simulate}} function)}
 
 \item{MD_pattern}{Missing data pattern in the original dataset (MD_Pattern output from the \code{\link{get_data}} function)}
 
@@ -16,13 +16,13 @@ all_patterns(X_hat, MD_pattern, NA_fraction, min_PDM = 10,
 
 \item{min_PDM}{All patterns with number of observations less than this number will be removed from the missing data generation. This argument is necessary to be carefully set, as the function will fail or generate erroneous missing data patterns with very complicated missing data patterns. The default is 10, but for large datasets this number needs to be set higher to avoid errors. Please select a value based on the min_PDM_thresholds output from the \code{\link{get_data}} function}
 
-\item{assumed_pattern}{Vector of missingess types (must be same length as missingness fraction per variable). If this input is specified, the function will spike in missing datapoints in a MAP pattern as well.}
+\item{assumed_pattern}{Vector of missingness types (must be same length as missingness fraction per variable). If this input is specified, the function will spike in missing datapoints in a MAP pattern as well.}
 }
 \value{
-\item{MCAR_matrix}{Matrix with MCAR pred-defined missingess pattern (default output)}
-\item{MAR_matrix}{Matrix with MAR pred-defined missingess pattern (default output)}
-\item{MNAR_matrix}{Matrix with MNAR pred-defined missingess pattern (default output)}
-\item{MAP_matrix}{Matrix with MAP pred-defined missingess pattern (optional output)}
+\item{MCAR_matrix}{Matrix with MCAR pre-defined missingness pattern (default output)}
+\item{MAR_matrix}{Matrix with MAR pre-defined missingness pattern (default output)}
+\item{MNAR_matrix}{Matrix with MNAR pre-defined missingness pattern (default output)}
+\item{MAP_matrix}{Matrix with MAP pre-defined missingness pattern (optional output)}
 }
 \description{
 \code{\link{all_patterns}} spikes in missingness using MCAR, MAR, MNAR (default) and MAP (optional) patterns
@@ -31,7 +31,7 @@ all_patterns(X_hat, MD_pattern, NA_fraction, min_PDM = 10,
 This function uses the generated simulated matrix and generates missing datapoints in MCAR, MAR and MNAR patterns.
 Optionally, in case the user defines an assumed pattern, the \code{\link{all_patterns}} function will also generate
 a MAP missingness pattern. It is suggested that the user carefully
-examines the missing data fractions, excludes variables with high missingess using the \code{\link{clean}} function.
+examines the missing data fractions, excludes variables with high missingness using the \code{\link{clean}} function.
 For more information on the functions that spike in missing data in MCAR, MAR,
 MNAR and MAP patterns, please see the functions \code{\link{MCAR}}, \code{\link{MAR}},
 \code{\link{MNAR}} and \code{\link{MAP}}.

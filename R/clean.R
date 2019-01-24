@@ -2,12 +2,12 @@
 #'
 #' @description
 #' \code{\link{clean}} helps in the conversion of missing values, variable types and removes rows and columns above
-#' pre-specified missingess
+#' pre-specified missingness
 #'
 #' @details
 #' For better imputation performance, a clean, filtered dataframe is needed. Variables and samples with very high
 #' missingness fractions will negatively impact most missing data imputation algorithms. This function cleans the original
-#' dataframe by removing rows (samples) and columns (variables) above pre-specified missingess thresholds. The function
+#' dataframe by removing rows (samples) and columns (variables) above pre-specified missingness thresholds. The function
 #' will also convert any prespecified, strangely coded missing data to NAs. Note that all factor variables will
 #' be converted or coerced to numeric variables.
 #'
