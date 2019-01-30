@@ -75,7 +75,6 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
     X_imp_factor <- X_imp[!sapply(X_imp, is.numeric)]
   }
 
-  x <- NULL
   # barcharts for categorical (factor) variables
   if (factors_present == T) {
     for (i in 1:ncol(X_orig_factor)) {
@@ -207,7 +206,6 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
     }
   }
 
-  var1 <- NULL
   meanmat[lower.tri(meanmat, diag = T)] <- NA
   y <- as.data.frame(meanmat)
   colnames(y) <- colnames(X_orig_num)
@@ -281,7 +279,6 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
   colnames(correlation_results) <- c("var1", "var2", "orig.cor", "orig.lo.ci", "orig.hi.ci",
                                      "imp.cor", "imp.lo.ci", "imp.hi.ci")
 
-  imp.lo.ci <- imp.hi.ci <- orig.lo.ci <- orig.hi.ci <- orig.cor <- imp.cor <- NULL
   p <- ggplot(data = correlation_results, aes(x = orig.cor, y = imp.cor)) + geom_point(alpha = 0.2) +
     geom_errorbar(aes(ymin = imp.lo.ci, ymax = imp.hi.ci), alpha = 0.1) + geom_errorbarh(aes(xmin = orig.lo.ci,
                                                                                              xmax = orig.hi.ci), alpha = 0.1) + geom_abline(slope = 1, intercept = 0, col = "blue",

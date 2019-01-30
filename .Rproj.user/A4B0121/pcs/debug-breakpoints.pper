@@ -1682,21 +1682,6 @@
                 "type" : 1
             },
             {
-                "editor_line_number" : 19,
-                "editor_state" : 1,
-                "function_name" : "toplevel",
-                "function_steps" : "",
-                "id" : 753,
-                "is_package_breakpoint" : false,
-                "is_pending_debug_completion" : false,
-                "line_number" : 19,
-                "needs_updated_steps" : false,
-                "package_name" : "",
-                "path" : "~/Documents/temp/missCompare_install.R",
-                "state" : 1,
-                "type" : 1
-            },
-            {
                 "editor_line_number" : 22,
                 "editor_state" : 1,
                 "function_name" : "toplevel",
@@ -1735,6 +1720,21 @@
                 "is_package_breakpoint" : false,
                 "is_pending_debug_completion" : false,
                 "line_number" : 13,
+                "needs_updated_steps" : false,
+                "package_name" : "",
+                "path" : "~/Documents/temp/missCompare_install.R",
+                "state" : 1,
+                "type" : 1
+            },
+            {
+                "editor_line_number" : 19,
+                "editor_state" : 1,
+                "function_name" : "toplevel",
+                "function_steps" : "",
+                "id" : 762,
+                "is_package_breakpoint" : false,
+                "is_pending_debug_completion" : false,
+                "line_number" : 19,
                 "needs_updated_steps" : false,
                 "package_name" : "",
                 "path" : "~/Documents/temp/missCompare_install.R",

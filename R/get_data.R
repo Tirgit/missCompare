@@ -32,10 +32,9 @@
 #' \item{Cluster_plot}{Cluster plot of co-missingness. Variables demonstrating shared missingness patterns will branch at closer to the bottom of the plot, while no patterns will be represented by branches high in the plot}
 #'
 #' @examples
-#' \dontrun{
+#' cleaned <- clean(clindata_miss, missingness_coding = -9)
 #' metadata <- get_data(cleaned)
-#' metadata <- get_data(cleaned, matrixplot_sort = F)
-#' }
+#' metadata <- get_data(cleaned, matrixplot_sort = FALSE)
 #'
 #' @export
 
@@ -86,7 +85,6 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   }
 
   melted_cormat <- data.table::melt(na_cor)
-  Var1 <- Var2 <- NULL
   p_cor <- ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) +
     geom_tile() + labs(x= "", y= "") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     ggtitle("Variable - Variable NA Correlation Matrix") +
@@ -106,8 +104,6 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
     message(paste("Warning! Missingness exceeds 50% for variable(s) ", (paste(vars_above_half,
                                                                               collapse = ", ")), ". Although the pipeline will function with variables with high missingness, consider excluding these variables using missCompare::clean() and repeating function until no warnings are shown.",
                   sep = ""))
-
-  variable <- Observations <- value <- NULL
 
   # matrix plot
   df_miss_id <- cbind(c(1:rows), arr_X)

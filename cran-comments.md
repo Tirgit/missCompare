@@ -1,11 +1,15 @@
 ## Resubmission
 This is a resubmission. In this version (1.0.1) I have:
 
-* Fixed first sentence and grammar mistake the Description section in the DESCRIPTION file.
+* Fixed first sentence and grammar mistake the Description section in the DESCRIPTION file
 
-* Added a reference to the Description section in the DESCRIPTION file 
+* Regarding the the question about potential references in the Description section in the DESCRIPTION file: our study group is working on a publication related to this R package, but this is not published yet. As soon as this paper is published, the authors will include this reference in the DESCRIPTION file
 
-* Updated year from 2018 to 2019 in the LICENSE file.
+* Updated year from 2018 to 2019 in the LICENSE file
+
+* Converted examples in functions *clean()*, *get_data()*, *simulate()*  to executable examples. Functions *impute_simulated()*, *impute_data()*, *post_imp_diag()* remain non-executable due to time constraints. However, the authors made sure that all of the functions in the latter category (with non-executed examples) remain to be thoroughly checked through testthat
+
+* "No visible binding for global variables" problems now fixed using the high level *utils::globalVariables()* function
 
 ## Submission comments
 This is this first submission of the missCompare R package to CRAN.    

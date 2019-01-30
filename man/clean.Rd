@@ -33,19 +33,13 @@ will also convert any prespecified, strangely coded missing data to NAs. Note th
 be converted or coerced to numeric variables.
 }
 \examples{
-\dontrun{
 # basic settings
 cleaned <- clean(clindata_miss, missingness_coding = -9)
-# factors (sex, education) converted to numeric
-# variables exceeding the pre-defined removal threshold (PPG) removed
 
 # setting very conservative removal thresholds
 cleaned <- clean(clindata_miss,
                  var_removal_threshold = 0.10,
                  ind_removal_threshold = 0.9,
                  missingness_coding = -9)
-# factors (sex, education) converted to numeric
-# variables exceeding the custom set conservative removal threshold (PPG, HDL) removed
-}
 
 }

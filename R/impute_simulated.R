@@ -121,11 +121,7 @@ impute_simulated <- function(rownum, colnum, cormat, n.iter = 10, MD_pattern, NA
         mean(x, na.rm = TRUE)
       }
 
-      Method <- NULL
       all_stats <- collect_res %>% group_by(Method) %>% summarise_all(funs(mymean))
-
-      Pattern <- Method <- value <- Comp_time <- MCAR_RMSE <- MAR_RMSE <- MNAR_RMSE <- MAP_RMSE <- NULL
-      MCAR_MAE <- MAR_MAE <- MNAR_MAE <- MAP_MAE <- MCAR_KS <- MAR_KS <- MNAR_KS <- MAP_KS <- NULL
 
       if (!is.na(assumed_pattern))
         forgraph <- gather(collect_res, Pattern, value, Comp_time:MAP_KS, factor_key = TRUE) else forgraph <- gather(collect_res, Pattern, value, Comp_time:MNAR_KS, factor_key = TRUE)

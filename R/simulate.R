@@ -27,10 +27,10 @@
 #' \item{NearPD_correlation_sample}{Sample of the nearPD (nearest positive definitive matrix) correlation structure of the simulated matrix (for comparison)}
 #'
 #' @examples
-#' \dontrun{
+#' cleaned <- clean(clindata_miss, missingness_coding = -9)
+#' metadata <- get_data(cleaned)
 #' simulated <- simulate(rownum = metadata$Rows, colnum = metadata$Columns,
 #' cormat = metadata$Corr_matrix)
-#' }
 #'
 #' @export
 

@@ -36,9 +36,9 @@ distribution and fixed mean and standard deviation. This matrix will be subseque
 values and for the testing of various missing data imputation algorithms.
 }
 \examples{
-\dontrun{
+cleaned <- clean(clindata_miss, missingness_coding = -9)
+metadata <- get_data(cleaned)
 simulated <- simulate(rownum = metadata$Rows, colnum = metadata$Columns,
 cormat = metadata$Corr_matrix)
-}
 
 }

@@ -39,9 +39,8 @@ missingness fractions overall and by variable, number of missing values overall 
 missing data patterns, missing data correlations and missing data visualizations
 }
 \examples{
-\dontrun{
+cleaned <- clean(clindata_miss, missingness_coding = -9)
 metadata <- get_data(cleaned)
-metadata <- get_data(cleaned, matrixplot_sort = F)
-}
+metadata <- get_data(cleaned, matrixplot_sort = FALSE)
 
 }
