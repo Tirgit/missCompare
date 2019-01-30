@@ -39,7 +39,8 @@ imputing all datasets. The function will automatically detect whether there is a
 RMSE for all matrices provided in the list.
 }
 \examples{
-cleaned <- clean(clindata_miss[1:200,1:5], missingness_coding = -9)
+clindata_miss_mini <- clindata_miss[1:80,1:4]
+cleaned <- clean(clindata_miss_mini, missingness_coding = -9)
 metadata <- get_data(cleaned)
 simulated <- simulate(rownum = metadata$Rows, colnum = metadata$Columns,
 cormat = metadata$Corr_matrix)
