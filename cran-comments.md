@@ -9,9 +9,9 @@ This is a resubmission. In this version I have:
 
 * Updated year from 2018 to 2019 in the LICENSE file
 
-* Converted examples to executable examples in functions *clean()*, *get_data()*, *simulate()*, *MCAR()*, *MAR()*, *MNAR()*, *MAP()*, *all_patterns()* and *all individual method test() functions*. The remaining functions - *impute_simulated()*, *impute_data()*, *post_imp_diag()* - remain non-executable due to time constraints. However, the authors made sure that all the functions in the latter category (with non-executed examples) remain to be thoroughly checked through testthat
+* Converted examples to executable examples in functions `clean()`, `get_data()`, `simulate()`, `MCAR()`, `MAR()`, `MNAR()`, `MAP()`, `all_patterns()`,  `test_AmeliaII()`, `test_aregImpute()`, `test_kNN()`, `test_mean_imp()`, `test_median_imp()`, `test_mice_mixed()`, `test_missForest()`, `test_missMDA_EM()`, `test_missMDA_reg()`, `test_pcaMethods_BPCA()`, `test_pcaMethods_Nipals()`, `test_pcaMethods_PPCA()`, `test_pcaMethods_svdImpute()`, `test_random_imp()`. The remaining functions - `test_mi()`, `test_pcaMethods_NLPCA()`, `impute_simulated()`, `impute_data()`, `post_imp_diag()` - remain non-executable due to time constraints. However, the authors made sure that all the functions in the latter category (with non-executed examples) remain to be thoroughly checked through testthat
 
-* Fixed "No visible binding for global variables" problems using the high level *utils::globalVariables()* function as instructed.
+* Fixed "No visible binding for global variables" problems using the high level `utils::globalVariables()` function as instructed.
 
 ## Submission comments
 This is this first submission of the missCompare R package to CRAN.    
