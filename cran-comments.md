@@ -1,3 +1,12 @@
+## Resubmission
+This is a resubmission. In this version (1.0.1) I have:
+
+* Fixed first sentence and grammar mistake the Description section in the DESCRIPTION file.
+
+* Added a reference to the Description section in the DESCRIPTION file 
+
+* Updated year from 2018 to 2019 in the LICENSE file.
+
 ## Submission comments
 This is this first submission of the missCompare R package to CRAN.    
 

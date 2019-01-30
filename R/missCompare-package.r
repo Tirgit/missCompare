@@ -16,8 +16,8 @@
 #' Package: \tab missCompare\cr
 #' Depends: \tab R (>= 3.5.0)\cr
 #' Type: \tab Package\cr
-#' Version:  \tab 1.0.0\cr
-#' Date:  \tab 2019-01-24\cr
+#' Version:  \tab 1.0.1\cr
+#' Date:  \tab 2019-01-30\cr
 #' License:  \tab MIT\cr
 #' LazyLoad:  \tab Yes
 #' }
