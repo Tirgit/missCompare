@@ -7,7 +7,7 @@ This is a resubmission. In this version (1.0.1) I have:
 
 * Updated year from 2018 to 2019 in the LICENSE file
 
-* Converted examples in functions *clean()*, *get_data()*, *simulate()*  to executable examples. Functions *impute_simulated()*, *impute_data()*, *post_imp_diag()* remain non-executable due to time constraints. However, the authors made sure that all of the functions in the latter category (with non-executed examples) remain to be thoroughly checked through testthat
+* Converted examples to executable examples in functions *clean()*, *get_data()*, *simulate()*, *MCAR()*, *MAR()*, *MNAR()*, *MAP()*, *all_patterns()* and *all individual method test() functions*. The remaining functions - *impute_simulated()*, *impute_data()*, *post_imp_diag()* - must remain non-executable due to time constraints. However, the authors made sure that all the functions in the latter category (with non-executed examples) remain to be thoroughly checked through testthat
 
 * "No visible binding for global variables" problems now fixed using the high level *utils::globalVariables()* function
 
@@ -21,13 +21,6 @@ This is this first submission of the missCompare R package to CRAN.
 
 ## R CMD check results
 There were no ERRORs, WARNINGs or NOTEs. 
-
-During the checking process, a group of NOTEs were due to "no visible binding for global variables". These problems arose due to the use of *dplyr* and *ggplot2* functions.    
-If, for instance, NOTEs were generated in a function for **x**, **y** and **z**, because    
-these were defined inside a ggplot() function as column names, these issues were eliminated by adding lines:     
-x <- y <- y <- NULL    
-To the functions before calling ggplot().   
-The authors are aware that these lines do not have functional relevance in the functions, but they strived to eliminate all NOTEs during the process, as suggested by various sources.
 
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.    

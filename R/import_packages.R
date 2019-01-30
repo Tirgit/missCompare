@@ -15,7 +15,7 @@
 #' @importFrom pcaMethods pca
 #' @importFrom plyr revalue
 #' @importFrom rlang .data
-#' @importFrom utils capture.output
+#' @importFrom utils capture.output globalVariables
 #' @importFrom stats quantile runif complete.cases cor dist hclust sd qt glm predict as.formula median t.test as.dendrogram ks.test
 #' @import tidyr
 #' @importFrom VIM kNN
