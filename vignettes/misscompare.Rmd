@@ -48,7 +48,7 @@ on the dataframe using `?clindata_miss`.
 
 ## Before you start...
 
-...Some words on alternative imputation methods. Before you get yourself acquainted with missCompare and its functions, it is **always** a good idea to carefully observe, and do some thinking about your data, your variables/features and your missing data. Before trying fancy methods, there are some cases when **deductive imputation** can be applied. This is a form of imputation based on logical reasoning rather than statistical methods. Let's consider three separate cases when this can be applied:
+...Some words on alternative imputation methods. Before you get yourself acquainted with missCompare and its functions, it is **always** a good idea to carefully observe, and do some thinking about your data, your variables/features and your missing data. Before trying fancy methods, there are some cases when **deductive imputation** can be applied. This is a form of imputation based on logical reasoning rather than statistical methods. Let's consider four separate cases when this can be applied:
 
 1. Constant variables: In this scenario, in a prospective dataset, sex information is available at a participant's first visit in 1998 and third visit in 2005, but missing in 2000. With logical deduction, it can be concluded that biological sex is constant, therefore the missing data point is also **Female**
     
@@ -241,7 +241,7 @@ missCompare::impute_simulated(rownum = metadata$Rows,
 
 The `n.iter` argument controls how many times the process will repeat itself (spiking in missing data, imputation and assessment of imputation accuracy, that is).
 
-When this is completed (depending on the size of you data, it can take some time!), you should get messages stating what are the best performing algorithms for each missingness patterns (evaluated by various metrics) and a graph that gives you a visual aid on which algorithms perform in the most desired fashion. The less the error, and the more the imputed values' distributions match the original values' distributions, the better - i.e. lower RMSE, MAE and KS D statistic values are better! Computation time of course can also play a role in your decision on what to use eventually!
+When this is completed (depending on the size of you data, it can take some time!), you should obtain graphs that give you visual aid on which algorithms perform in the most desired fashion. The less the error, and the more the imputed values' distributions match the original values' distributions, the better - i.e. lower RMSE, MAE and KS D statistic values are better! Computation time of course can also play a role in your decision on what to use eventually!
 
 Let's look at some plots:
 
@@ -255,7 +255,7 @@ Let's look at some plots:
 <img src="../man/figures/Plot_KS.png" width = "100%"/>
 
 
-Please note that RMSE and MAE measures correlate strongly. It is interesting to consider that there are two different main imputation strategies - one group of methods focus more on *prediction*, while the other does *imputation per se*. To give an intuitive explanation, while predictive algorithms set up models that try to predict missing data based on all the other data available and thereby often ignore the uncertainty of missing values, multiple imputation algorithms focus more on variables distributions.
+Please note that RMSE and MAE measures correlate strongly. It is interesting to consider that there are two different main imputation strategies - one group of methods focus more on *prediction*, while the others perform *imputation per se*. To give an intuitive explanation, while predictive algorithms set up models that try to predict missing data based on all the other data available and thereby often ignore the uncertainty of missing values, multiple imputation algorithms focus more on variables distributions.
 
 
 ## Imputing your dataset
