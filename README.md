@@ -3,6 +3,7 @@
 [![Project Status: Active – The project has reached a stable, usable state and is being actively developed.](https://www.repostatus.org/badges/latest/active.svg)](https://www.repostatus.org/#active)
 [![Licence](https://img.shields.io/github/license/mashape/apistatus.svg)](http://choosealicense.com/licenses/mit/)
 [![Build Status](https://travis-ci.com/Tirgit/missCompare.svg?branch=master)](https://travis-ci.com/Tirgit/missCompare)
+[![Downloads](https://cranlogs.r-pkg.org/badges/missCompare)](https://cran.rstudio.com/web/packages/missCompare/index.html)
  
 ---
  
@@ -10,9 +11,6 @@
 [![CRAN_Status_Badge](http://www.r-pkg.org/badges/version/missCompare)](https://cran.r-project.org/package=missCompare)
 [![packageversion](https://img.shields.io/badge/Package%20version-1.0.1.9000-orange.svg?style=flat-square)](commits/master)
  
----
- 
-[![Last-changedate](https://img.shields.io/badge/last%20change-2019--02--06-yellowgreen.svg)](/commits/master)
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
 
