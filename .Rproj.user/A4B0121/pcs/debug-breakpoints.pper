@@ -2147,33 +2147,18 @@
                 "type" : 1
             },
             {
-                "editor_line_number" : 52,
-                "editor_state" : 0,
-                "function_name" : "simulate",
-                "function_steps" : "10",
-                "id" : 837,
-                "is_package_breakpoint" : false,
-                "is_pending_debug_completion" : false,
-                "line_number" : 52,
-                "needs_updated_steps" : false,
-                "package_name" : "",
-                "path" : "~/Documents/GitHub/missCompare/R/simulate.R",
-                "state" : 1,
-                "type" : 0
-            },
-            {
-                "editor_line_number" : 39,
+                "editor_line_number" : 45,
                 "editor_state" : 2,
-                "function_name" : "simulate",
-                "function_steps" : "2",
-                "id" : 838,
+                "function_name" : "get_data",
+                "function_steps" : "",
+                "id" : 839,
                 "is_package_breakpoint" : true,
                 "is_pending_debug_completion" : false,
-                "line_number" : 40,
+                "line_number" : 45,
                 "needs_updated_steps" : false,
                 "package_name" : "missCompare",
-                "path" : "~/Documents/GitHub/missCompare/R/simulate.R",
-                "state" : 1,
+                "path" : "~/Documents/GitHub/missCompare/R/get_data.R",
+                "state" : 2,
                 "type" : 0
             }
         ]
