@@ -84,8 +84,9 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
     }
   }
 
-  melted_cormat <- data.table::melt(na_cor)
-  p_cor <- ggplot(data = melted_cormat, aes(x=Var1, y=Var2, fill=value)) +
+  na_cor <- data.table::as.data.table(na_cor, keep.rownames = TRUE) 
+  melted_cormat <- data.table::melt(na_cor, id = 'rn')
+  p_cor <- ggplot(data = melted_cormat, aes(x=factor(rn, levels=unique(rn)), y=variable, fill=value)) +
     geom_tile() + labs(x= "", y= "") + theme(axis.text.x = element_text(angle = 90, hjust = 1)) +
     ggtitle("Variable - Variable NA Correlation Matrix") +
     theme(plot.title = element_text(hjust = 0.5)) + guides(fill=guide_legend(title="Point-biserial correlation coefficient"))
@@ -108,14 +109,16 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   # matrix plot
   df_miss_id <- cbind(c(1:rows), arr_X)
   colnames(df_miss_id) <- c("Observations", colnames(arr_X))
-  df_melt <- data.table::melt(df_miss_id, id = c("Observations"))
+  df_miss_id <- data.table::as.data.table(df_miss_id) 
+  df_melt <- data.table::melt(df_miss_id, id = c('Observations'))
   matrixplot_sorted <- ggplot(df_melt, aes(x = variable, y = Observations)) + geom_tile(aes(fill = value)) +
     scale_fill_gradient(low = "white", high = "blue") + theme(panel.background = element_blank()) +
     ggtitle("Matrix plot of missing data") + theme(plot.title = element_text(hjust = 0.5))
 
   df_miss_id <- cbind(c(1:rows), X_update)
   colnames(df_miss_id) <- c("Observations", colnames(X_update))
-  df_melt <- data.table::melt(df_miss_id, id = c("Observations"))
+  df_miss_id <- data.table::as.data.table(df_miss_id) 
+  df_melt <- data.table::melt(df_miss_id, id = c('Observations'))
   matrixplot_unsorted <- ggplot(df_melt, aes(x = variable, y = Observations)) + geom_tile(aes(fill = value)) +
     scale_fill_gradient(low = "white", high = "blue") + theme(panel.background = element_blank()) +
     ggtitle("Matrix plot of missing data") + theme(plot.title = element_text(hjust = 0.5))
