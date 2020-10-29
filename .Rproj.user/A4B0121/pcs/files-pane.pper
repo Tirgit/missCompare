@@ -1,21 +1,21 @@
 {
-    "path" : "~/Documents/GitHub/missCompare/R",
-    "sortOrder" : [
+    "path": "~/Documents/GitHub/missCompare/R",
+    "sortOrder": [
         {
-            "ascending" : true,
-            "columnIndex" : 2
+            "columnIndex": 2,
+            "ascending": true
         },
         {
-            "ascending" : false,
-            "columnIndex" : 3
+            "columnIndex": 3,
+            "ascending": false
         },
         {
-            "ascending" : false,
-            "columnIndex" : 4
+            "columnIndex": 4,
+            "ascending": false
         },
         {
-            "ascending" : true,
-            "columnIndex" : 1
+            "columnIndex": 1,
+            "ascending": true
         }
     ]
 }
