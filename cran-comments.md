@@ -11,5 +11,6 @@ There were no ERRORs, WARNINGs or NOTEs.
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.    
 
-## Further notes
+## Further notes on resubmisson to CRAN
 Package version 1.0.1 was removed from CRAN, as I did not meet the deadline for fixing issues. I am now resubmitting the package with these issues fixed as version 1.0.2.
+The errors needed fixing related to the data.table::melt() function, that has been passed to various categories of objects, e.g. matrices and data.frames - as data.table::melt() currently only has a method for data.tables, objects have either been converted to data.tables or another solutions were found to replace existing code.

@@ -1,5 +1,5 @@
 #' @importFrom Amelia amelia
-#' @importFrom data.table melt
+#' @importFrom data.table melt setDT
 #' @import dplyr
 #' @importFrom ggdendro dendro_data ggdendrogram
 #' @import ggplot2

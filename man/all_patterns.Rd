@@ -4,8 +4,13 @@
 \alias{all_patterns}
 \title{Missing data spike-in in various missing data patterns}
 \usage{
-all_patterns(X_hat, MD_pattern, NA_fraction, min_PDM = 10,
-  assumed_pattern = NA)
+all_patterns(
+  X_hat,
+  MD_pattern,
+  NA_fraction,
+  min_PDM = 10,
+  assumed_pattern = NA
+)
 }
 \arguments{
 \item{X_hat}{Simulated matrix with no missingness (Simulated_matrix output from the \code{\link{simulate}} function)}

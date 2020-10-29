@@ -4,9 +4,14 @@
 \alias{MAP}
 \title{Missing data spike-in in MAP pattern}
 \usage{
-MAP(X_hat, MD_pattern, NA_fraction, min_PDM = 10,
-  assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR",
-  "MCAR", "MAR", "MNAR", "MCAR", "MCAR"))
+MAP(
+  X_hat,
+  MD_pattern,
+  NA_fraction,
+  min_PDM = 10,
+  assumed_pattern = c("MAR", "MCAR", "MCAR", "MAR", "MNAR", "MCAR", "MCAR", "MAR",
+    "MNAR", "MCAR", "MCAR")
+)
 }
 \arguments{
 \item{X_hat}{Simulated matrix with no missingness (Simulated_matrix output from the \code{\link{simulate}} function)}

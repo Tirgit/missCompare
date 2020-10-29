@@ -4,7 +4,8 @@
 \name{clindata_miss}
 \alias{clindata_miss}
 \title{Clinical dataset with missingness}
-\format{A data frame with 2500 rows and 12 variables:
+\format{
+A data frame with 2500 rows and 12 variables:
 \describe{
   \item{age}{numeric, age, in years, 2.88\% missing - in general, age is not likely have lots of missing data in a realistic dataset, therefore only a few values are missing here randomly, e.g. due to mistakes in data input}
   \item{sex}{factor, male=1 and female=2, 2.88\% missing - similar to age, sex information is also not likely have missing data in a realistic dataset, no values are missing here}
@@ -18,7 +19,8 @@
   \item{TG}{numeric, blood triglycerides concentration, in mmol/dl, 7.48\% missing - often missing together with other lipids, TC and HDL-C, due to the sensitivity of a hypothetical machine, values below 0.6 are set to -9, upon conversion from -9s to NAs, the missingness fraction is 10.6\%}
   \item{HDL}{numeric, blood high density lipoprotein cholesterol concentration, in mmol/dl, 10.76\% missing - often missing together with other lipids, TG and TC, due to the sensitivity of a hypothetical machine, values below 0.05 are set to -9, upon conversion from -9s to NAs, the missingness fraction is 13.72\%}
   \item{education}{factor, primary school=1, secondary school=2, bsc degree=3, msc degree=4, phd degree=5, 7.16\% missing - self reported education missing in a not random fashion, those with lower education are less likely to report their education status}
-}}
+}
+}
 \source{
 The dataset is simulated and undergone manual configuration.
 }

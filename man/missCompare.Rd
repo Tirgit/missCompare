@@ -3,7 +3,6 @@
 \docType{package}
 \name{missCompare}
 \alias{missCompare}
-\alias{missCompare-package}
 \title{missCompare: Missing Data Imputation Comparison Framework}
 \description{
 The \strong{missCompare} package offers a convenient pipeline to test and compare various missing data
@@ -22,8 +21,8 @@ framework and help you better understand missing data in your dataset.
 Package: \tab missCompare\cr
 Depends: \tab R (>= 3.5.0)\cr
 Type: \tab Package\cr
-Version:  \tab 1.0.1\cr
-Date:  \tab 2019-01-30\cr
+Version:  \tab 1.0.2\cr
+Date:  \tab 2020-10-29\cr
 License:  \tab MIT\cr
 LazyLoad:  \tab Yes
 }

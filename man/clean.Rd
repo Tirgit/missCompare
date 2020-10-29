@@ -4,8 +4,13 @@
 \alias{clean}
 \title{Dataframe cleaning for missing data handling}
 \usage{
-clean(X, var_remove = NULL, var_removal_threshold = 0.5,
-  ind_removal_threshold = 1, missingness_coding = NA)
+clean(
+  X,
+  var_remove = NULL,
+  var_removal_threshold = 0.5,
+  ind_removal_threshold = 1,
+  missingness_coding = NA
+)
 }
 \arguments{
 \item{X}{Original dataframe with samples in rows and variables as columns}
