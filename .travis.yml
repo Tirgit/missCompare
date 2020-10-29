@@ -9,6 +9,6 @@ bioc_required: true
 
 jobs:
   include:
-  - r: 3.5
+  - r: 4.0
 
 
