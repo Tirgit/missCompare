@@ -17,31 +17,31 @@ test_that("factors error when methods dont support it", {
 })
 
 # expect methods that support factors run OK when factors are defined - with scaling
-small <- clindata_miss[1:60, 1:4]
+small <- clindata_miss[1:40, 1:4]
 test_that("factors OK scaling runs OK", {
   expect_error(impute_data(small, n.iter = 1, scale = T, sel_method = c(1,11,12,14:16)), NA)
 })
 
 # expect methods that support factors run OK when factors are defined - without scaling
-small <- clindata_miss[1:60, 1:4]
+small <- clindata_miss[1:40, 1:4]
 test_that("factors OK no scaling runs OK", {
   expect_error(impute_data(small, n.iter = 1, scale = F, sel_method = c(1,11,12,14:16)), NA)
 })
 
 # expect all methods to run OK when variables are all numeric - with scaling
-small <-  clindata_miss[1:60, 3:7]
+small <-  clindata_miss[1:40, 3:7]
 test_that("runs OK when all numeric and with scaling", {
   expect_error(impute_data(small, n.iter = 1, scale = T, sel_method = c(1:16)), NA)
 })
 
 # expect all methods to run OK when variables are all numeric - without scaling (note is output though)
-small <-  clindata_miss[1:60, 3:7]
+small <-  clindata_miss[1:40, 3:7]
 test_that("runs OK when all numeric and without scaling", {
   expect_error(suppressWarnings(impute_data(small, n.iter = 1, scale = F, sel_method = c(1:16))), NA)
 })
 
 # test that single imputation methods do not output multiple imputed sets when multiple iters are defined
-small <-  clindata_miss[1:60, 3:7]
+small <-  clindata_miss[1:40, 3:7]
 imputed <- impute_data(small, scale = T, n.iter = 2, sel_method = c(2:5, 7:9, 16))
 
 test_that("median imputation error", {
