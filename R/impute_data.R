@@ -57,19 +57,17 @@
 #' @name impute_data
 #'
 #' @examples
-#' \donttest{
-#' #running 10 iterations of all algorithms (that allow for multiple imputation) and
-#' #one copy of those that do not allow for multiple imputations
-#' impute_data(df, scale = TRUE, n.iter = 10,
-#'             sel_method = c(1:16))
-#' #running 20 iterations of missForest (e.g. this was the best performing algorithm
-#' #in simulations) on a non-scaled dataframe
-#' impute_data(df, scale = FALSE, n.iter = 20,
-#'             sel_method = c(14))
-#' #running 1 iterations of four selected non-probabilistic algorithms on a scaled dataframe
-#' impute_data(df, scale = TRUE, n.iter = 1,
-#'             sel_method = c(2:3, 5, 7))
-#' }
+#' ## running 10 iterations of all algorithms (that allow for multiple imputation) and
+#' ## one copy of those that do not allow for multiple imputations
+#' # impute_data(df, scale = TRUE, n.iter = 10,
+#' #            sel_method = c(1:16))
+#' ## running 20 iterations of missForest (e.g. this was the best performing algorithm
+#' ## in simulations) on a non-scaled dataframe
+#' # impute_data(df, scale = FALSE, n.iter = 20,
+#' #            sel_method = c(14))
+#' ## running 1 iterations of four selected non-probabilistic algorithms on a scaled dataframe
+#' # impute_data(df, scale = TRUE, n.iter = 1,
+#' #            sel_method = c(2:3, 5, 7))
 #'
 #' @export
 

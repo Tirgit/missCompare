@@ -34,12 +34,10 @@
 #' \item{Correlation_plot}{Scatter plot of mean pairwise Pearson's correlation coefficients from the original dataframe (with missingness) and the imputed dataframe. The blue line represents a line with slope 1 and intercept 0. The red line is a fitted line of the correlation coefficient pairs. The error bars around the points represent the individual 95\% confidence intervals drawn from bootstrapping the correlation coefficients}
 #'
 #' @examples
-#' \donttest{
-#' diagnostics <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=TRUE)
-#' diagnostics$Histograms$variable_X
-#' diagnostics$Boxplots$variable_Z
-#' diagnostics$Statistics$variable_Y
-#' }
+#' # diagnostics <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=TRUE)
+#' # diagnostics$Histograms$variable_X
+#' # diagnostics$Boxplots$variable_Z
+#' # diagnostics$Statistics$variable_Y
 #'
 #' @export
 

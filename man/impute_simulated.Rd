@@ -53,27 +53,25 @@ automatically detect whether there is a MAP matrix in the list and calculate met
 output by this function are calculated for ALL missing values across the dataset, not by variable.
 }
 \examples{
-\donttest{
-#in case there is no assumed missingness pattern per variable
-wrap <- impute_simulated(rownum = metadata$Rows,
-        colnum = metadata$Columns,
-        cormat = metadata$Corr_matrix,
-        MD_pattern = metadata$MD_Pattern,
-        NA_fraction = metadata$Fraction_missingness,
-        min_PDM = 10,
-        n.iter = 50)
+## in case there is no assumed missingness pattern per variable
+# wrap <- impute_simulated(rownum = metadata$Rows,
+#        colnum = metadata$Columns,
+#        cormat = metadata$Corr_matrix,
+#        MD_pattern = metadata$MD_Pattern,
+#        NA_fraction = metadata$Fraction_missingness,
+#        min_PDM = 10,
+#        n.iter = 50)
 
-#in case there is a pre-defined assumed pattern
-wrap <- impute_simulated(rownum = metadata$Rows,
-        colnum = metadata$Columns,
-        cormat = metadata$Corr_matrix,
-        MD_pattern = metadata$MD_Pattern,
-        NA_fraction = metadata$Fraction_missingness,
-        min_PDM = 10,
-        assumed_pattern = c('MAR','MAR','MCAR','MCAR',
-                          'MNAR','MCAR','MAR','MNAR',
-                          'MCAR','MNAR','MCAR'),
-        n.iter = 50)
-}
+## in case there is a pre-defined assumed pattern
+# wrap <- impute_simulated(rownum = metadata$Rows,
+#        colnum = metadata$Columns,
+#        cormat = metadata$Corr_matrix,
+#        MD_pattern = metadata$MD_Pattern,
+#        NA_fraction = metadata$Fraction_missingness,
+#        min_PDM = 10,
+#        assumed_pattern = c('MAR','MAR','MCAR','MCAR',
+#                          'MNAR','MCAR','MAR','MNAR',
+#                          'MCAR','MNAR','MCAR'),
+#        n.iter = 50)
 
 }
