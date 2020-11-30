@@ -2132,36 +2132,6 @@
                 "type": 1
             },
             {
-                "id": 840,
-                "path": "~/Documents/temp/missCompare_install.R",
-                "line_number": 7,
-                "function_steps": "",
-                "function_name": "toplevel",
-                "state": 1,
-                "editor_state": 1,
-                "editor_line_number": 7,
-                "is_pending_debug_completion": false,
-                "needs_updated_steps": false,
-                "type": 1,
-                "is_package_breakpoint": false,
-                "package_name": ""
-            },
-            {
-                "id": 841,
-                "path": "~/Documents/temp/missCompare_install.R",
-                "line_number": 12,
-                "function_steps": "",
-                "function_name": "toplevel",
-                "state": 1,
-                "editor_state": 1,
-                "editor_line_number": 12,
-                "is_pending_debug_completion": false,
-                "needs_updated_steps": false,
-                "type": 1,
-                "is_package_breakpoint": false,
-                "package_name": ""
-            },
-            {
                 "id": 842,
                 "path": "~/Documents/temp/missCompare_flow.R",
                 "line_number": 187,
