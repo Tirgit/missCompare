@@ -63,6 +63,10 @@ multiple imputed datasets. The user can decide to impute their dataframe with a 
 }
 \examples{
 \donttest{
+#running 10 iterations of all algorithms (that allow for multiple imputation) and
+#one copy of those that do not allow for multiple imputations
+impute_data(df, scale = TRUE, n.iter = 10,
+            sel_method = c(1:16))
 #running 20 iterations of missForest (e.g. this was the best performing algorithm
 #in simulations) on a non-scaled dataframe
 impute_data(df, scale = FALSE, n.iter = 20,
