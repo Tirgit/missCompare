@@ -1,4 +1,4 @@
-## Submission of new version 1.0.2
+## Resubmission of new version 1.0.3
 
 ## Test environments
 * local OS X install, R 4.0.3       
@@ -11,7 +11,16 @@ There were no ERRORs, WARNINGs or NOTEs.
 ## Downstream dependencies
 There are currently no downstream dependencies for this package.    
 
-## Further notes on resubmisson to CRAN
-In response to Uwe's e-mail, I reduced data size for testing and running less iterations. Hoping this will reduce time for check time. Running the tests takes now 1m 19s on local OS.
+## Resubmission
+This is a resubmission. In this version I have made the following changes in response to Gregor Seyer's comments:
 
-Win-devel and Win-release show a NOTE: This note relates to the fact that missCompare was previously on CRAN and it was archived because check problems were not corrected on time. These checks are now corrected and I am now resubmitting the package with these issues fixed as version 1.0.2. The errors needed fixing related to the data.table::melt() function, that has been passed to various categories of objects, e.g. matrices and data.frames - as data.table::melt() currently only has a method for data.tables, objects have either been converted to data.tables or another solutions were found to replace existing code.
+* Please always write package names, software names and API (application programming interface) names in single quotes in title and description: FIXED. All package names are now marked with single quotation marks in the DESCRIPTION file and in the function titles and details.
+
+* If there are references describing the methods in your package, please add these in the description field of your DESCRIPTION file in the form: FIXED. I added five key references to the DESCRIPTION file now.
+
+* Please write TRUE and FALSE instead of T and F. (Please don't use 'T' or 'F' as vector names.): FIXED. All instances in all functions checked, Ts and Fs replaced with TRUEs and FALSEs.
+
+* \dontrun{} should only be used if the example really cannot be executed (e.g. because of missing additional software, missing API keys, ...) by the user [...] Please unwrap the examples if they are executable in < 5 sec, or replace
+\dontrun{} with \donttest{}: FIXED. Examples are now marked with donttest{} in the following functions: impute_data(), impute_simulated(), post_imp_diag(), test_mi() and test_pcaMethods_NLPCA() due to longer executable times.
+
+* Have the issues why your package was archived been fixed?: FIXED. The package was archived because there were ERRORs that needed fixing related to the data.table::melt() function, that has been passed to various categories of objects, e.g. matrices and data.frames - as data.table::melt() currently only has a method for data.tables, objects have either been converted to data.tables or another solutions were found to replace existing code.

@@ -4,7 +4,7 @@
 \alias{post_imp_diag}
 \title{Post imputation diagnostics}
 \usage{
-post_imp_diag(X_orig, X_imp, scale = T, n.boot = 100)
+post_imp_diag(X_orig, X_imp, scale = TRUE, n.boot = 100)
 }
 \arguments{
 \item{X_orig}{Dataframe - the original data that contains missing values.}
@@ -41,8 +41,8 @@ the original dataframe and the imputed one. Should the imputation algorithm perf
 the variable distributions and the variable clusters should be similar.
 }
 \examples{
-\dontrun{
-diagnostics <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=T)
+\donttest{
+diagnostics <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=TRUE)
 diagnostics$Histograms$variable_X
 diagnostics$Boxplots$variable_Z
 diagnostics$Statistics$variable_Y

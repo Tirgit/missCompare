@@ -37,7 +37,7 @@
 
 ### FUNCTION
 simulate <- function(rownum, colnum, cormat, meanval = 0, sdval = 1) {
-    pd_corr_matrix <- Matrix::nearPD(cormat, keepDiag = T, conv.tol = 1e-07, corr = T)
+    pd_corr_matrix <- Matrix::nearPD(cormat, keepDiag = TRUE, conv.tol = 1e-07, corr = TRUE)
     mu <- rep(meanval, colnum)
     stddev <- rep(sdval, colnum)
     covMat <- stddev %*% t(stddev) * pd_corr_matrix$mat

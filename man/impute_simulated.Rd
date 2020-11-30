@@ -53,7 +53,7 @@ automatically detect whether there is a MAP matrix in the list and calculate met
 output by this function are calculated for ALL missing values across the dataset, not by variable.
 }
 \examples{
-\dontrun{
+\donttest{
 #in case there is no assumed missingness pattern per variable
 wrap <- impute_simulated(rownum = metadata$Rows,
         colnum = metadata$Columns,

@@ -43,7 +43,7 @@ test_random_imp <- function(X_hat, list) {
     random_imp <- function(X) {
         for (i in 1:ncol(X)) {
             X[, i][is.na(X[, i])] <- sample(X[, i][!is.na(X[, i])], size = sum(is.na(X[,
-                i])), replace = T)
+                i])), replace = TRUE)
         }
 
         list(Imputed = X)

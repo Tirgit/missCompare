@@ -34,8 +34,8 @@
 #' \item{Correlation_plot}{Scatter plot of mean pairwise Pearson's correlation coefficients from the original dataframe (with missingness) and the imputed dataframe. The blue line represents a line with slope 1 and intercept 0. The red line is a fitted line of the correlation coefficient pairs. The error bars around the points represent the individual 95\% confidence intervals drawn from bootstrapping the correlation coefficients}
 #'
 #' @examples
-#' \dontrun{
-#' diagnostics <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=T)
+#' \donttest{
+#' diagnostics <- post_imp_diag(X_orig = df_miss, X_imp = df_imputed, scale=TRUE)
 #' diagnostics$Histograms$variable_X
 #' diagnostics$Boxplots$variable_Z
 #' diagnostics$Statistics$variable_Y
@@ -43,7 +43,7 @@
 #'
 #' @export
 
-post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
+post_imp_diag <- function(X_orig, X_imp, scale = TRUE, n.boot = 100) {
 
   # warning if dimensions are unequal
   if (!identical(dim(X_orig), dim(X_imp)))
@@ -56,9 +56,9 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
   factors_present <- (sum(sapply(X_orig, is.factor)) > 0)
 
   # optional scaling
-  if (factors_present & (scale == T)) {
+  if (factors_present & (scale == TRUE)) {
     ind <- sapply(X_orig, is.numeric)
-    X_orig[ind] <- as.data.frame(lapply(X_orig[ind], scale)) } else if ((factors_present == F) & (scale == T)) {
+    X_orig[ind] <- as.data.frame(lapply(X_orig[ind], scale)) } else if ((factors_present == FALSE) & (scale == TRUE)) {
       X_orig <- as.data.frame(scale(X_orig)) }
 
   histograms <- list()
@@ -67,16 +67,16 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
   barcharts <- list()
 
   X_orig_num <- X_orig[sapply(X_orig, is.numeric)]
-  if (factors_present == T) {
+  if (factors_present == TRUE) {
     X_orig_factor <- X_orig[!sapply(X_orig, is.numeric)]
   }
   X_imp_num <- X_imp[sapply(X_imp, is.numeric)]
-  if (factors_present == T) {
+  if (factors_present == TRUE) {
     X_imp_factor <- X_imp[!sapply(X_imp, is.numeric)]
   }
 
   # barcharts for categorical (factor) variables
-  if (factors_present == T) {
+  if (factors_present == TRUE) {
     for (i in 1:ncol(X_orig_factor)) {
 
       pltName <- colnames(X_orig_factor)[i]
@@ -206,7 +206,7 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
     }
   }
 
-  meanmat[lower.tri(meanmat, diag = T)] <- NA
+  meanmat[lower.tri(meanmat, diag = TRUE)] <- NA
   y <- as.data.frame(meanmat)
   colnames(y) <- colnames(X_orig_num)
   rownames(y) <- colnames(X_orig_num)
@@ -214,7 +214,7 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
   z <- gather(data = y, key = "var2", value = "value", -var1)
   correlation_results <- z[!is.na(z$value), ]
 
-  locimat[lower.tri(locimat, diag = T)] <- NA
+  locimat[lower.tri(locimat, diag = TRUE)] <- NA
   y <- as.data.frame(locimat)
   colnames(y) <- colnames(X_orig_num)
   rownames(y) <- colnames(X_orig_num)
@@ -223,7 +223,7 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
   z <- z[!is.na(z$value), ]
   correlation_results <- cbind(correlation_results, z$value)
 
-  hicimat[lower.tri(hicimat, diag = T)] <- NA
+  hicimat[lower.tri(hicimat, diag = TRUE)] <- NA
   y <- as.data.frame(hicimat)
   colnames(y) <- colnames(X_orig_num)
   rownames(y) <- colnames(X_orig_num)
@@ -249,7 +249,7 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
     }
   }
 
-  meanmat[lower.tri(meanmat, diag = T)] <- NA
+  meanmat[lower.tri(meanmat, diag = TRUE)] <- NA
   y <- as.data.frame(meanmat)
   colnames(y) <- colnames(X_imp_num)
   rownames(y) <- colnames(X_imp_num)
@@ -258,7 +258,7 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
   z <- z[!is.na(z$value), ]
   correlation_results <- cbind(correlation_results, z$value)
 
-  locimat[lower.tri(locimat, diag = T)] <- NA
+  locimat[lower.tri(locimat, diag = TRUE)] <- NA
   y <- as.data.frame(locimat)
   colnames(y) <- colnames(X_imp_num)
   rownames(y) <- colnames(X_imp_num)
@@ -267,7 +267,7 @@ post_imp_diag <- function(X_orig, X_imp, scale = T, n.boot = 100) {
   z <- z[!is.na(z$value), ]
   correlation_results <- cbind(correlation_results, z$value)
 
-  hicimat[lower.tri(hicimat, diag = T)] <- NA
+  hicimat[lower.tri(hicimat, diag = TRUE)] <- NA
   y <- as.data.frame(hicimat)
   colnames(y) <- colnames(X_imp_num)
   rownames(y) <- colnames(X_imp_num)

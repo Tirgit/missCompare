@@ -57,24 +57,24 @@
 #' @name impute_data
 #'
 #' @examples
-#' \dontrun{
-#' #running 10 iterations of all algoritms (that allow for multiple imputation) and
+#' \donttest{
+#' #running 10 iterations of all algorithms (that allow for multiple imputation) and
 #' #one copy of those that do not allow for multiple imputations
-#' impute_data(df, scale = T, n.iter = 10,
+#' impute_data(df, scale = TRUE, n.iter = 10,
 #'             sel_method = c(1:16))
 #' #running 20 iterations of missForest (e.g. this was the best performing algorithm
 #' #in simulations) on a non-scaled dataframe
-#' impute_data(df, scale = F, n.iter = 20,
+#' impute_data(df, scale = FALSE, n.iter = 20,
 #'             sel_method = c(14))
 #' #running 1 iterations of four selected non-probabilistic algorithms on a scaled dataframe
-#' impute_data(df, scale = T, n.iter = 1,
+#' impute_data(df, scale = TRUE, n.iter = 1,
 #'             sel_method = c(2:3, 5, 7))
 #' }
 #'
 #' @export
 
 ## FUNCTION
-impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
+impute_data <- function(X, scale = TRUE, n.iter = 10, sel_method = c(1:16)) {
 
   strings_present <- (sum(sapply(X, is.character)) > 0)
 
@@ -89,14 +89,14 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
           all missMDA and pcaMethods methods and AmeliaII. In case you aim to use any of these, please convert your dataframe to all
           numeric and attempt re-running this.") }
 
-  if (any(((c(4:9) %in% sel_method) & (scale == F)))) {
+  if (any(((c(4:9) %in% sel_method) & (scale == FALSE)))) {
     warning("One or more of your selected methods is based on PCA - Although your command will run, scaling is strongly recommended.") }
 
 
   # optional scaling
-  if (factors_present & (scale == T)) {
+  if (factors_present & (scale == TRUE)) {
     ind <- sapply(X, is.numeric)
-    X[ind] <- as.data.frame(lapply(X[ind], scale)) } else if ((factors_present == F) & (scale == T)) {
+    X[ind] <- as.data.frame(lapply(X[ind], scale)) } else if ((factors_present == FALSE) & (scale == TRUE)) {
     X <- as.data.frame(scale(X)) }
 
 
@@ -125,7 +125,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
             Y <- X
             for (i in 1:ncol(Y)) {
                 Y[, i][is.na(Y[, i])] <- sample(Y[, i][!is.na(Y[, i])], size = sum(is.na(Y[,
-                  i])), replace = T)
+                  i])), replace = TRUE)
             }
             random_imp_list[[n]] <- as.data.frame(Y)
         }
@@ -286,7 +286,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
         print("missForest imputation - in progress")
         for (n in 1:n.iter) {
             log_output <- utils::capture.output(results <- missForest::missForest(X,
-                maxiter = 10, ntree = 100, replace = T))
+                maxiter = 10, ntree = 100, replace = TRUE))
             imp_matrix <- results$ximp
             missForest_list[[n]] <- as.data.frame(imp_matrix)
         }
@@ -311,7 +311,7 @@ impute_data <- function(X, scale = T, n.iter = 10, sel_method = c(1:16)) {
         print("VIM kNN imputation - in progress")
         Xcolnames <- colnames(X)
         log_output <- utils::capture.output(completeData <- VIM::kNN(data = X, variable = Xcolnames,
-            k = 10, trace = F, imp_var = F))
+            k = 10, trace = FALSE, imp_var = FALSE))
         kNN_list[[1]] <- as.data.frame(completeData)
     }
 

@@ -74,15 +74,15 @@ MAP <- function(X_hat, MD_pattern, NA_fraction, min_PDM = 10, assumed_pattern = 
 
     # amputation in 3 patterns
     amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple,
-        freq = myfreq, bycases = F, mech = "MCAR")
+        freq = myfreq, bycases = FALSE, mech = "MCAR")
     X_hat_MCAR <- amputed$amp
 
     amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple,
-        freq = myfreq, bycases = F, mech = "MAR")
+        freq = myfreq, bycases = FALSE, mech = "MAR")
     X_hat_MAR <- amputed$amp
 
     amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple,
-        freq = myfreq, bycases = F, mech = "MNAR")
+        freq = myfreq, bycases = FALSE, mech = "MNAR")
     X_hat_MNAR <- amputed$amp
 
     X_hat <- cbind(X_hat_MCAR[, assumed_pattern == "MCAR"], X_hat_MAR[, assumed_pattern ==

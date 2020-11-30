@@ -1262,21 +1262,6 @@
                 "type": 1
             },
             {
-                "editor_line_number": 4,
-                "editor_state": 1,
-                "function_name": "toplevel",
-                "function_steps": "",
-                "id": 703,
-                "is_package_breakpoint": false,
-                "is_pending_debug_completion": false,
-                "line_number": 4,
-                "needs_updated_steps": false,
-                "package_name": "",
-                "path": "~/Documents/GitHub/missCompare/tests/testthat/test.imp_simulation.R",
-                "state": 1,
-                "type": 1
-            },
-            {
                 "editor_line_number": 5,
                 "editor_state": 1,
                 "function_name": "toplevel",
@@ -1570,7 +1555,7 @@
                 "is_package_breakpoint": false,
                 "is_pending_debug_completion": false,
                 "line_number": 76,
-                "needs_updated_steps": false,
+                "needs_updated_steps": true,
                 "package_name": "",
                 "path": "~/Documents/GitHub/missCompare/tests/testthat/test.imp_data.R",
                 "state": 1,

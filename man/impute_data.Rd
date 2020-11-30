@@ -4,7 +4,7 @@
 \alias{impute_data}
 \title{Missing data imputation with various methods}
 \usage{
-impute_data(X, scale = T, n.iter = 10, sel_method = c(1:16))
+impute_data(X, scale = TRUE, n.iter = 10, sel_method = c(1:16))
 }
 \arguments{
 \item{X}{Dataframe - the original data that contains missing values.}
@@ -62,17 +62,17 @@ way to impute datasets with a curated list of functions. Some of the functions a
 multiple imputed datasets. The user can decide to impute their dataframe with a selected method or with multiple methods.
 }
 \examples{
-\dontrun{
-#running 10 iterations of all algoritms (that allow for multiple imputation) and
+\donttest{
+#running 10 iterations of all algorithms (that allow for multiple imputation) and
 #one copy of those that do not allow for multiple imputations
-impute_data(df, scale = T, n.iter = 10,
+impute_data(df, scale = TRUE, n.iter = 10,
             sel_method = c(1:16))
 #running 20 iterations of missForest (e.g. this was the best performing algorithm
 #in simulations) on a non-scaled dataframe
-impute_data(df, scale = F, n.iter = 20,
+impute_data(df, scale = FALSE, n.iter = 20,
             sel_method = c(14))
 #running 1 iterations of four selected non-probabilistic algorithms on a scaled dataframe
-impute_data(df, scale = T, n.iter = 1,
+impute_data(df, scale = TRUE, n.iter = 1,
             sel_method = c(2:3, 5, 7))
 }
 

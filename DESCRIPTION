@@ -1,19 +1,24 @@
 Package: missCompare
 Type: Package
 Title: Intuitive Missing Data Imputation Framework
-Version: 1.0.2
+Version: 1.0.3
 Authors@R: c(person("Tibor", "V. Varga", email = "tirgit@hotmail.com", role = c("aut", "cre"), comment = c(ORCID = "0000-0002-2383-699X")),
             person("David", "Westergaard", email = "david.westergaard@cpr.ku.dk", role= c("aut"), comment = c(ORCID = "0000-0003-0128-8432")))
 Maintainer: Tibor V. Varga <tirgit@hotmail.com>
 Description: Offers a convenient pipeline to test and compare various missing data
-  imputation algorithms on simulated and real data. The central assumption behind missCompare is that structurally
-  different datasets (e.g. larger datasets with a large number of correlated variables vs. smaller datasets
-  with non correlated variables) will benefit differently from different missing data imputation algorithms.
-  missCompare takes measurements of your dataset and sets up a sandbox to try a curated list of standard and 
+  imputation algorithms on simulated and real data. These include simpler methods, such as mean and median
+  imputation and random replacement, but also include more sophisticated algorithms already implemented in popular 
+  R packages, such as 'mi', described by Su et al. (2011) <doi:10.18637/jss.v045.i02>; 'mice', described by van Buuren 
+  and Groothuis-Oudshoorn (2011) <doi:10.18637/jss.v045.i03>; 'missForest', described by Stekhoven and Buhlmann (2012) 
+  <doi:10.1093/bioinformatics/btr597>; 'missMDA', described by Josse and Husson (2016) <doi:10.18637/jss.v070.i01>; and 
+  'pcaMethods', described by Stacklies et al. (2007) <doi:10.1093/bioinformatics/btm069>. The central assumption behind 
+  'missCompare' is that structurally different datasets (e.g. larger datasets with a large number of correlated variables 
+  vs. smaller datasets with non correlated variables) will benefit differently from different missing data imputation 
+  algorithms. 'missCompare' takes measurements of your dataset and sets up a sandbox to try a curated list of standard and 
   sophisticated missing data imputation algorithms and compares them assuming custom missingness patterns.
-  missCompare will also impute your real-life dataset for you after the selection of the best performing algorithm
+  'missCompare' will also impute your real-life dataset for you after the selection of the best performing algorithm
   in the simulations. The package also provides various post-imputation diagnostics and visualizations to help you 
-  assess imputation performance.    
+  assess imputation performance.   
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

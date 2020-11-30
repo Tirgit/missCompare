@@ -32,7 +32,7 @@
 #' \item{Plot_KS}{Faceted boxplot of KS values per missingness pattern and missing data imputation algorithm}
 #'
 #' @examples
-#' \dontrun{
+#' \donttest{
 #' #in case there is no assumed missingness pattern per variable
 #' wrap <- impute_simulated(rownum = metadata$Rows,
 #'         colnum = metadata$Columns,

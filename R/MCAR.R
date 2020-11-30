@@ -60,7 +60,7 @@ MCAR <- function(X_hat, MD_pattern, NA_fraction, min_PDM = 10) {
 
     # amputation
     amputed <- mice::ampute(X_hat, prop = NA_fraction, patterns = MD_pattern_simple,
-        freq = myfreq, bycases = F, mech = "MCAR")
+        freq = myfreq, bycases = FALSE, mech = "MCAR")
 
     X_hat <- amputed$amp
 

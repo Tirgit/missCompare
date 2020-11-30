@@ -40,7 +40,7 @@
 
 
 ### FUNCTION
-get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
+get_data <- function(X, matrixplot_sort = TRUE, plot_transform = TRUE) {
 
   vars_non_num <- names(X)[!sapply(X, is.numeric)]
   if (length(vars_non_num) != 0)
@@ -56,7 +56,7 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
   missfrac_per_var <- colMeans(is.na(X))
   na_per_df <- sum(is.na(X))
   na_per_var <- sapply(X, function(x) sum(length(which(is.na(x)))))
-  mdpat <- mice::md.pattern(X, plot = F)
+  mdpat <- mice::md.pattern(X, plot = FALSE)
   data_names <- colnames(X)
   mdpat <- mdpat[, data_names]
 
@@ -90,7 +90,7 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
     ggtitle("Variable - Variable NA Correlation Matrix") +
     theme(plot.title = element_text(hjust = 0.5)) + guides(fill=guide_legend(title="Point-biserial correlation coefficient"))
 
-  if (plot_transform == T)
+  if (plot_transform == TRUE)
     X_update <- as.data.frame(scale(X)) else X_update <- X
 
   nm1 <- names(X_update)[colSums(is.na(X_update)) > 0]
@@ -120,7 +120,7 @@ get_data <- function(X, matrixplot_sort = T, plot_transform = T) {
     scale_fill_gradient(low = "white", high = "blue") + theme(panel.background = element_blank()) +
     ggtitle("Matrix plot of missing data") + theme(plot.title = element_text(hjust = 0.5))
 
-  if (matrixplot_sort == F)
+  if (matrixplot_sort == FALSE)
     matrix_plot <- matrixplot_unsorted else matrix_plot <- matrixplot_sorted
 
   # cluster plot
